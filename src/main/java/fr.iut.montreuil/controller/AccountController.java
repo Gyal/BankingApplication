@@ -40,7 +40,7 @@ public class AccountController {
         final Iterable<AccountEntity> accounts = this.accountService.getAllAccounts();
         model.addAttribute("accounts", accounts);
         LOGGER.info("List Accounts is {}", accounts);
-        return "templates/index";
+        return "index.html";
     }
 
 
