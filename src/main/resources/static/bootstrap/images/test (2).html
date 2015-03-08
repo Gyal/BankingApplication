@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Liste des projets - Portail de gestion des projets sensibles</title>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    </link>
+    <style type="text/css">
+        body{
+        padding-top:30px;
+        padding-bottom : 40px;
+        padding-left:15px;
+        }
+        .sidebar-nav {
+        padding: 9px 0;
+        }
+        form{
+        width:20%;
+        padding: 20px;
+        }
+        #tab_project{
+        width:50%;
+
+        }
+        .row-fluid{
+        padding-top:50px;
+        }
+        #form-inline well jal{
+        margin: 250px;projects.html
+
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Accueil</a></li>
+            <li><a th:href="@{/delete/}+${project.id}">Supprimer ce projet</a></li>
+            <li><a th:href="@{/modify/}+${project.id}">Modifier ce projet</a></li>
+            <li><a href="#">Exporter un projet dans Excel</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+<div class="row-fluid">
+    <div class="well" id="tab_project">
+        <h3> Details du projet: <p th:text="${project.name}"></p></h3>
+
+
+            <ul>
+               <h5> Nom :</h5> <li th:text="${project.name}"></li>
+               <h5> Client :</h5> <li th:text="${project.client}"></li>
+               <h5> Coût :</h5> <li th:text="${project.cost}"></li>
+               <h5> Date de début:</h5> <li th:text="${project.dateStart}"></li>
+               <h5>Jalons :</h5>
+               <ol th:each="project: ${project}"><!--Boucle sur la liste des jalon placé dans un li un par un -->
+                   <li th:text="${project.jalons}"></li>
+               </ol>
+
+            </ul>
+    </div>
+</div>
+
+
+<hr class="soft" />
+
+
+<div class="container-fluid">
+
+    <form class="form-inline well jal" th:action="@{/}+${project.id}" method="POST">
+        <legend>Ajouter un Jalon a ce projet </legend>
+
+        <div class="control-group">
+            <label class="control-label">Date</label>
+            <div class="controls">
+                <input type="text" name="date" placeholder="Date"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Description</label>
+            <div class="controls">
+                <input type="text" name="description" placeholder="Description"/>
+            </div>
+        </div>
+        <hr class="soft"/>
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button type="reset" class="btn">Annuler</button>
+        </div>
+    </form>
+
+</div>
+
+</body>
+</html>
