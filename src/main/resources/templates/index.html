@@ -3,14 +3,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
+<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/bootstrap/css/style.css" rel="stylesheet"> </link>
 <head>
-    <title>Good Thymes Virtual Grocery</title>
+    <title>BankingApplication</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
 
-<p th:text="#{msg}">Welcome to our grocery store!</p>
+<div class="row-fluid">
+    <div class="well" id="tab_project">
+        <h3>Liste des projets</h3>
+
+        <table id="myTable" class="table table-hover">
+
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Client</th>
+                <th>Coût</th>
+                <th>Date de début</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="account: ${accounts}"> <!--Création d'une boucle où chaque ligne sera un novueau projet-->
+                <!-- <td><input type="checkbox" /></td>-->
+                <td><a th:href="@{/}+${account.id}"><p th:text="${account.name}"></p></a></td>
+                <!-- @/ c'est l'url, $ c'est mon element :Récupération du nom du projet-->
+                <td th:text="${account.shortName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 </body>
 

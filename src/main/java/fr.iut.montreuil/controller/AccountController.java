@@ -34,6 +34,16 @@ public class AccountController {
         this.accountService = accountService;
     }*/
 
+    @RequestMapping(value = "/a", method = RequestMethod.GET)
+    @ResponseBody
+    public String Accounts(final Model model){
+        final Iterable<AccountEntity> accounts = this.accountService.getAllAccounts();
+        model.addAttribute("accounts", accounts);
+        LOGGER.info("List Accounts is {}", accounts);
+        return "templates/index";
+    }
+
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public String index(final Model model){
