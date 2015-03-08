@@ -1,9 +1,10 @@
-package fr.iut.montreuil;
+package fr.iut.montreuil.service;
 
+import fr.iut.montreuil.entity.AccountEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by Mélina on 07/03/2015.
+ * Created by Mélina on 08/03/2015.
  */
 public interface AccountService {
 

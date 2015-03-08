@@ -2,7 +2,6 @@ package fr.iut.montreuil;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +19,8 @@ public class BankingApplication  extends SpringBootServletInitializer{
         SpringApplication.run(BankingApplication.class, args);
     }
 
-    @Override
+   /* @Override
     protected final SpringApplicationBuilder configure(final SpringApplicationBuilder application){
         return application.sources(BankingApplication.class);
-    }
+    }*/
 }

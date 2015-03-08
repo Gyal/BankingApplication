@@ -1,6 +1,7 @@
-package fr.iut.montreuil;
+package fr.iut.montreuil.entity;
 
 import javax.persistence.*;
+
 /**
  * Created by Mélina on 07/03/2015.
  */

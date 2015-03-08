@@ -1,5 +1,7 @@
-package fr.iut.montreuil;
+package fr.iut.montreuil.controller;
 
+import fr.iut.montreuil.entity.AccountEntity;
+import fr.iut.montreuil.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 /**
  * Created by Mélina on 07/03/2015.
  */
@@ -30,16 +33,6 @@ public class AccountController {
     public AccountController(final AccountService accountService){
         this.accountService = accountService;
     }*/
-
-
-    @RequestMapping(value="/a", method=RequestMethod.GET)
-    @ResponseBody
-    public String getAccounts(final Model model) {
-        final Iterable<AccountEntity> accounts = this.accountService.getAllAccounts();
-        model.addAttribute("accounts", accounts);
-        LOGGER.info("Msg is {}, persisting.", accounts);
-        return "index";
-    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
@@ -86,6 +79,4 @@ public class AccountController {
         this.accountService.deleteAccount(id);
 
     }
-
-
 }

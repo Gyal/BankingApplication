@@ -1,5 +1,8 @@
-package fr.iut.montreuil;
+package fr.iut.montreuil.service;
 
+
+import fr.iut.montreuil.entity.AccountEntity;
+import fr.iut.montreuil.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +39,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountEntity saveAccountEntity(AccountEntity account) {
-        return null;
+        return account;
     }
 
     @Override
     public AccountEntity updateAccount(AccountEntity account) {
-        return null;
+        return account;
     }
 
     @Override
@@ -53,4 +56,5 @@ public class AccountServiceImpl implements AccountService {
     public AccountEntity getAccountByShortName(String shortName) {
         return null;
     }
+
 }
