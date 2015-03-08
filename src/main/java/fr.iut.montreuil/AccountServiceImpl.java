@@ -26,12 +26,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Iterable<AccountEntity> getAllAccounts() {
-        return null;
+        return accountRepository.findAll();
     }
 
     @Override
     public AccountEntity getAccountById(Long id) {
-        return null;
+        return accountRepository.findOne(id);
     }
 
     @Override

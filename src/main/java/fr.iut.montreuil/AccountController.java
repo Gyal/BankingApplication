@@ -18,6 +18,7 @@ La différence entre cela et Controller annotation est l'ancien implique égalem
 ce qui signifie qu'il ya moins d'écrire puisque depuis un service Web RESTFUL nous retournons objets JSON de toute façon.
 */
 
+@RequestMapping("api")
 public class AccountController {
 
 
@@ -31,7 +32,17 @@ public class AccountController {
     }*/
 
 
+    @RequestMapping(value="/a", method=RequestMethod.GET)
+    @ResponseBody
+    public String getAccounts(final Model model) {
+        final Iterable<AccountEntity> accounts = this.accountService.getAllAccounts();
+        model.addAttribute("accounts", accounts);
+        LOGGER.info("Msg is {}, persisting.", accounts);
+        return "index";
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseBody
     public String index(final Model model){
         String msg = "Test" ;
         model.addAttribute("message", msg);
