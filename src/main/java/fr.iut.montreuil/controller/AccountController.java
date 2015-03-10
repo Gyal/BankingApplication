@@ -61,7 +61,6 @@ public class AccountController {
         LOGGER.info("Account Creating{}, persisting.", accountEntity.toString());
     }
 
-
     @RequestMapping(value = "/account/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id){
