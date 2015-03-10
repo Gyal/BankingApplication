@@ -5,10 +5,9 @@ import fr.iut.montreuil.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * Created by Mélina on 07/03/2015.
@@ -20,6 +19,7 @@ import javax.validation.Valid;
 La différence entre cela et Controller annotation est l'ancien implique également ResponseBody sur chaque méthode,
 ce qui signifie qu'il ya moins d'écrire puisque depuis un service Web RESTFUL nous retournons objets JSON de toute façon.
 */
+
 
 @RequestMapping("api")
 public class AccountController {
@@ -34,53 +34,38 @@ public class AccountController {
         this.accountService = accountService;
     }*/
 
-    @RequestMapping(value = "/a", method = RequestMethod.GET)
-    @ResponseBody
-    public String Accounts(final Model model){
+    // GET /account : Récupération de la liste des comptes
+    @RequestMapping(value = "/account", method = RequestMethod.GET, produces = "application/json")
+    public  @ResponseBody Iterable<AccountEntity> list(Model model){
         final Iterable<AccountEntity> accounts = this.accountService.getAllAccounts();
         model.addAttribute("accounts", accounts);
         LOGGER.info("List Accounts is {}", accounts);
-        return "index.html";
+        return accounts;
     }
 
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    @ResponseBody
-    public String index(final Model model){
-        String msg = "Test" ;
-        model.addAttribute("message", msg);
-        return "index";
+    // GET /accountId : Récupération d'un compte par son ID
+    @RequestMapping(value = "/account/{id}", method = RequestMethod.GET, produces = "application/json" )
+    public @ResponseBody AccountEntity getById(@PathVariable long id){
+        AccountEntity accountEntity = accountService.getAccountById(id);
+        LOGGER.info("Account id is {}, return.", accountEntity);
+       return  accountEntity;
     }
 
-    @RequestMapping(value = "/accountTest", method = RequestMethod.GET)
-    public String printWelcome(final Model model) {
-        String msg = "Page Account" ;
-        LOGGER.info("Msg is {}, persisting.", msg);
-        model.addAttribute("message", msg);
+    // PUT /account : enregistrement d'un nouveau compte, renvoi un statut
+    @RequestMapping(value = "/account", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void create(@RequestBody AccountEntity accountEntity) {
+        accountService.save(accountEntity);
 
-        return "project";
+        LOGGER.info("Account Creating{}, persisting.", accountEntity.toString());
     }
 
 
-
-    @RequestMapping(value = "/account",method = RequestMethod.POST)
-    public AccountEntity createAccount(@RequestBody @Valid final AccountEntity account) {
-
-        return accountService.saveAccountEntity(account);
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    public Iterable<AccountEntity> getAllPlaces() {
-
-        return this.accountService.getAllAccounts();
-    }
-
-    @RequestMapping(value = "/{shortName}", method = RequestMethod.GET)
-    public AccountEntity getPlaceForShortName(@PathVariable(value = "shortName") String shortName) {
-
-        //find place by shortname
-        return this.accountService.getAccountByShortName(shortName);
-
+    @RequestMapping(value = "/account/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id){
+        accountService.deleteAccount(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
