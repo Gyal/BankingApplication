@@ -9,5 +9,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource
 public interface AccountRepository extends JpaRepository<AccountEntity, Long>{
-    AccountEntity findByShortName(String shortName);
 }

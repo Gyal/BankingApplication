@@ -11,6 +11,9 @@ import java.util.Date;
 @Table(name = "transaction")
 public class TransactionEntity {
 
+    @JoinTable(name = "transaction_id", joinColumns = {@JoinColumn(name = "account_id")}, inverseJoinColumns = {@JoinColumn(name = "account_id")})
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "transaction_id")

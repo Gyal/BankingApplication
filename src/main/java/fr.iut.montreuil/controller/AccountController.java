@@ -21,7 +21,7 @@ ce qui signifie qu'il ya moins d'écrire puisque depuis un service Web RESTFUL n
 */
 
 
-@RequestMapping("api")
+@RequestMapping("api/account")
 public class AccountController {
 
 
@@ -29,13 +29,8 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-   /* @Inject
-    public AccountController(final AccountService accountService){
-        this.accountService = accountService;
-    }*/
-
     // GET /account : Récupération de la liste des comptes
-    @RequestMapping(value = "/account", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
     public  @ResponseBody Iterable<AccountEntity> list(Model model){
         final Iterable<AccountEntity> accounts = this.accountService.getAllAccounts();
         model.addAttribute("accounts", accounts);
@@ -44,26 +39,23 @@ public class AccountController {
     }
 
 
-    // GET /accountId : Récupération d'un compte par son ID
-    @RequestMapping(value = "/account/{id}", method = RequestMethod.GET, produces = "application/json" )
+     // GET /{account-id}/{customer-id} Donne les infos du compte client checks droits"
+    @RequestMapping(value = "/{account-id}/{customer-id}", method = RequestMethod.GET, produces = "application/json" )
     public @ResponseBody AccountEntity getById(@PathVariable long id){
         AccountEntity accountEntity = accountService.getAccountById(id);
         LOGGER.info("Account id is {}, return.", accountEntity);
        return  accountEntity;
     }
 
-    // PUT /account : enregistrement d'un nouveau compte, renvoi un statut
-    @RequestMapping(value = "/account", method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void create(@RequestBody AccountEntity accountEntity) {
-        accountService.saveAccount(accountEntity);
-        LOGGER.info("Account Creating{}, persisting.", accountEntity.toString());
-    }
 
-    @RequestMapping(value = "/account/{id}", method = RequestMethod.DELETE)
+    /* PUT/balance/{customer-id}:  crédit ou débit d’argent sur le compte client (conditions comptes, alimenter historique opération client)
+     transfère de l’argent du compte de customer-id vers le compte customer-id-crediteur (check conditions compte alimenter historique opérations sur les comptes)
+    */
+
+    @RequestMapping(value = "/balance/{customer-id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAccount(@PathVariable long id){
-        accountService.deleteAccount(id);
+    public void balance(@PathVariable long id){
+      // a faire
     }
 
 

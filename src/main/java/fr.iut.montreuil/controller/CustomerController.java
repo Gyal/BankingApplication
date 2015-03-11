@@ -52,16 +52,16 @@ public class CustomerController {
        return  customerEntity;
     }
 
-    // PUT /account : enregistrement d'un nouveau compte, renvoi un statut
-    @RequestMapping(value = "/customer", method = RequestMethod.PUT)
+    // POST/{customer-id}: crée un compte pour le client
+    @RequestMapping(value = "/{customer-id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void create(@RequestBody CustomerEntity customerEntity) {
+    public void createCustomer(@RequestBody CustomerEntity customerEntity) {
         customerService.saveCustomer(customerEntity);
-
         LOGGER.info("Customer Creating{}, persisting.", customerEntity.toString());
     }
 
-    @RequestMapping(value = "/customer/{id}", method = RequestMethod.DELETE)
+    // Supression d'un utilisateur
+    @RequestMapping(value = "/{customer-id", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable long id){customerService.deleteCustomer(id);
     }

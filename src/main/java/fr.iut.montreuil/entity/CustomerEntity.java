@@ -10,6 +10,8 @@ import java.util.Date;
 @Entity
 @Table(name = "customer")
 public class CustomerEntity {
+
+    @JoinTable(name = "account_customer", joinColumns = {@JoinColumn(name = "account_id")}, inverseJoinColumns = {@JoinColumn(name = "customer_id")})
     //Variables
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
