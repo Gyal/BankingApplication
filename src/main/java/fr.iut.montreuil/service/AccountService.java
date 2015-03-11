@@ -12,6 +12,7 @@ import javax.inject.Inject;
  * Created by Mélina on 07/03/2015.
  */
 @Service
+@Transactional
 public class AccountService{
 
     private final AccountRepository accountRepository;
@@ -21,38 +22,14 @@ public class AccountService{
         this.accountRepository = accountRepository;
     }
 
-
-    @Transactional
-    public AccountEntity save(final AccountEntity accountEntity) {
-        return accountRepository.save(accountEntity);
-    }
-
-
+    public AccountEntity saveAccount(final AccountEntity accountEntity) {return accountRepository.save(accountEntity);}
+    public void deleteAccount(Long id) {accountRepository.delete(id);}
     public Iterable<AccountEntity> getAllAccounts() {
         return accountRepository.findAll();
     }
-
-
     public AccountEntity getAccountById(Long id) {
         return accountRepository.findOne(id);
     }
-
-
-    public AccountEntity saveAccountEntity(AccountEntity account) {
-        return account;
-    }
-
-
-    public AccountEntity updateAccount(AccountEntity account) {
-        return account;
-    }
-
-
-    public void deleteAccount(Long id) {
-            accountRepository.delete(id);
-
-    }
-
     public AccountEntity getAccountByShortName(String shortName) {
         return null;
     }

@@ -56,21 +56,15 @@ public class AccountController {
     @RequestMapping(value = "/account", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void create(@RequestBody AccountEntity accountEntity) {
-        accountService.save(accountEntity);
-
+        accountService.saveAccount(accountEntity);
         LOGGER.info("Account Creating{}, persisting.", accountEntity.toString());
     }
 
     @RequestMapping(value = "/account/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id){
+    public void deleteAccount(@PathVariable long id){
         accountService.deleteAccount(id);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void
-    deleteAccount(@PathVariable(value = "id") Long id) {
-        this.accountService.deleteAccount(id);
 
     }
-}
