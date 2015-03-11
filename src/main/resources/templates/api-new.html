@@ -1,0 +1,20 @@
+<div ng-controller="AccountNewController">
+    <h2>Nouveau compte</h2>
+
+    <form>
+        <div class="formField">
+            <label for="account.libelle">Nom du compte </label>
+            <input id="account.libelle" type= "text" ng-model="account.libelle"/>
+        </div>
+
+        <div class="formField">
+            <label for="account.balance">Solde</label>
+            <textarea id="account.libelle" ng-model="account.libelle">
+            </textarea>
+        </div>
+        <hr/>
+
+        <button class="button" ng-click="goAccountListPage()">&lt; Retour liste de compte</button>&nbsp;
+        <button class="button" ng-click="submit()">Ajouter</button>
+    </form>
+</div>

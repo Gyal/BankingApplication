@@ -24,6 +24,10 @@ public class AccountTypeEntity {
     @Column(nullable = false)
     private double percentage;
 
+    public AccountTypeEntity() {
+
+    }
+
     public AccountTypeEntity(Long idAccountType, String title, double celling, double percentage) {
         this.idAccountType = idAccountType;
         this.title = title;

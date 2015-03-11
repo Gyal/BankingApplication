@@ -56,12 +56,6 @@ public class AccountTypeController {
         LOGGER.info("Account Type Creating{}, persisting.", accountTypeEntity.toString());
     }
 
-    @RequestMapping(value = "/accountType/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id){
-        accountTypeService.deleteTypeAccount(id);
-    }
-
     @RequestMapping(value = "/acountType/{id}", method = RequestMethod.DELETE)
     public void
     deleteAccount(@PathVariable(value = "id") Long id) {

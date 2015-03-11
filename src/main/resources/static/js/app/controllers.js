@@ -1,17 +1,18 @@
 'use strict';
-function BankingListController($scope, $location, Todo) {
-    $scope.accounts = Todo.query();
+
+function AccountListController($scope, $location, Account) {
+    $scope.accounts = Account.query();
     $scope.gotoAccountNewPage = function () {
         $location.path("/api/account/new")
     };
-    $scope.deleteAccount = function (todo) {
-        todo.$delete({'id':account.id}, function () {
+    $scope.deleteAccount = function (account) {
+        account.$delete({'id':account.id}, function () {
             $location.path('/');
         });
     };
 }
-function BankingDetailController($scope, $routeParams, $location, Account) {
-    $scope.banking = Banking.get({id:$routeParams.id}, function (account) {
+function AccountDetailController($scope, $routeParams, $location, Account) {
+    $scope.account = Account.get({id:$routeParams.id}, function (account) {
     });
     $scope.gotoAccountListPage = function () {
         $location.path("/")

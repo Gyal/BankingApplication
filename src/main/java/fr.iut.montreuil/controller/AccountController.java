@@ -26,6 +26,7 @@ public class AccountController {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
+   // Au lieu de passer directement par le repository
     @Autowired
     private AccountService accountService;
 
@@ -37,7 +38,6 @@ public class AccountController {
         LOGGER.info("List Accounts is {}", accounts);
         return accounts;
     }
-
 
      // GET /{account-id}/{customer-id} Donne les infos du compte client checks droits"
     @RequestMapping(value = "/{account-id}/{customer-id}", method = RequestMethod.GET, produces = "application/json" )
