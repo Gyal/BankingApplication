@@ -1,8 +1,23 @@
 'use strict';
 
-function AccountListController($scope, $location, Account) {
-    $scope.accounts = Account.query();
-    $scope.gotoAccountNewPage = function () {
+var accountListControllers = angular.module('accountListControllers', []);
+accountListControllers.controller('AccountListCtrl' , ['$scope', '$http',
+    function($scope, $http) {
+        $http.get('/api/accountTypes.json').success(function (data) {
+            $scope.phones = 'title';
+        });
+        $scope.orderProp = 'celling';
+    }]);
+accountListControllers.controller('AccountListCtrl', ['$scope', '$routeParams',
+    function($scope, $routeParams) {
+        $scope.title = $routeParams.title;
+    }
+]);
+
+
+
+/*
+      $scope.gotoAccountNewPage = function () {
         $location.path("/api/account/new")
     };
     $scope.deleteAccount = function (account) {
@@ -27,4 +42,4 @@ function AccountNewController($scope, $location, Account) {
     $scope.gotoAccountListPage = function () {
         $location.path("/")
     };
-}
+}*/
