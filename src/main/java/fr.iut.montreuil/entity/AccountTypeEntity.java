@@ -13,7 +13,7 @@ public class AccountTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_type_id")
-    private Long idAccountType;
+    private Long idType;
 
     @Column(nullable = false)
     private String title;
@@ -28,15 +28,15 @@ public class AccountTypeEntity {
 
     }
 
-    public AccountTypeEntity(Long idAccountType, String title, double celling, double percentage) {
-        this.idAccountType = idAccountType;
+    public AccountTypeEntity(Long idType, String title, double celling, double percentage) {
+        this.idType = idType;
         this.title = title;
         this.celling = celling;
         this.percentage = percentage;
     }
 
     public long getIdAccountType() {
-        return idAccountType;
+        return idType;
     }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

@@ -70,11 +70,21 @@ public class TransactionEntity {
         this.transactionDate = transactionDate;
     }
 
-    public void virement(int numDebitedAccount, int numCreditedAccount, double amount, Date transactionDate){
+    public void transfer(int numDebitedAccount, int numCreditedAccount, double amount, Date transactionDate){
         /* à récupérer de la base */
-        long idVirement = 123; /* Cette valeur sera à valeur + 1 du dernier virement de la base de données */
-        TransactionEntity virement = new TransactionEntity(idVirement,"Virement",numDebitedAccount, numCreditedAccount, amount, transactionDate);
+        long idTransfert = 123; /* Cette valeur sera à valeur + 1 du dernier virement de la base de données */
+        TransactionEntity virement = new TransactionEntity(idTransfert,"Virement",numDebitedAccount, numCreditedAccount, amount, transactionDate);
     }
+
+   /* public void deposit(float amount) {
+        long idDeposit = 1;
+        int numDebitedAccount = 0;
+        TransactionEntity virement = new TransactionEntity(idDepot,"Depot",numDebitedAccount, numCreditedAccount, amount, transactionDate);
+        AccountEntity accountCredited = AccountEntity.
+        balance = balance + amount;
+        System.out.println(firstName + " " + lastName + " deposited $" + deposit + ". Current Balance $" + balance);
+
+    }*/
 
     public void depot(int numCreditedAccount, double amount, Date transactionDate){
         /* à récupérer de la base */

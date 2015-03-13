@@ -14,30 +14,32 @@ public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
-    private Long idAccount;
+    private Long id;
 
-    private String libelleAccount;
+    private String name;
 
     protected double balance;
 
-    @ElementCollection// annotation pour tracer le type de base de l'objet
-    private List<TransactionEntity> transactions = new ArrayList<TransactionEntity>();
+    private String type;
 
-    public AccountEntity(Long idAccount, String libelleAccount, double balance) {
-        this.idAccount = idAccount;
-        this.libelleAccount = libelleAccount;
+    @ElementCollection// annotation pour tracer le type de base de l'objet
+    private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
+
+    public AccountEntity(Long id, String name, double balance) {
+        this.id = id;
+        this.name = name;
         this.balance= balance;
     }
 
     public long getIdAccount() {
-        return idAccount;
+        return id;
     }
 
-    public String getLibelleAccount() {
-        return libelleAccount;
+    public String getNameAccount() {
+        return name;
     }
-    public void setLibelleAccount(String libelleAccount) {
-        this.libelleAccount = libelleAccount;
+    public void setNameAccount(String name) {
+        this.name = name;
     }
 
     public double getBalance() {
@@ -50,6 +52,11 @@ public class AccountEntity {
     public void debit(int amount){ this.balance = this.balance - amount; };
 
     public void credit(int amount) { this.balance = this.balance + amount; };
+
+    public List<TransactionEntity> getOperations(){
+        return operations;
+    }
+
 }
 
 

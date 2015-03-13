@@ -1,12 +1,19 @@
-'use strict';
+(function(){
+    angular.module("BankingApp.controllers", []);
+    angular.module("BankingApp.services", []);
+    angular.module("BankingApp.", ["ngResource", "BankingApp.controllers", "BankingApp.services"]);
+}(angular));
+
+
+/*'use strict';
 var bankingApp = angular.module('bankingApp', [
     'accountListControllers',
     'ngRoute'
 ]);
 
-bankingApp.config(['$routeProvider',
-    function ($routeProvider) {
-        $routeProvider.
+bankingApp.config(['$resourceProvider',
+    function ($resourceProvider) {
+        $resourceProvider.defaults.stripTrailingSlashes = false;
             when('/api/accountTypes', {
                 templateUrl: 'templates/api-list.html',
                 controller: 'AccountListCtrl'
@@ -23,3 +30,6 @@ bankingApp.config(['$routeProvider',
                 redirectTo: '/api'
             });
     }]);
+
+
+   */

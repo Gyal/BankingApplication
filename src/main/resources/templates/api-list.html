@@ -6,6 +6,9 @@
 </head>
 <body>
 
+<p>{{acountTypes}}</p>
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -22,6 +25,7 @@
             <ul class="accounts">
                 <li ng-repeat="accountType in accountTypes | filter:query | orderBy:orderProp" class="thumbnail">
                     <p>{{accountType.title}}</p>
+
                 </li>
             </ul>
         </div>

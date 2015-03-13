@@ -1,0 +1,60 @@
+   body{
+        padding-top:30px;
+        padding-bottom : 40px;
+        padding-left:15px;
+        }
+        body a {
+        color:#FF0000;
+        }
+        body a:hover{
+        color:#AFAFAF;
+        }
+        .sidebar-nav {
+        padding: 9px 0;
+        }
+        form{
+        width:20%;
+        padding: 20px;
+        }
+        #tab_account{
+        width:50%;
+
+        }
+        .row-fluid{
+        padding-top:50px;
+        }
+
+
+   .row-centered {
+       text-align:center;
+   }
+   .col-centered {
+       display:inline-block;/*aligner les div sur une ligne*/
+       float:none;
+       /* reset the text-align */
+       text-align:center;
+       /* inline-block space fix */
+       margin-right:4px;
+       margin-left:4px;
+   }
+
+
+   .col-fixed {
+       /* custom width */
+       width:320px;
+   }
+   .col-min {
+       /* custom min width */
+       min-width:320px;
+   }
+   .col-max {
+       /* custom max width */
+       max-width: 320px;
+   }
+   .block{
+       height:200px;
+   }
+
+   #page{
+       margin-top: 50px;
+   }

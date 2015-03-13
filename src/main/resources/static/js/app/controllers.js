@@ -1,18 +1,38 @@
-'use strict';
+(function() {
+    var AccountController = function($scope, accountService){
 
-var accountListControllers = angular.module('accountListControllers', []);
-accountListControllers.controller('AccountListCtrl' , ['$scope', '$http',
-    function($scope, $http) {
-        $http.get('/api/accountTypes.json').success(function (data) {
-            $scope.phones = 'title';
+        accountService.query(function(response) {
+            $scope.accountTypes = response || [];
         });
-        $scope.orderProp = 'celling';
-    }]);
-accountListControllers.controller('AccountListCtrl', ['$scope', '$routeParams',
-    function($scope, $routeParams) {
-        $scope.title = $routeParams.title;
-    }
-]);
+
+        $scope.addAccount = function (accountDTO) {
+            accountService.save({
+                description: accountDTO.description
+            }, function (account) {
+                $scope.accountTypes.push(account);
+            });
+            $scope.newAccount = "";
+        };
+        $scope.deleteAccount = function (accountDTO) {
+           accountService.remove({
+                id: todoDTO.id
+            }, function () {
+                $scope.accountTypes = _.remove($scope.accountTypes, function (element) {
+                    return element.id !== accountDto.id;
+                });
+            });
+        };
+        $scope.updateAccount = function (accountDTO) {
+            accountService.update({
+                id: accountDTO.id
+            },{
+                account: accountDTO
+            });
+        };
+    };
+    AccountController.$inject = ['$scope', 'accountService'];
+    angular.module("BankingApp.controllers").controller("AccountController", AccountController);
+}(angular));
 
 
 
