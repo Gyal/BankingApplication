@@ -28,7 +28,6 @@
         <class-b>fr.iut.montreuil.entity.dto.AccountDto</class-b>
     </mapping>
 
-
     <mapping>
         <class-a>fr.iut.montreuil.entity.CustomerEntity</class-a>
         <class-b>fr.iut.montreuil.entity.dto.CustomerDto</class-b>
