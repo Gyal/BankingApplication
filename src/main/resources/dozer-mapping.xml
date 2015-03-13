@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--
+        Not needed anymore, we are not making dependant DTO and POJO
+        We can encounter complexe understanding issue when we get cyclomatic references
+        with jackson in those cases.
+        Furthermore, we are also able to fine grain (unit) test our dozer and jackson mappings
+        Keep decoupling in mind.
+     -->
+   <configuration>
+        <stop-on-errors>true</stop-on-errors>
+        <date-format>MM/dd/yyyy HH:mm</date-format>
+        <wildcard>true</wildcard>
+    </configuration>
+
+    <mapping>
+        <class-a>fr.iut.montreuil.entity.AccountTypeEntity</class-a>
+        <class-b>fr.iut.montreuil.entity.dto.AccountTypeDto</class-b>
+    </mapping>
+
+
+    <mapping>
+        <class-a>fr.iut.montreuil.entity.AccountEntity</class-a>
+        <class-b>fr.iut.montreuil.entity.dto.AccountDto</class-b>
+    </mapping>
+
+
+    <mapping>
+        <class-a>fr.iut.montreuil.entity.CustomerEntity</class-a>
+        <class-b>fr.iut.montreuil.entity.dto.CustomerDto</class-b>
+    </mapping>
+
+
+    <mapping>
+        <class-a>fr.iut.montreuil.entity.TransactionEntity</class-a>
+        <class-b>fr.iut.montreuil.entity.dto.TransactionDto</class-b>
+    </mapping>
+</mappings>
