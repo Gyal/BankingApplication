@@ -11,31 +11,4 @@
         Furthermore, we are also able to fine grain (unit) test our dozer and jackson mappings
         Keep decoupling in mind.
      -->
-   <configuration>
-        <stop-on-errors>true</stop-on-errors>
-        <date-format>MM/dd/yyyy HH:mm</date-format>
-        <wildcard>true</wildcard>
-    </configuration>
-
-    <mapping>
-        <class-a>fr.iut.montreuil.entity.AccountTypeEntity</class-a>
-        <class-b>fr.iut.montreuil.entity.dto.AccountTypeDto</class-b>
-    </mapping>
-
-
-    <mapping>
-        <class-a>fr.iut.montreuil.entity.AccountEntity</class-a>
-        <class-b>fr.iut.montreuil.entity.dto.AccountDto</class-b>
-    </mapping>
-
-    <mapping>
-        <class-a>fr.iut.montreuil.entity.CustomerEntity</class-a>
-        <class-b>fr.iut.montreuil.entity.dto.CustomerDto</class-b>
-    </mapping>
-
-
-    <mapping>
-        <class-a>fr.iut.montreuil.entity.TransactionEntity</class-a>
-        <class-b>fr.iut.montreuil.entity.dto.TransactionDto</class-b>
-    </mapping>
 </mappings>
