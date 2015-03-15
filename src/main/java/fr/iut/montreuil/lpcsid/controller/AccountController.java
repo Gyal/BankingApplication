@@ -1,18 +1,18 @@
-package controller;
+package fr.iut.montreuil.lpcsid.controller;
 
-import dto.AccountDto;
-import entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.dto.AccountDto;
+import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.service.AccountService;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import service.AccountService;
 
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
-import static dto.AccountDto.newAccountDto;
+import static fr.iut.montreuil.lpcsid.dto.AccountDto.newAccountDto;
 
 /**
  * Created by Mélina on 07/03/2015.

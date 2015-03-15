@@ -1,8 +1,7 @@
-package service;
+package fr.iut.montreuil.lpcsid.service;
 
-
-import entity.TransactionEntity;
-import repository.TransactionRepository;
+import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
+import fr.iut.montreuil.lpcsid.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,42 +1,34 @@
-package entity;
+package fr.iut.montreuil.lpcsid.dto;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mélina on 07/03/2015.
+ * Created by youniik-nana on 10/03/15.
  */
-@Entity
-@Table(name = "account")
-public class AccountEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "account_id")
+public class AccountDto {
+
     private Long id;
-
     private String libelle;
-
-    private double balance = 0;// la balance du compte est initialisé à 0
+    protected double balance = 0;// la balance du compte est initialisé à 0
     private String type;
-
-    @ElementCollection// annotation pour tracer le type de base de l'objet
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
 
 
-    public AccountEntity() {
+    public AccountDto() {
     }
 
-    public AccountEntity(Long id, String libelle, double balance) {
+    public AccountDto(Long id, String libelle, double balance) {
         this.id = id;
         this.libelle = libelle;
         this.balance = balance;
     }
 
-    public static AccountEntity newAccountEntity() {
-        return newAccountEntity();
+    public static AccountDto newAccountDto() {
+        return newAccountDto();
     }
 
     public Long getId() {
@@ -63,6 +55,12 @@ public class AccountEntity implements Serializable {
         this.balance = balance;
     }
 
+    public List<TransactionEntity> getOperations() {
+        return operations;
+    }
+
+
+    // Méthode withDraw(amount) : débit d'un montant
     public int withDraw(final int amount) {
         if (amount >= 0 &&
                 balance - amount >= 0) {
@@ -73,17 +71,11 @@ public class AccountEntity implements Serializable {
         }
     }
 
+    // Méthode deposit(ammount) : depot d'un montant
     public void deposit(final int amount) {
         if (amount >= 0) {
             balance = balance + amount;
         }
     }
-
-    public List<TransactionEntity> getOperations() {
-        return operations;
-    }
-
 }
-
-
 

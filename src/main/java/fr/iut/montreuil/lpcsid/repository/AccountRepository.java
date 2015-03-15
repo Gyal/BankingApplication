@@ -1,6 +1,6 @@
-package repository;
+package fr.iut.montreuil.lpcsid.repository;
 
-import entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

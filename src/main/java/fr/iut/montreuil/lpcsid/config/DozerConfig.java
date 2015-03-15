@@ -1,4 +1,4 @@
-package config;
+package fr.iut.montreuil.lpcsid.config;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;

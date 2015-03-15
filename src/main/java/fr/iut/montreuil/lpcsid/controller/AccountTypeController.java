@@ -1,7 +1,7 @@
-package controller;
+package fr.iut.montreuil.lpcsid.controller;
 
-import entity.AccountTypeEntity;
-import service.AccountTypeService;
+import fr.iut.montreuil.lpcsid.entity.AccountTypeEntity;
+import fr.iut.montreuil.lpcsid.service.AccountTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

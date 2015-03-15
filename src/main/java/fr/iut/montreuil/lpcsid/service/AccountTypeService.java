@@ -1,12 +1,13 @@
-package service;
+package fr.iut.montreuil.lpcsid.service;
 
 
-import entity.AccountTypeEntity;
-import repository.AccountTypeRepository;
+import fr.iut.montreuil.lpcsid.entity.AccountTypeEntity;
+import fr.iut.montreuil.lpcsid.repository.AccountTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by Mélina on 07/03/2015.
@@ -23,6 +24,9 @@ public class AccountTypeService {
 
     public AccountTypeEntity saveTypeAccount(final AccountTypeEntity accountTypeEntity) {return accountTypeRepository.save(accountTypeEntity);}
     public void deleteTypeAccount(Long id){accountTypeRepository.delete(id);}
-    public Iterable<AccountTypeEntity> getAllAccountTypes() {return accountTypeRepository.findAll();}
+
+    public List<AccountTypeEntity> getAllAccountTypes() {
+        return accountTypeRepository.findAll();
+    }
     public AccountTypeEntity getAccountTypeById(Long id) {return accountTypeRepository.findOne(id);}
 }

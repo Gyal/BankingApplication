@@ -1,8 +1,7 @@
-package service;
+package fr.iut.montreuil.lpcsid.service;
 
-
-import entity.AccountEntity;
-import repository.AccountRepository;
+import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package entity;
+package fr.iut.montreuil.lpcsid.entity;
 
 import javax.persistence.*;
 import java.util.Date;
