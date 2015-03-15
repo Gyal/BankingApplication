@@ -15,7 +15,7 @@
         <version>1.2.2.RELEASE</version>
     </parent>
 
-    <name>Example Spring Boot REST Service Tutorial</name>
+    <name>Banking Application</name>
 
     <properties>
         <java.version>1.7</java.version>
@@ -152,6 +152,17 @@
             <artifactId>spring-test</artifactId>
             <version>4.1.5.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>4.1.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>4.1.4.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <build>

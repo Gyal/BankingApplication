@@ -1,7 +1,8 @@
 package dto;
 
-import config.DozerConfig;
-import entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.config.DozerConfig;
+import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
 import org.dozer.Mapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +14,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -53,7 +54,7 @@ public class AccountDtoTest {
         String libelle = "lib";
         double balance = 10.2;
 
-        AccountEntity account = new AccountEntity(id, libelle, balance);
+        AccountEntity account = new AccountEntity(id, libelle, balance, "CURRENT");
         AccountDto accountDTO = mapper.map(account, AccountDto.class);
 
         LOGGER.info("ID accountDto is {}", accountDTO.getId());
@@ -90,8 +91,6 @@ public class AccountDtoTest {
 
     /**
      * ----------------------------------------------------------------------------------
-     * <p/>
-     * <p/>
      * /*-----------------------------------------------------------------------------------
      * Test des méthodes de dépot et de débit
      * -----------------------------------------------------------------------------------

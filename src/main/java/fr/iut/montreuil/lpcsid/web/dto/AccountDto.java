@@ -1,4 +1,4 @@
-package fr.iut.montreuil.lpcsid.dto;
+package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 
