@@ -1,10 +1,40 @@
-(function(){
+var BankingAppModule = angular.module('BankingAppModule', ['ngRessource']);
+
+BankingAppModule.controller('BankingAppController', function ($scope, $http) {
+    BankingAppModule
+
+    app.config(function ($stateProvider, $urlRouterProvider) {
+
+        $stateProvider
+            .state('home', {
+                url: '/api/account/',
+                templateUrl: URLS.partialsList,
+                controller: 'BankingAppController'
+            });
+
+        app.controller("BankingAppController", function ($scope, Account, $state) {
+            function init() {
+                $scope.getAccounts();
+            }
+
+
+            $scope.getAccounts = function () {
+                $scope.account = Account.query();
+            };
+        });
+    })
+});
+
+
+/*
+
+ (function(){
     angular.module("BankingApp.controllers", []);
     angular.module("BankingApp.services", []);
     angular.module("BankingApp.", ["ngResource", "BankingApp.controllers", "BankingApp.services"]);
 }(angular));
 
-
+ */
 /*'use strict';
 var bankingApp = angular.module('bankingApp', [
     'accountListControllers',
