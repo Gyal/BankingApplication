@@ -13,9 +13,6 @@ import java.util.Date;
 @Table(name = "transaction")
 public class TransactionEntity implements Serializable {
 
-    //  @JoinTable(name = "transaction_id", joinColumns = {@JoinColumn(name = "account_id")}, inverseJoinColumns = {@JoinColumn(name = "account_id")})
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "transaction_id")
@@ -24,9 +21,10 @@ public class TransactionEntity implements Serializable {
     @Column(nullable = false)
     private String transactionName;
 
-   /* @Column(nullable = false)
-    private int NumDebitedAccount;
+    @OneToOne
+    private AccountEntity accountDebited;
 
+/*
     @Column(nullable = false)
     private int NumCreditedAccount;
     */
@@ -40,16 +38,27 @@ public class TransactionEntity implements Serializable {
     @Column(nullable = false)
     private String type;
 
+
+    /**
+     * Récupération du compte bancaire associé
+     *
+     * @return Compte bancaire associé
+     */
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    public AccountEntity account;
+
     public TransactionEntity() {
 
     }
 
-    public TransactionEntity(Long idTransaction, String transactionName, int amount, Date transactionDate, String type) {
+    public TransactionEntity(Long idTransaction, AccountEntity account, String transactionName, int amount, Date transactionDate, String type) {
         this.idTransaction = idTransaction;
         this.transactionName = transactionName;
         this.amount = amount;
         this.transactionDate = transactionDate;
         this.type = type;
+        this.account = account;
     }
 
     public Long getIdTransaction() {

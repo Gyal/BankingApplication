@@ -63,6 +63,9 @@ public class AccountController {
         Iterable<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
+
+        AccountEntity accountEntity = new AccountEntity(1L, "test", 10.2, "CURRENT");
+        accountService.saveAccount(accountEntity);
         return accountDtos;
     }
 

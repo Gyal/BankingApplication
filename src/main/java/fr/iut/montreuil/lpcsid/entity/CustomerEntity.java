@@ -56,7 +56,7 @@ public class CustomerEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @ElementCollection// annotation pour tracer le type de base de l'objet
+    @OneToMany
     private List<AccountEntity> accounts = new ArrayList<AccountEntity>();
 
     public CustomerEntity(Long idCustomer, String civilities, String lastname, String firstName, Date dateOfBirth, String street, String city, String country, int zipCode, String mail, int phoneNumber, int connexionLogin, String password) {

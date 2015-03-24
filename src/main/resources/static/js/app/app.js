@@ -4,9 +4,27 @@
 
 // Super Tuto pour angular : http://www.angular-js.fr/decouvrez-angularjs/
 
-var app = angular.module('myApp', []);
 
-var AccountCtrl = function ($scope) {
+// Déclaration de l'application
+var app = angular.module('bankingApp', [
+    'accountList'
+]);
+
+// Déclaration du module todule accountList
+var accountList = angular.module('accountList', []);
+
+// Contrôleur de l'application "AccountList"
+accountList.controller('AccountCtrl', ['$scope',
+    function ($scope) {
+
+        $scope.accounts = [],
+            $scope.profil = "L'id de l'user en Angular"
+    }]);
+
+
+// Ajout d'un compte
+
+/*
     $scope.profil = "L'id de l'user en Angular"
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider
@@ -14,4 +32,4 @@ var AccountCtrl = function ($scope) {
                 templateUrl: 'templates/index.html'
             })
     }]);
-}
+ }*/

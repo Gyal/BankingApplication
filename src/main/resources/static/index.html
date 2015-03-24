@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="fr" ng-app>
+<html lang="fr" ng-app="bankingApp">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -28,10 +28,24 @@
 
     <div class="container-fluid" ng-controller="AccountCtrl">
         <div class="row row-centered">
-            <div class="col-xs-5 col-centered well block">Profil : {{profil}}</div>
-            <div class="col-xs-2 col-centered well block">Etat Compte Courant</div>
-            <div class="col-xs-2 col-centered well block">Etat Compte PEL</div>
-            <div class="col-xs-5 col-centered well block">Liste des activités ( actions possibles)</div>
+            <div class="col-lg-5 col-centered well block ">Profil :{{profil}}</div>
+            <div class="col-lg-2 col-centered well block fixed">Etat Compte Courant:{{accounts.id}}</div>
+            <div class="col-lg-2 col-centered well block fixed">Etat Compte PEL</div>
+
+            <div class="col-lg-5 col-centered well block fixed">
+                <ul class="nav">
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Liste des activités ( actions
+                            possibles) <b class="caret"></b></a>
+
+                        <div class="list-group">
+                            <a href="api/accounts/" class="list-group-item">Visualiser mes comptes</a>
+                            <a href="api/transfer/" class="list-group-item">Réaliser un virement</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
             <div class="col-xs-2 col-centered well block"> Histo Courant</div>
             <div class="col-xs-2 col-centered well block"> Histo PEL</div>
         </div>

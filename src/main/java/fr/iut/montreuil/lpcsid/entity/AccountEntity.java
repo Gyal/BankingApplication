@@ -14,8 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "account")
 public class AccountEntity implements Serializable {
-    //@JoinTable(name = "customer_account", joinColumns = {@JoinColumn(name = "account_id")}, inverseJoinColumns = {@JoinColumn(name = "customer_id")})
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,9 +26,12 @@ public class AccountEntity implements Serializable {
     private Date dateCreated;
     private static double taxation;
 
-    @ElementCollection// annotation pour tracer le type de base de l'objet
+    @ManyToMany()// annotation pour tracer le type de base de l'objet
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
 
+
+    @OneToOne
+    private CustomerEntity customer;
 
     public AccountEntity() {
     }
@@ -121,6 +122,9 @@ public class AccountEntity implements Serializable {
         return operations;
     }
 
+    public void setOperations(TransactionEntity operations1) {
+        operations.add(operations1);
+    }
     public int withDraw(final int amount) {
         if (amount > 0 && balance - amount >= 0) {
             balance = balance - amount;
