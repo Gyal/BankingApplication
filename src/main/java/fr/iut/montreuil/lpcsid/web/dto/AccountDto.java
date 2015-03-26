@@ -3,7 +3,10 @@ package fr.iut.montreuil.lpcsid.web.dto;
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,21 +17,31 @@ public class AccountDto {
 
     private Long id;
     private String libelle;
-    protected double balance = 0;// la balance du compte est initialisé à 0
+    private double balance = 0;
+    private double MAX_BALANCE;
     private String type;
+    private Date dateCreated;
+    private static double taxation;
+
+    @ManyToMany()// annotation pour tracer le type de base de l'objet
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
+
+
+    @OneToOne
     private CustomerEntity customer;
 
     public AccountDto() {
     }
 
 
-    public AccountDto(Long id, String libelle, double balance, CustomerEntity customer) {
+    public AccountDto(Long id, String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, CustomerEntity customer) {
         this.id = id;
         this.libelle = libelle;
         this.balance = balance;
+        this.MAX_BALANCE = MAX_BALANCE;
+        this.type = type;
+        this.dateCreated = dateCreated;
         this.customer = customer;
-
     }
 
     public static AccountDto newAccountDto() {
@@ -69,6 +82,38 @@ public class AccountDto {
 
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
+    }
+
+    public double getMAX_BALANCE() {
+        return MAX_BALANCE;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public static double getTaxation() {
+        return taxation;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public static void setTaxation(double taxation) {
+        AccountDto.taxation = taxation;
+    }
+
+    public void setOperations(List<TransactionEntity> operations) {
+        this.operations = operations;
     }
 
     // Méthode withDraw(amount) : débit d'un montant
