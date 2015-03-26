@@ -1,5 +1,6 @@
 package fr.iut.montreuil.lpcsid.web.dto;
 
+import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 
 import java.util.ArrayList;
@@ -16,15 +17,18 @@ public class AccountDto {
     protected double balance = 0;// la balance du compte est initialisé à 0
     private String type;
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
-
+    private CustomerEntity customer;
 
     public AccountDto() {
     }
 
-    public AccountDto(Long id, String libelle, double balance) {
+
+    public AccountDto(Long id, String libelle, double balance, CustomerEntity customer) {
         this.id = id;
         this.libelle = libelle;
         this.balance = balance;
+        this.customer = customer;
+
     }
 
     public static AccountDto newAccountDto() {
@@ -59,6 +63,13 @@ public class AccountDto {
         return operations;
     }
 
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
+    }
 
     // Méthode withDraw(amount) : débit d'un montant
     public int withDraw(final int amount) {

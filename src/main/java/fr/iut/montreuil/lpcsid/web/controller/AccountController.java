@@ -1,8 +1,10 @@
 package fr.iut.montreuil.lpcsid.web.controller;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 import fr.iut.montreuil.lpcsid.service.AccountService;
+import fr.iut.montreuil.lpcsid.service.CustomerService;
 import fr.iut.montreuil.lpcsid.service.TransactionService;
 import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
@@ -16,6 +18,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.google.common.collect.FluentIterable.from;
@@ -45,6 +48,8 @@ public class AccountController {
     private AccountService accountService;
 
     @Autowired
+    private CustomerService customerService;
+    @Autowired
     private TransactionService transactionService;
     @Autowired
     private Mapper mapper;
@@ -64,7 +69,10 @@ public class AccountController {
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
 
-        AccountEntity accountEntity = new AccountEntity(1L, "test", 10.2, "CURRENT");
+        CustomerEntity customer = new CustomerEntity(1l, "eee", "mel", "tat", new Date(), "rue", "vii", "france", 91240, "mmm@", 0651, 111, "melin");
+
+        customerService.saveCustomer(customer);
+        AccountEntity accountEntity = new AccountEntity(22L, "test", 10.00, 3000, "CURRENT", new Date(), customer);
         accountService.saveAccount(accountEntity);
         return accountDtos;
     }
