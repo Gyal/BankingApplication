@@ -21,7 +21,7 @@ public class BankingApplication  extends SpringBootServletInitializer{
     }
 
 
-    // SERVLETinitializer
+    // ServletInitializer
    @Override
     protected final SpringApplicationBuilder configure(final SpringApplicationBuilder application){
         return application.sources(BankingApplication.class);
