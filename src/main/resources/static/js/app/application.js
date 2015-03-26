@@ -1,65 +1,34 @@
-var BankingAppModule = angular.module('BankingAppModule', ['ngRessource']);
-
-BankingAppModule.controller('BankingAppController', function ($scope, $http) {
-    BankingAppModule
-
-    app.config(function ($stateProvider, $urlRouterProvider) {
-
-        $stateProvider
-            .state('home', {
-                url: '/api/account/',
-                templateUrl: URLS.partialsList,
-                controller: 'BankingAppController'
-            });
-
-        app.controller("BankingAppController", function ($scope, Account, $state) {
-            function init() {
-                $scope.getAccounts();
-            }
-
-
-            $scope.getAccounts = function () {
-                $scope.account = Account.query();
-            };
-        });
-    })
-});
-
-
-/*
-
- (function(){
-    angular.module("BankingApp.controllers", []);
-    angular.module("BankingApp.services", []);
-    angular.module("BankingApp.", ["ngResource", "BankingApp.controllers", "BankingApp.services"]);
-}(angular));
-
+/**
+ * Created by Mélina on 16/03/2015.
  */
-/*'use strict';
-var bankingApp = angular.module('bankingApp', [
-    'accountListControllers',
-    'ngRoute'
+// Super Tuto pour angular : http://www.angular-js.fr/decouvrez-angularjs/
+
+
+// Déclaration de l'application
+var app = angular.module('bankingApp', [
+    'accountList'
 ]);
 
-bankingApp.config(['$resourceProvider',
-    function ($resourceProvider) {
-        $resourceProvider.defaults.stripTrailingSlashes = false;
-            when('/api/accountTypes', {
-                templateUrl: 'templates/api-list.html',
-                controller: 'AccountListCtrl'
-            }).
-            when('/api/account/new', {
-                templateUrl: 'templates/api-new.html',
-                controller: 'AccountNewController'
-            }).
-            when('/api/account:id', {
-                templateUrl: 'templates/api-detail.html',
-                controller: 'AccountDetailController'
-            }).
-                otherwise({
-                redirectTo: '/api'
-            });
+// Déclaration du module todule accountList
+var accountList = angular.module('accountList', []);
+
+// Contrôleur de l'application "AccountList"
+accountList.controller('AccountCtrl', ['$scope',
+    function ($scope) {
+
+        $scope.accounts = [],
+            $scope.profil = "L'id de l'user en Angular"
     }]);
 
 
-   */
+// Ajout d'un compte
+
+/*
+    $scope.profil = "L'id de l'user en Angular"
+    app.config(['$routeProvider', function ($routeProvider) {
+        $routeProvider
+            .when('/', {
+                templateUrl: 'templates/index.html'
+            })
+    }]);
+ }*/
