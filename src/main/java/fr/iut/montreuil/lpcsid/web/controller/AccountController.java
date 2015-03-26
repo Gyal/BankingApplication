@@ -17,6 +17,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.google.common.collect.FluentIterable.from;
@@ -35,7 +36,6 @@ La différence entre cela et Controller annotation est l'ancien implique égalem
 ce qui signifie qu'il ya moins d'écrire puisque depuis un service Web RESTFUL nous retournons objets JSON de toute façon.
 */
 
-
 @RequestMapping("api/account")
 public class AccountController {
 
@@ -44,14 +44,12 @@ public class AccountController {
     // Au lieu de passer directement par le repositoryTest
     @Autowired
     private AccountService accountService;
-
     @Autowired
     private CustomerService customerService;
     @Autowired
     private TransactionService transactionService;
     @Autowired
     private Mapper mapper;
-
 
     /**
      * *************************************Methode HTTP basic ****************************************
@@ -70,7 +68,7 @@ public class AccountController {
        /* CustomerEntity customer = new CustomerEntity(1l, "eee", "mel", "tat", new Date(), "rue", "vii", "france", 91240, "mmm@", 0651, 111, "melin");
 
         customerService.saveCustomer(customer);
-        AccountEntity accountEntity = new AccountEntity(22L, "test", 10.00, 3000, "CURRENT", new Date(), customer);
+        AccountEntity accountEntity = new AccountEntity(22L, "test", 10.00, 3000, "CURRENT", customer);
         accountService.saveAccount(accountEntity);
         */
         return accountDtos;
@@ -126,7 +124,6 @@ public class AccountController {
         return mapper.map(updatedAccount, AccountDto.class);
     }
 
-
     // DELETE /account/delete/{id} : suprpession d'un compte de tel id, renvoi le statut NOCONTENT
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -137,7 +134,6 @@ public class AccountController {
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
         }
     }
-
 
     /* PUT/balance/{customer-id}:  crédit ou débit d’argent sur le compte client (conditions comptes, alimenter historique opération client)
      transfère de l’argent du compte de customer-id vers le compte customer-id-crediteur (check conditions compte alimenter historique opérations sur les comptes)
@@ -152,42 +148,36 @@ public class AccountController {
 
 /*****************************************************************************************************************************/
 
-    /**
-     * ************************** Functional knowledge **************************************************************************
-     */
-
     @RequestMapping(value = "/{id}/transfert", method = RequestMethod.POST)
-    public void deposit(@PathVariable long id, @RequestBody AccountDto accountDto, @RequestParam(value = "amount", required = true) final int amountTransfer, @RequestParam(value = "idAccountCredited", required = true) final Long idAccountCredited) {
+    public void transfert(@PathVariable long id, @RequestBody AccountDto accountDto, @RequestParam(value = "amount", required = true) final int amountTransfer, @RequestParam(value = "idAccountCredited", required = true) final Long idAccountCredited) {
 
         AccountEntity account = mapper.map(accountDto, AccountEntity.class);
         AccountEntity accountDebited = accountService.getAccountById(id);
         AccountEntity accountCredited = accountService.getAccountById(idAccountCredited);
+        Date today = new Date();
 
         if (null == accountDebited) {
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
         }
-
+        /* Informations logger */
         if (accountDebited.getType() != "CURRENT") {
             LOGGER.info("le transfert n'est pas autorisé car le compte débité est de type{}", accountDebited.getType());
         }
-        if (accountCredited.getType() != "CURRENT") {
-            LOGGER.info("le transfert n'est pas autorisé car le compte crédité est de type{}", accountCredited.getType());
-
-        }
         if (amountTransfer <= 0) {
             LOGGER.info("le montant du transfert est inférieur à 0 : {}", amountTransfer);
-
         }
         if (accountDebited.getBalance() - amountTransfer < 0) {
-            LOGGER.info("Le retrait ne peut pas être éffectuer car le compte serait à découvert : solde-montant = {}", accountDebited.getBalance() - amountTransfer);
-
-        } else {
-
-            accountDebited.tranfert(amountTransfer, accountDebited, accountCredited);
-            accountService.saveAccount(accountCredited);
-            accountService.saveAccount(accountCredited);
+            LOGGER.info("Le retrait ne peut pas être effectuer car le compte serait à découvert : solde-montant = {}", accountDebited.getBalance() - amountTransfer);
         }
+        /* Action */
+        if(accountDebited.getType() == "CURRENT" && amountTransfer > 0 && accountDebited.getBalance() - amountTransfer > 0){
+            accountDebited.transfert(amountTransfer, accountDebited, accountCredited);
+            accountService.saveAccount(accountDebited);
+            accountService.saveAccount(accountCredited);
 
+            TransactionEntity transfertEntity = new TransactionEntity((long)account.getOperations().size(), "Transfert", amountTransfer, today, accountDebited, accountCredited);
+            account.getOperations().add(transfertEntity);
+        }
     }
 
     @RequestMapping(value = "/{id}/deposit", method = RequestMethod.POST)
@@ -200,29 +190,49 @@ public class AccountController {
         List<TransactionEntity> operations = account.getOperations();
         LOGGER.info("For account {}", account.getId());
         LOGGER.info("Operations is:{}", operations);
+        Date today = new Date();
 
         for (TransactionEntity operation : operations) {
-            if (operation.getType() == "DEPOSIT") {
-                sommeOperationDeposit = sommeOperationDeposit + operation.getAmount();
+            if (operation.getTransactionType() == "DEPOSIT" && operation.getTransactionDate().getMonth() == today.getMonth()) {
+                sommeOperationDeposit += operation.getAmount();
             }
         }
-        if (amountDeposit + sommeOperationDeposit > 3000) {
-            LOGGER.info("le montant maximum de dépot est atteint {}", amountDeposit + sommeOperationDeposit);
+        /* Informations logger */
+        if (amountDeposit + sommeOperationDeposit < 3000) {
+            LOGGER.info("Le montant maximum de dépot n'est pas encore atteint {}", amountDeposit + sommeOperationDeposit);
+        }
+        else
+        {
+            LOGGER.info("Le montant maximum de dépot est atteint {}", amountDeposit + sommeOperationDeposit);
+        }
+        if (amountDeposit > 0) {
+            LOGGER.info("Le montant déposé est supérieur à 0 :{}", amountDeposit);
+        }
+        else
+        {
+            LOGGER.info("Le montant déposé n'être pas supérieur à 0 :{}", amountDeposit);
+        }
+        if (amountDeposit + accountToDeposit.getBalance() < accountToDeposit.getMaxBalance()) {
+            LOGGER.info("Le plafond n'est pas encore atteint :{}", amountDeposit + accountToDeposit.getBalance());
+        }
+        else
+        {
+            LOGGER.info("Le plafond est atteint :{}", amountDeposit + accountToDeposit.getBalance());
         }
 
-        if (amountDeposit >= 0) {
-            LOGGER.info("Le montant déposé doit être supérieur à 0 :{}", amountDeposit);
-        }
-        if (amountDeposit + accountToDeposit.getBalance() > accountToDeposit.getMaxBalance()) {
-            LOGGER.info("Le montant déposé est supérieur au plafond indiqué par le compte :{}", amountDeposit + accountToDeposit.getBalance());
-        } else {
-            accountToDeposit.deposit(amountDeposit);
+        /* Action si tout ce passe bien */
+        if (amountDeposit + sommeOperationDeposit > 3000 && amountDeposit > 0 && amountDeposit + accountToDeposit.getBalance() < accountToDeposit.getMaxBalance())
+        {
+            accountToDeposit.deposit(amountDeposit, account);
             accountService.saveAccount(accountToDeposit);
+
+            TransactionEntity transfertEntity = new TransactionEntity((long)account.getOperations().size(), "Transfert", amountDeposit, today, accountToDeposit, null);
+            account.getOperations().add(transfertEntity);
         }
     }
 
     @RequestMapping(value = "/{id}/withdraw", method = RequestMethod.POST)
-    public void withDraw(@PathVariable long id, @RequestBody AccountDto accountDto, @RequestParam(value = "amount", required = true) final int amountDebit) {
+    public void withDrawal(@PathVariable long id, @RequestBody AccountDto accountDto, @RequestParam(value = "amount", required = true) final int amountDebit) {
         AccountEntity account = mapper.map(accountDto, AccountEntity.class);
         AccountEntity accountToDebit = accountService.getAccountById(id);
 
@@ -230,25 +240,39 @@ public class AccountController {
         List<TransactionEntity> operations = account.getOperations();
         LOGGER.info("For account {}", account.getId());
         LOGGER.info("Operations is:{}", operations);
+        Date today = new Date();
 
         for (TransactionEntity operation : operations) {
-            if (operation.getType() == "WITHDRAW") {
+            if (operation.getTransactionType() == "WITHDRAWAL") {
                 sommeOperationDebit = sommeOperationDebit + operation.getAmount();
             }
             if (sommeOperationDebit + amountDebit > 2500) {
                 LOGGER.info("Le montant maximum de retrait est atteind {}", sommeOperationDebit);
-
             }
         }
-        if (amountDebit <= 0) {
-            LOGGER.info("La somme débité doit être suppérieur à 0 {}", amountDebit);
+        /* Informations logger */
+        if (amountDebit > 0){
+            LOGGER.info("La somme débité est supérieur à 0 {}", amountDebit);
         }
+        else
+        {
+            LOGGER.info("La somme débité n'est pas supérieur à 0 {}", amountDebit);
+        }
+
         if (amountDebit + accountToDebit.getBalance() > accountToDebit.getMaxBalance()) {
             LOGGER.info("Le solde dépasse le plafond {}", amountDebit + accountToDebit.getBalance());
-
         }
+        else
+        {
+            LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountDebit + accountToDebit.getBalance());
+        }
+        /* Action */
+        if(amountDebit > 0 && amountDebit + accountToDebit.getBalance() < accountToDebit.getMaxBalance()){
+            accountToDebit.withDrawal(amountDebit, account);
+            accountService.saveAccount(accountToDebit);
 
-
+            TransactionEntity transfertEntity = new TransactionEntity((long)account.getOperations().size(), "Transfert", amountDebit, today, null, accountToDebit);
+            account.getOperations().add(transfertEntity);
+        }
     }
-
 }

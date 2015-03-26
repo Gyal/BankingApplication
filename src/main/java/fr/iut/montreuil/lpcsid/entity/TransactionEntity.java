@@ -19,25 +19,19 @@ public class TransactionEntity implements Serializable {
     private Long idTransaction;
 
     @Column(nullable = false)
-    private String transactionName;
+    private String transactionType;
 
     @OneToOne
-    private AccountEntity accountDebited;
+    private AccountEntity NumDebitedAccount;
 
-/*
-    @Column(nullable = false)
-    private int NumCreditedAccount;
-    */
+    @OneToOne
+    private AccountEntity NumCreditedAccount;
 
     @Column(nullable = false)
     private int amount;
 
     @Column(nullable = false)
     private Date transactionDate;
-
-    @Column(nullable = false)
-    private String type;
-
 
     /**
      * Récupération du compte bancaire associé
@@ -52,13 +46,13 @@ public class TransactionEntity implements Serializable {
 
     }
 
-    public TransactionEntity(Long idTransaction, AccountEntity account, String transactionName, int amount, Date transactionDate, String type) {
+    public TransactionEntity(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
         this.idTransaction = idTransaction;
-        this.transactionName = transactionName;
+        this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.type = type;
-        this.account = account;
+        this.NumCreditedAccount = NumCreditedAccount;
+        this.NumDebitedAccount = NumDebitedAccount;
     }
 
     public Long getIdTransaction() {
@@ -69,32 +63,13 @@ public class TransactionEntity implements Serializable {
         this.idTransaction = id;
     }
 
-    public String getTransactionName() { return transactionName; }
-    public void setTransactionName(String transactionName) { this.transactionName = transactionName; }
+    public String getTransactionType() { return transactionType; }
+    public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
 
-    /*public int getNumDebitedAccount() {
-        return NumDebitedAccount;
-    }
-    public void setNumDebitedAccount(int numDebitedAccount) { NumDebitedAccount = numDebitedAccount; }
-
-    public int getNumCreditedAccount() { return NumCreditedAccount; }
-    public void setNumCreditedAccount(int numCreditedAccount) { NumCreditedAccount = numCreditedAccount; }
-*/
     public int getAmount() {
         return amount;
     }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
+    public void setAmount(int amount) { this.amount = amount; }
 
     public Date getTransactionDate() {
         return transactionDate;
@@ -103,7 +78,19 @@ public class TransactionEntity implements Serializable {
         this.transactionDate = transactionDate;
     }
 
-    //public void transfer(int numDebitedAccount, int numCreditedAccount, int amount, Date transactionDate){
+    public AccountEntity getNumDebitedAccount() { return NumDebitedAccount; }
+
+    public void setNumDebitedAccount(AccountEntity numDebitedAccount) { NumDebitedAccount = numDebitedAccount; }
+
+    public AccountEntity getNumCreditedAccount() { return NumCreditedAccount; }
+
+    public void setNumCreditedAccount(AccountEntity numCreditedAccount) { NumCreditedAccount = numCreditedAccount; }
+
+    public AccountEntity getAccount() { return account; }
+
+    public void setAccount(AccountEntity account) { this.account = account; }
+
+//public void transfer(int numDebitedAccount, int numCreditedAccount, int amount, Date transactionDate){
         /* à récupérer de la base */
     //   long idTransfert = 123; /* Cette valeur sera à valeur + 1 du dernier virement de la base de données */
     // TransactionEntity virement = new TransactionEntity(idTransfert,"Virement", amount, transactionDate,"DEPOSIT" );
