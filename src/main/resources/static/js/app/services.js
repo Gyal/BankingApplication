@@ -1,18 +1,24 @@
-(function(angular) {
-    var AccountFactory = function ($resource) {
-        return $resource('/api/accountType/{id}',{
-            id: '@id'
-        }, {
-            update: {
-                method: 'PUT'
-            },
-            remove: {
-                method: 'DELETE'
-            }
-        });
+// déclaration d'un service,  singleton en paramètre que les modules et angular
+application.service("accountService", function ($http) {
+    return {
+
+        // définition de la fonction sayHello du service accountService
+        sayHello: function (msg) {
+            alert(msg);
+
+        },
+
+
+        getUsers: function () {
+            var promise = $http.get("api/account/").then(function (response) {
+                alert(response.data[0]);
+                return response.data[0];
+            });
+            return promise;
+        }
+
     };
-    AccountFactory.$inject = ['$resource'];
-    angular.module('BankingApp.services').factory('accountService', AccountFactory);
-}(angular));
 
+});
 
+//sayHello("melina");

@@ -4,7 +4,6 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/bankingapplication
     username: root
     password: "0000"
-    thymeleaf: cache=false
 
   jpa:
     show-sql: true

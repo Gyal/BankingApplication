@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html lang="fr" ng-app="bankingApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Banking Application</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    </link>
+    <link href="css/style.css" rel="stylesheet">
+    </link>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Accueil</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div id="page"></div>
+<h3>Page d'accueil </h3>
+<center>
+
+
+    <div class="container-fluid" ng-controller="AccountCtrl">
+        <div class="row row-centered">
+            <p>hello: {{hello}}</p>
+
+            <div class="col-lg-5 col-centered well block ">Profil :{{profil}}</div>
+            <div class="col-lg-2 col-centered well block fixed">Etat Compte Courant:{{accounts.id}}</div>
+            <div class="col-lg-2 col-centered well block fixed">Etat Compte PEL</div>
+
+            <div class="col-lg-5 col-centered well block fixed">
+                <ul class="nav">
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Liste des activités ( actions
+                            possibles) <b class="caret"></b></a>
+
+                        <div class="list-group">
+                            <a href="api/accounts/" class="list-group-item">Visualiser mes comptes</a>
+                            <a href="api/transfer/" class="list-group-item">Réaliser un virement</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-2 col-centered well block"> Histo Courant</div>
+            <div class="col-xs-2 col-centered well block"> Histo PEL</div>
+        </div>
+    </div>
+    <hr class="soft"/>
+
+
+</center>
+</div>
+</body>
+<script src="angular/angular.min.js"></script>
+<script src="angular/angular-resource.min.js"></script>
+<script src="bootstrap/js/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+
+<script src="js/app/application.js"></script>
+<script src="js/app/controllers.js"></script>
+<script src="js/app/services.js"></script>
+
+
+</html>

@@ -125,6 +125,29 @@ public class AccountEntity implements Serializable {
     public void setOperations(TransactionEntity operations1) {
         operations.add(operations1);
     }
+
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
+    }
+
+    public double getMAX_BALANCE() {
+        return MAX_BALANCE;
+    }
+
+    public void setMAX_BALANCE(double MAX_BALANCE) {
+        this.MAX_BALANCE = MAX_BALANCE;
+    }
+
+    public void setOperations(List<TransactionEntity> operations) {
+        this.operations = operations;
+    }
+
+
+
     public int withDraw(final int amount) {
         if (amount > 0 && balance - amount >= 0) {
             balance = balance - amount;
