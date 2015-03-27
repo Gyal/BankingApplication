@@ -3,9 +3,7 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/bankingapplication
     username: root
-    password: "1234"
-    thymeleaf: cache=false
-
+    password: "0000"
   jpa:
     show-sql: true
     hibernate:
