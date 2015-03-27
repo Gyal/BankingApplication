@@ -85,7 +85,7 @@ public class CustomerDto {
     }
 
     public void setDateOfBirth(Date dateBirthDay) {
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = dateBirthDay;
     }
 
     public String getStreet() {
@@ -101,7 +101,7 @@ public class CustomerDto {
     }
 
     public void setCity(String ville) {
-        this.city = city;
+        this.city = ville;
     }
 
     public int getZipCode() {
@@ -125,7 +125,7 @@ public class CustomerDto {
     }
 
     public void setCivilities(String civilities) {
-        civilities = civilities;
+        this.civilities = civilities;
     }
 
     public int getPhoneNumber() {

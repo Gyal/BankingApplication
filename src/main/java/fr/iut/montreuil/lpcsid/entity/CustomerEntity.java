@@ -104,7 +104,7 @@ public class CustomerEntity implements Serializable {
         return dateOfBirth;
     }
     public void setDateOfBirth(Date dateBirthDay) {
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = dateBirthDay;
     }
 
     public String getStreet() {
@@ -118,7 +118,7 @@ public class CustomerEntity implements Serializable {
         return city;
     }
     public void setCity(String ville) {
-        this.city = city;
+        this.city = ville;
     }
 
     public int getZipCode() {
@@ -139,7 +139,7 @@ public class CustomerEntity implements Serializable {
         return civilities;
     }
     public void setCivilities(String civilities) {
-        civilities = civilities;
+        this.civilities = civilities;
     }
 
     public int getPhoneNumber() {
