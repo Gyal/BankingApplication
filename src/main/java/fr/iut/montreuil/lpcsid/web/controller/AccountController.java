@@ -1,6 +1,7 @@
 package fr.iut.montreuil.lpcsid.web.controller;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 import fr.iut.montreuil.lpcsid.service.AccountService;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
@@ -51,6 +52,43 @@ public class AccountController {
     @Autowired
     private Mapper mapper;
 
+
+    //GET /{account-id}/{customer-id}
+    @RequestMapping(value = "/{account-id}/{customer-id}", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    AccountEntity getUserAccount(@PathVariable(value = "account-id") Long accountId, @PathVariable(value = "customer-id") Long customerId) {
+
+        /****************Récupération du compte en BDD avec l'ID fournis****/
+        AccountEntity accountGetted = accountService.getAccountById(accountId);
+        if (null == accountGetted) {
+            LOGGER.info("Aucun compte n'est trouvé avec l'ID mappé : {}", accountGetted);
+            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        }
+        LOGGER.info("AccountGetted {}", accountGetted);
+        /*********************************************************************/
+
+        /**********Récupération de l'utilisateur en BDD avec l'ID fournis****/
+        CustomerEntity userGetted = customerService.getCustomerById(customerId);
+        if (null == userGetted) {
+            LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userGetted);
+            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        }
+        LOGGER.info("UserGetted {}", userGetted);
+
+        /*********************************************************************/
+
+        /***********Vérification de la concordance entre le compte et l'utilisateur*/
+        if (accountGetted.getCustomer().getIdCustomer().equals(userGetted.getIdCustomer())) {
+            LOGGER.info("AccountGetted is mapped with the userGetted {}", accountGetted + "" + userGetted);
+            return accountGetted;
+        }
+        return accountGetted;
+    }
+    /*********************************************************************/
+
+
+
     /**
      * *************************************Methode HTTP basic ****************************************
      */
@@ -65,12 +103,6 @@ public class AccountController {
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
 
-       /* CustomerEntity customer = new CustomerEntity(1l, "eee", "mel", "tat", new Date(), "rue", "vii", "france", 91240, "mmm@", 0651, 111, "melin");
-
-        customerService.saveCustomer(customer);
-        AccountEntity accountEntity = new AccountEntity(22L, "test", 10.00, 3000, "CURRENT", customer);
-        accountService.saveAccount(accountEntity);
-        */
         return accountDtos;
     }
 
@@ -140,9 +172,8 @@ public class AccountController {
     */
 
     @RequestMapping(value = "/balance/{customer-id}", method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public void balance(@PathVariable long id) {
-
         // a faire
     }
 
