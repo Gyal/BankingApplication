@@ -5,7 +5,8 @@ package fr.iut.montreuil.lpcsid.web.exception;
  */
 public enum ErrorCode {
     NO_ENTITY_FOUND("No entity found"),
-    WRONG_ENTITY_INFORMATION("Could not create/update entity with wrong informations");
+    WRONG_ENTITY_INFORMATION("Could not create/update entity with wrong informations"),
+    UNAUTHORIZED("notAUTHORIZED to make this action");
 
     private String message;
 

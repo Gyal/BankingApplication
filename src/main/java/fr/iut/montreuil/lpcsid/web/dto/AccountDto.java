@@ -2,6 +2,7 @@ package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
@@ -30,30 +31,32 @@ public class AccountDto {
     @OneToOne
     private CustomerEntity customer;
 
+    /* Pour le dozer */
     public AccountDto() {
-    }
-
-    public AccountDto(Long id, String libelle, String type, CustomerEntity customer) {
-        this.id = id;
-        this.libelle = libelle;
-        this.type = type;
-        this.customer = customer;
-    }
-
-
-    public AccountDto(Long id, String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, CustomerEntity customer) {
-        this.id = id;
-        this.libelle = libelle;
-        this.balance = balance;
-        this.MAX_BALANCE = MAX_BALANCE;
-        this.type = type;
-        this.dateCreated = dateCreated;
-        this.customer = customer;
     }
 
     public static AccountDto newAccountDto() {
         return newAccountDto();
     }
+
+
+    // Création d'un compte par l'utilisateur*/
+    public AccountDto(String libelle, String type, CustomerEntity customer) {
+        this.libelle = libelle;
+        this.type = type;
+        this.customer = customer;
+    }
+
+    public AccountDto(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation, CustomerEntity customer) {
+        this.libelle = libelle;
+        this.balance = balance;
+        this.MAX_BALANCE = setMaxBalance();
+        this.type = type;
+        this.dateCreated = new Date();
+        this.taxation = setTaxation();
+        this.customer = customer;
+    }
+
 
     public Long getId() {
         return id;
@@ -79,8 +82,60 @@ public class AccountDto {
         this.balance = balance;
     }
 
+    public double getMaxBalance() {
+        return MAX_BALANCE;
+    }
+
+    /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si PEL alors 85000*/
+    public double setMaxBalance() {
+        if (this.type.equals("CURRENT")) {
+            this.MAX_BALANCE = 25000;
+        }
+        if (this.type.equals("PEL")) {
+            this.MAX_BALANCE = 850000;
+        }
+        return this.MAX_BALANCE;
+    }
+
+    public double getTaxation() {
+
+        return taxation;
+    }
+
+    public double setTaxation() {
+        if (this.type.equals("CURRENT")) {
+            this.taxation = 0;
+        }
+        if (this.type.equals("PEL")) {
+            this.taxation = 0.06;
+        }
+        /*
+        this.taxation = taxation;*/
+        return this.taxation;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated() {
+        this.dateCreated = new Date();
+    }
+
     public List<TransactionEntity> getOperations() {
         return operations;
+    }
+
+    public void setOperations(List<TransactionEntity> operations) {
+        this.operations = operations;
     }
 
     public CustomerEntity getCustomer() {
@@ -95,50 +150,40 @@ public class AccountDto {
         return MAX_BALANCE;
     }
 
-    public String getType() {
-        return type;
+    public void setMAX_BALANCE(double MAX_BALANCE) {
+        this.MAX_BALANCE = MAX_BALANCE;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public static double getTaxation() {
-        return taxation;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public static void setTaxation(double taxation) {
-        AccountDto.taxation = taxation;
-    }
-
-    public void setOperations(List<TransactionEntity> operations) {
-        this.operations = operations;
-    }
-
-    // Méthode withDraw(amount) : débit d'un montant
-    public int withDraw(final int amount) {
-        if (amount >= 0 &&
-                balance - amount >= 0) {
-            balance = balance - amount;
-            return amount;
-        } else {
-            return 0;
-        }
-    }
-
-    // Méthode deposit(ammount) : depot d'un montant
+    /* Deposit */
+    // Opération Crédit(ajout)
     public void deposit(final int amount) {
-        if (amount >= 0) {
+        Date date = new Date();
+        if (amount >= 0 && amount + balance <= this.getMaxBalance()) {
             balance = balance + amount;
         }
     }
-}
 
+    /* Withdrawal */
+    // Opération Débit(retrait)
+    public void withDraw(final int amount) {
+        Date date = new Date();
+        if (amount > 0 && balance - amount >= 0) {
+            balance = balance - amount;
+        }
+    }
+
+    /* Transfert */
+    /*
+    * Si les comptes sont des comptes courant, le montant du transfert est <0 et après le transfert le solde du compte débité est <0 alors tranfert
+    * Attention : Le transfert sera possible vers un compte même si après transfert le solde dépasse 25000 euros, sinon il faut rajouter une vérification
+     */
+    @Transactional
+    public int transfert(final int amount, AccountDto accountDtoDebited, AccountDto accountDtoCredited) {
+        Date date = new Date();
+        if (accountDtoDebited.type == "CURRENT" && accountDtoCredited.type == "CURRENT" && amount > 0 && accountDtoDebited.balance - amount >= 0) {
+            double transactionDebit = accountDtoCredited.balance - amount;
+            double transactionCredit = accountDtoCredited.balance + amount;
+        }
+        return amount;
+    }
+}

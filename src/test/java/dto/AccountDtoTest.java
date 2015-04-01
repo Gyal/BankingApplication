@@ -63,7 +63,7 @@ public class AccountDtoTest {
         double taxation = 0.0;
         CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
 
-        AccountEntity account = new AccountEntity(id, libelle, type, date, custom);
+        AccountEntity account = new AccountEntity(libelle, type, custom);
         AccountDto accountDTO = mapper.map(account, AccountDto.class);
 
         LOGGER.info("ID accountDto is {}", accountDTO.getId());
@@ -89,7 +89,7 @@ public class AccountDtoTest {
         double taxation = 0.0;
         CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
 
-        AccountDto accountdto = new AccountDto(id, libelle, balance, max_balance, type, date, custom);
+        AccountDto accountdto = new AccountDto(libelle, balance, max_balance, type, date, taxation, custom);
         AccountEntity account = mapper.map(accountDto, AccountEntity.class);
 
         LOGGER.info("ID account is {}", account.getId());

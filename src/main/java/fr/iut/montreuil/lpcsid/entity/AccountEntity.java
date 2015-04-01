@@ -1,5 +1,7 @@
 package fr.iut.montreuil.lpcsid.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -14,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "account")
 public class AccountEntity implements Serializable {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountEntity.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
@@ -35,26 +37,25 @@ public class AccountEntity implements Serializable {
     /* Pour le dozer */
     public AccountEntity() {
     }
+
     public static AccountEntity newAccountEntity() {
         return newAccountEntity();
     }
 
-    public AccountEntity(Long id, String libelle, String type, CustomerEntity customer) {
-        this.id = id;
+    // Création d'un compte par l'utilisateur*/
+    public AccountEntity(String libelle, String type, CustomerEntity customer) {
         this.libelle = libelle;
         this.type = type;
         this.customer = customer;
     }
 
-    public AccountEntity(Long id, String libelle, String type, Date dateCreated, CustomerEntity customer) {
-
-
-        this.id = id;
+    public AccountEntity(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation, CustomerEntity customer) {
         this.libelle = libelle;
         this.balance = balance;
-        this.MAX_BALANCE = MAX_BALANCE;
+        this.MAX_BALANCE = setMaxBalance();
         this.type = type;
         this.dateCreated = new Date();
+        this.taxation = setTaxation();
         this.customer = customer;
     }
 
@@ -77,35 +78,33 @@ public class AccountEntity implements Serializable {
         return MAX_BALANCE;
     }
 
-    /* SetMaxBalance : si le montant saisie est <0 et différent de 0
-    * et si le montant + le montant de la balance ne dépasse pas le montant du plafond alors met à jour la balance
-    */
-
-    public void setMaxBalance() {
-        if (this.type == "CURRENT") {
+    /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si PEL alors 85000*/
+    public double setMaxBalance() {
+        if (this.type.equals("CURRENT")) {
+            LOGGER.info("accountType is {} ", this.type);
             this.MAX_BALANCE = 25000;
         }
-        if (this.type == "PEL") {
+        if (this.type.equals("PEL")) {
             this.MAX_BALANCE = 850000;
         }
-      /*  if (maxBalance < 0 && maxBalance + balance <= this.MAX_BALANCE) {
-            this.MAX_BALANCE = maxBalance;
-        }*/
+        return this.MAX_BALANCE;
     }
+
     public double getTaxation() {
 
         return taxation;
     }
 
-    public void setTaxation() {
-        if (this.type == "CURRENT") {
+    public double setTaxation() {
+        if (this.type.equals("CURRENT")) {
             this.taxation = 0;
         }
-        if (this.type == "PEL") {
+        if (this.type.equals("PEL")) {
             this.taxation = 0.06;
         }
         /*
         this.taxation = taxation;*/
+        return this.taxation;
     }
 
     public String getType() {
