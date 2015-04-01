@@ -58,3 +58,29 @@
    #page{
        margin-top: 50px;
    }
+
+   body {
+       padding-left: 100px;
+       padding-top: 100px;
+   }
+
+   ul.tabs li {
+       float: left;
+       width: 57px;
+       height: 45px;
+       margin: 0px 1px 0px 0px;
+       list-style-type: none;
+   }
+
+   .table {
+       border: medium solid #CFD0CF;
+       border-collapse: collapse;
+
+   }
+
+   .jal {
+       background-color: white;
+       width: 400px;
+       padding: 10px 5px 5px 20px;
+       border: 1px solid rgba(0, 0, 0, 0.2);
+   }

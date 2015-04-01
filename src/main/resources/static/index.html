@@ -29,12 +29,11 @@
     <div class="container-fluid" ng-controller="AccountCtrl">
         <div class="row row-centered">
             <p>hello: {{hello}}</p>
-
             <div ng-click='clickHello()' class="btn btn btn-info">Say hello</div>
     <hr class="soft"/>
 
             <div>
-                <div ng-repeat="e in users">Account: {{e.id}}, {{e.libelle}}</div>
+                <div ng-repeat=" a in account">Account: {{a.id}}, {{a.libelle}}, {{a.balance}}</div>
 
             </div>
 </center>

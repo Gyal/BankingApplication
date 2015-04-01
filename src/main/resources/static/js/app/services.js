@@ -1,4 +1,6 @@
 // déclaration d'un service,  singleton en paramètre que les modules et angular
+
+
 application.service("accountService", function ($http) {
     return {
 
@@ -9,16 +11,15 @@ application.service("accountService", function ($http) {
         },
 
 
-        getUsers: function () {
-            var promise = $http.get("api/account/").then(function (response) {
-                alert(response.data[0]);
-                return response.data[0];
+        getAccount: function () {
+            return $http.get("api/account/").then(function (response) {
+                return {
+                    id: response.data.id,
+                    libelle: response.data.libelle
+                }
             });
-            return promise;
         }
 
     };
 
 });
-
-//sayHello("melina");

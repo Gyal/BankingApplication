@@ -1,15 +1,26 @@
 package dto;
 
 import fr.iut.montreuil.lpcsid.config.DozerConfig;
+import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
 import org.dozer.Mapper;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Date;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * AccountDto Tester.
@@ -32,21 +43,27 @@ public class AccountDtoTest {
     @Before
     public void setUp() throws Exception {
         // C'est l'instance que l'on va utiliser pour faire nos tests
-        //accountDto = new AccountDto();
+        accountDto = new AccountDto();
     }
 
     /**
      * -----------------------------------------------------------------------------------
      * Test de la transmission de notre objet vers le DTO correspondant
      * -----------------------------------------------------------------------------------
-     */
-  /*  @Test
+     **/
+
+    @Test
     public void should_SerializeDTOToPojo_OnAccount() {
         Long id = 1L;
         String libelle = "lib";
         double balance = 10.2;
+        double max_balance = 3000;
+        String type = "CURRENT";
+        Date date = new Date();
+        double taxation = 0.0;
+        CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
 
-        AccountEntity account = new AccountEntity(id, libelle, balance, "CURRENT");
+        AccountEntity account = new AccountEntity(id, libelle, type, date, custom);
         AccountDto accountDTO = mapper.map(account, AccountDto.class);
 
         LOGGER.info("ID accountDto is {}", accountDTO.getId());
@@ -61,14 +78,19 @@ public class AccountDtoTest {
 
 
     @Test
-    public void should_SerializePojoToDTO_OnAccount() {
+    public void should_SerializeAccountToDTO_OnAccount() {
 
-        Long id = 10L;
-        String libelle = "test";
-        double balance = 10.0;
+        Long id = 1L;
+        String libelle = "lib";
+        double balance = 10.2;
+        double max_balance = 3000;
+        String type = "CURRENT";
+        Date date = new Date();
+        double taxation = 0.0;
+        CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
 
-        AccountDto accountDTO = new AccountDto(id, libelle, balance);
-        AccountEntity account = mapper.map(accountDTO, AccountEntity.class);
+        AccountDto accountdto = new AccountDto(id, libelle, balance, max_balance, type, date, custom);
+        AccountEntity account = mapper.map(accountDto, AccountEntity.class);
 
         LOGGER.info("ID account is {}", account.getId());
         LOGGER.info("libelle account is {}", account.getLibelle());
@@ -81,18 +103,18 @@ public class AccountDtoTest {
 
     }
 
+
     /**
      * ----------------------------------------------------------------------------------
      * /*-----------------------------------------------------------------------------------
      * Test des méthodes de dépot et de débit
      * -----------------------------------------------------------------------------------
      */
-/*
+
     @Test
     public void testDeposit() {
         LOGGER.info("Deposit");
         int amountDeposit = 10;
-        // initial balance = 0
         accountDto.deposit(amountDeposit);
         assertEquals(10, accountDto.getBalance(), 10);
     }
@@ -128,6 +150,5 @@ public class AccountDtoTest {
         LOGGER.info("test{}", bal);
         assertTrue("Le solde du compte n'a pas changé car Negative withdrawals are not allowed", bal == 0.0);
     }
-
 /**----------------------------------------------------------------------------------*/
 }

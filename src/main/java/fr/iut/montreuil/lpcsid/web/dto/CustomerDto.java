@@ -38,7 +38,7 @@ public class CustomerDto {
 
     private String password;
 
-    private List<AccountEntity> accountEntities;
+    private List<AccountEntity> accounts;
 
     public CustomerDto() {
     }
@@ -160,8 +160,8 @@ public class CustomerDto {
         this.country = country;
     }
 
-    public List<AccountEntity> getAccountEntities() {
-        return accountEntities;
+    public List<AccountEntity> getAccounts() {
+        return accounts;
     }
 
     public String getConnexionLogin() {

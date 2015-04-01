@@ -24,7 +24,7 @@ public class AccountEntity implements Serializable {
     private double MAX_BALANCE;
     private String type;
     private Date dateCreated;
-    private static double taxation;
+    private double taxation;
 
     @ManyToMany()// annotation pour tracer le type de base de l'objet
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
@@ -39,7 +39,16 @@ public class AccountEntity implements Serializable {
         return newAccountEntity();
     }
 
-    public AccountEntity(Long id, String libelle, double balance, double MAX_BALANCE, String type, CustomerEntity customer) {
+    public AccountEntity(Long id, String libelle, String type, CustomerEntity customer) {
+        this.id = id;
+        this.libelle = libelle;
+        this.type = type;
+        this.customer = customer;
+    }
+
+    public AccountEntity(Long id, String libelle, String type, Date dateCreated, CustomerEntity customer) {
+
+
         this.id = id;
         this.libelle = libelle;
         this.balance = balance;
@@ -65,12 +74,6 @@ public class AccountEntity implements Serializable {
     }
 
     public double getMaxBalance() {
-        if (this.type == "CURRENT") {
-            MAX_BALANCE = 25000;
-        }
-        if (this.type == "PEL") {
-            MAX_BALANCE = 850000;
-        }
         return MAX_BALANCE;
     }
 
@@ -78,23 +81,31 @@ public class AccountEntity implements Serializable {
     * et si le montant + le montant de la balance ne dépasse pas le montant du plafond alors met à jour la balance
     */
 
-    public void setMaxBalance(double maxBalance) {
-        if (maxBalance < 0 && maxBalance + balance <= this.MAX_BALANCE) {
-            this.MAX_BALANCE = maxBalance;
+    public void setMaxBalance() {
+        if (this.type == "CURRENT") {
+            this.MAX_BALANCE = 25000;
         }
+        if (this.type == "PEL") {
+            this.MAX_BALANCE = 850000;
+        }
+      /*  if (maxBalance < 0 && maxBalance + balance <= this.MAX_BALANCE) {
+            this.MAX_BALANCE = maxBalance;
+        }*/
     }
     public double getTaxation() {
+
+        return taxation;
+    }
+
+    public void setTaxation() {
         if (this.type == "CURRENT") {
             this.taxation = 0;
         }
         if (this.type == "PEL") {
             this.taxation = 0.06;
         }
-        return taxation;
-    }
-
-    public void setTaxation(double taxation) {
-        this.taxation = taxation;
+        /*
+        this.taxation = taxation;*/
     }
 
     public String getType() {
@@ -104,12 +115,12 @@ public class AccountEntity implements Serializable {
         this.type = type;
     }
 
-
     public Date getDateCreated() {
         return dateCreated;
     }
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
+
+    public void setDateCreated() {
+        this.dateCreated = new Date();
     }
 
     public List<TransactionEntity> getOperations() {

@@ -63,7 +63,7 @@ public class CustomerController {
     CustomerDto getCustomerById(@PathVariable long id) {
         CustomerEntity customer = customerService.getCustomerById(id);
         CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
-        List<AccountEntity> accountEntities = customerDto.getAccountEntities();
+        List<AccountEntity> accountEntities = customerDto.getAccounts();
         if (null == customer) {
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
         }
@@ -75,7 +75,7 @@ public class CustomerController {
     }
 
     // POST/{id}: crée un compte pour le client
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/TEST/{id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
         CustomerEntity customerEntity = mapper.map(customerDto, CustomerEntity.class);

@@ -33,6 +33,13 @@ public class AccountDto {
     public AccountDto() {
     }
 
+    public AccountDto(Long id, String libelle, String type, CustomerEntity customer) {
+        this.id = id;
+        this.libelle = libelle;
+        this.type = type;
+        this.customer = customer;
+    }
+
 
     public AccountDto(Long id, String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, CustomerEntity customer) {
         this.id = id;
