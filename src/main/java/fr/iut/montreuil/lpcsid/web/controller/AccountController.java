@@ -1,6 +1,5 @@
 package fr.iut.montreuil.lpcsid.web.controller;
 
-import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
@@ -8,6 +7,7 @@ import fr.iut.montreuil.lpcsid.service.AccountService;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
 import fr.iut.montreuil.lpcsid.service.TransactionService;
 import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
+import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
 import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
 import org.dozer.Mapper;
@@ -114,10 +114,8 @@ public class AccountController {
     public AccountDto createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
 
         // Vérification du champ Type
-        if (accountType != "CURRENT" || accountType != "PEL") {
-            throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
-        } else {
-
+        if (accountType.equals("CURRENT") || accountType.equals("PEL")) {
+            LOGGER.info("LOG: accountType is OK : equals CURRENT OR PEL{}");
             CustomerEntity customer = customerService.getCustomerById(id);
             CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
             AccountEntity accountEntity = new AccountEntity(accountName, accountType, customer);
@@ -127,17 +125,17 @@ public class AccountController {
             AccountEntity accountSaved;
 
             accountSaved = accountService.saveAccount(accountEntity);
-            accountSaved.setMaxBalance();
-            accountSaved.setTaxation();
-
-            LOGGER.info("Account Creating id is{}, persisting.", accountEntity.getMAX_BALANCE());
-
             // Ajout du compte crée à l'utilisateur
             customer.getAccounts().add(accountEntity);
             customerService.saveCustomer(customer);
-            LOGGER.info("Account id {}, as bean add to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
+            LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
 
             return mapper.map(accountSaved, AccountDto.class);
+        } else {
+            LOGGER.info(" LOG: AccountType is NOK : not equals CURRENT OR PEL {}", accountType);
+
+            throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
+
         }
     }
 

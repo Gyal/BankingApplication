@@ -93,10 +93,12 @@ public class AccountEntity implements Serializable {
     /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si PEL alors 85000*/
     public double setMaxBalance() {
         if (this.type.equals("CURRENT")) {
-            LOGGER.info("accountType is {} ", this.type);
+            LOGGER.info(" LOG: accountType is {}, so MAX_BALANCE is setted to 25000 ", this.type);
             this.MAX_BALANCE = 25000;
         }
         if (this.type.equals("PEL")) {
+            LOGGER.info(" LOG:accountType is {}, so MAX_BALANCE is setted to 850000 ", this.type);
+
             this.MAX_BALANCE = 850000;
         }
         return this.MAX_BALANCE;
@@ -109,9 +111,12 @@ public class AccountEntity implements Serializable {
 
     public double setTaxation() {
         if (this.type.equals("CURRENT")) {
+            LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0 ", this.type);
             this.taxation = 0;
         }
         if (this.type.equals("PEL")) {
+            LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0.06 ", this.type);
+
             this.taxation = 0.06;
         }
         /*
