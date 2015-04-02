@@ -114,8 +114,8 @@ public class AccountController {
     public AccountDto createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
 
         // Vérification du champ Type
-        if (accountType.equals("CURRENT") || accountType.equals("PEL")) {
-            LOGGER.info("LOG: accountType is OK : equals CURRENT OR PEL{}");
+        if (accountType.equals("CURRENT") || accountType.equals("SAVINGS")) {
+            LOGGER.info("LOG: accountType is OK : equals CURRENT OR SAVINGS{}");
             CustomerEntity customer = customerService.getCustomerById(id);
             CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
             AccountEntity accountEntity = new AccountEntity(accountName, accountType, customer);
@@ -132,7 +132,7 @@ public class AccountController {
 
             return mapper.map(accountSaved, AccountDto.class);
         } else {
-            LOGGER.info(" LOG: AccountType is NOK : not equals CURRENT OR PEL {}", accountType);
+            LOGGER.info(" LOG: AccountType is NOK : not equals CURRENT OR SAVINGS {}", accountType);
 
             throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
 
@@ -170,7 +170,7 @@ public class AccountController {
                 if (customerAccount.getId().equals(customerId)) {
                     customerAccount.getId().equals(compteToDeposit.getId());
                     {
-                        //appel de la méthode deposit
+                        //apel de la méthode deposit
                     }
                 }
             }
@@ -214,7 +214,7 @@ public class AccountController {
 
         /* Action si tout ce passe bien */
         if (amountDeposit + sommeOperationDeposit > 3000 && amountDeposit > 0 && amountDeposit + accountToDeposit.getBalance() < accountToDeposit.getMaxBalance()) {
-            accountToDeposit.deposit(amountDeposit, account);
+            accountToDeposit.deposit(amountDeposit);
             accountService.saveAccount(accountToDeposit);
 
             TransactionEntity transfertEntity = new TransactionEntity((long) account.getOperations().size(), "Transfert", amountDeposit, today, accountToDeposit, null);
@@ -256,7 +256,7 @@ public class AccountController {
         }
         /* Action */
         if (amountDebit > 0 && amountDebit + accountToDebit.getBalance() < accountToDebit.getMaxBalance()) {
-            accountToDebit.withDraw(amountDebit, account);
+            accountToDebit.withDraw(amountDebit);
             accountService.saveAccount(accountToDebit);
 
             TransactionEntity transfertEntity = new TransactionEntity((long) account.getOperations().size(), "Transfert", amountDebit, today, null, accountToDebit);

@@ -63,51 +63,51 @@ public class TransactionEntity implements Serializable {
         this.idTransaction = id;
     }
 
-    public String getTransactionType() { return transactionType; }
-    public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
 
     public int getAmount() {
         return amount;
     }
-    public void setAmount(int amount) { this.amount = amount; }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
     public Date getTransactionDate() {
         return transactionDate;
     }
+
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
     }
 
-    public AccountEntity getNumDebitedAccount() { return NumDebitedAccount; }
+    public AccountEntity getNumDebitedAccount() {
+        return NumDebitedAccount;
+    }
 
-    public void setNumDebitedAccount(AccountEntity numDebitedAccount) { NumDebitedAccount = numDebitedAccount; }
+    public void setNumDebitedAccount(AccountEntity numDebitedAccount) {
+        NumDebitedAccount = numDebitedAccount;
+    }
 
-    public AccountEntity getNumCreditedAccount() { return NumCreditedAccount; }
+    public AccountEntity getNumCreditedAccount() {
+        return NumCreditedAccount;
+    }
 
-    public void setNumCreditedAccount(AccountEntity numCreditedAccount) { NumCreditedAccount = numCreditedAccount; }
+    public void setNumCreditedAccount(AccountEntity numCreditedAccount) {
+        NumCreditedAccount = numCreditedAccount;
+    }
 
-    public AccountEntity getAccount() { return account; }
+    public AccountEntity getAccount() {
+        return account;
+    }
 
-    public void setAccount(AccountEntity account) { this.account = account; }
-
-//public void transfer(int numDebitedAccount, int numCreditedAccount, int amount, Date transactionDate){
-        /* à récupérer de la base */
-    //   long idTransfert = 123; /* Cette valeur sera à valeur + 1 du dernier virement de la base de données */
-    // TransactionEntity virement = new TransactionEntity(idTransfert,"Virement", amount, transactionDate,"DEPOSIT" );
-    // }
-
-
-    // public void depot(int numCreditedAccount, int amount, Date transactionDate){
-        /* à récupérer de la base */
-    //  long idDepot = 123; /* Cette valeur sera à valeur + 1 du dernier dépot de la base de données */
-    // int numDebitedAccount = 0;
-    // TransactionEntity virement = new TransactionEntity(idDepot,"Depot",numDebitedAccount, numCreditedAccount, amount, transactionDate);
-    //}
-
-    //public void retrait(int numDebitedAccount, int amount, Date transactionDate){
-        /* à récupérer de la base */
-    //    long idRetrait = 123; /* Cette valeur sera à valeur + 1 du dernier dépot de la base de données */
-    //   int numCreditedAccount = 0;
-    //   TransactionEntity virement = new TransactionEntity(idRetrait,"Depot",numDebitedAccount, numCreditedAccount, amount, transactionDate);
-    // }
+    public void setAccount(AccountEntity account) {
+        this.account = account;
+    }
 }

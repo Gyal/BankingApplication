@@ -20,23 +20,32 @@
     </div>
 </nav>
 
-<form class="form-inline jal" action="http://localhost:8080/api/account/2" method="POST">
+
+<form class="form-inline jal" action="http://localhost:8080/api/account/1" method="POST">
     <div class="well">
+        <h2> Création d'un compte </h2>
+
         <div class="control-group">
-            <label class="control-label">Name</label>
+            <label class="control-label">Nom du compte</label>
 
             <div class="controls">
-                <input id="accountName" type="text" name="accountName" placeholder="Name"/>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Type</label>
-
-            <div class="controls">
-                <input id="accountType" type="text" name="accountType" placeholder="Type"/>
+                <input id="accountName" type="text" name="accountName" placeholder="Nom du compte"/>
             </div>
         </div>
 
+        <!-- liste déroulante Type de compte -->
+        <div class="form-group">
+            <label>Type de compte</label>
+
+            <div class="row">
+                <div class="col-sm-10">
+                    <select name="accountType" id="listeAccount" class="form-control">
+                        <option value="CURRENT">Courant</option>
+                        <option value="SAVINGS">PEL</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <hr class="soft"/>
         <div class="controls">
             <button type="submit" class="btn btn-warning">Enregistrer</button>

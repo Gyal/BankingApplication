@@ -41,14 +41,14 @@ public class AccountService{
         return null;
     }
 
-    //Prélévement de l'impot une fois par ans ( 31557600000 milliseconde) pour le compte PEL
+    //Prélévement de l'impot une fois par ans ( 31557600000 milliseconde) pour le compte SAVINGS
     @Scheduled(fixedDelayString = "31557600000")
-    public void RecurringTaxPEL() {
+    public void RecurringTaxSAVINGS() {
         LOGGER.info("Scheduler launched at {}", new Date());
 
         List<AccountEntity> accountList = accountRepository.findAll();
         for (AccountEntity account : accountList) {
-            if (account.getType() == "PEL") {
+            if (account.getType() == "SAVINGS") {
                 LOGGER.info("Will Recurring : {}", account.getId());
                 double balance = account.getBalance();
                 double deduct = account.getTaxation() * balance;

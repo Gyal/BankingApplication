@@ -2,7 +2,6 @@ package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ public class CustomerDto {
 
     private String firstName;
 
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     private String street;
 
@@ -40,7 +39,7 @@ public class CustomerDto {
 
     private List<AccountEntity> accounts;
 
-    public CustomerDto(Long idCustomer, String civilities, String lastname, String firstName, Date dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
+    public CustomerDto(Long idCustomer, String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         this.idCustomer = idCustomer;
         this.civilities = civilities;
         this.lastname = lastname;
@@ -82,10 +81,11 @@ public class CustomerDto {
         this.firstName = firstName;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
-    public void setDateOfBirth(Date dateBirthDay) {
+
+    public void setDateOfBirth(String dateBirthDay) {
         this.dateOfBirth = dateBirthDay;
     }
 
@@ -167,7 +167,7 @@ public class CustomerDto {
         this.connexionLogin = connexionLogin;
     }
 
-    public long inscription(String civilities, String lastname, String firstName, Date dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
+    public long inscription(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         /* à récupérer de la base */
         long idCustomer = 123; /* Cette valeur sera à valeur + 1 du l'id du dernière inscrit de la base de données */
         CustomerDto newCustomer = new CustomerDto(idCustomer, civilities, lastname, firstName, dateOfBirth, street, city, country, zipCode, mail, phoneNumber, connexionLogin, password);

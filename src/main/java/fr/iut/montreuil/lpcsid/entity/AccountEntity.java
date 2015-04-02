@@ -54,6 +54,7 @@ public class AccountEntity implements Serializable {
         return newAccountEntity();
     }
 
+
     // Création d'un compte par l'utilisateur*/
     public AccountEntity(String libelle, String type, CustomerEntity customer) {
         this.libelle = libelle;
@@ -90,13 +91,13 @@ public class AccountEntity implements Serializable {
         return MAX_BALANCE;
     }
 
-    /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si PEL alors 85000*/
+    /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si SAVINGS alors 85000*/
     public double setMaxBalance() {
         if (this.type.equals("CURRENT")) {
             LOGGER.info(" LOG: accountType is {}, so MAX_BALANCE is setted to 25000 ", this.type);
             this.MAX_BALANCE = 25000;
         }
-        if (this.type.equals("PEL")) {
+        if (this.type.equals("SAVINGS")) {
             LOGGER.info(" LOG:accountType is {}, so MAX_BALANCE is setted to 850000 ", this.type);
 
             this.MAX_BALANCE = 850000;
@@ -105,22 +106,19 @@ public class AccountEntity implements Serializable {
     }
 
     public double getTaxation() {
-
         return taxation;
     }
 
     public double setTaxation() {
-        if (this.type.equals("CURRENT")) {
+        if (this.type.equals("SAVINGS")) {
             LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0 ", this.type);
             this.taxation = 0;
         }
-        if (this.type.equals("PEL")) {
+        if (this.type.equals("SAVINGS")) {
             LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0.06 ", this.type);
 
             this.taxation = 0.06;
         }
-        /*
-        this.taxation = taxation;*/
         return this.taxation;
     }
 
@@ -153,26 +151,19 @@ public class AccountEntity implements Serializable {
         this.customer = customer;
     }
 
-    public double getMAX_BALANCE() {
-        return MAX_BALANCE;
-    }
-    public void setMAX_BALANCE(double MAX_BALANCE) {
-        this.MAX_BALANCE = MAX_BALANCE;
-    }
+
 
     /* Deposit */
     // Opération Crédit(ajout)
-    public void deposit(final int amount, AccountEntity accountCredited) {
-        Date date = new Date();
+    public void deposit(final int amount) {
         if (amount >= 0 && amount + balance <= this.getMaxBalance()) {
             balance = balance + amount;
         }
     }
 
-    /* Withdrawal */
+    /* Withdraw */
     // Opération Débit(retrait)
-    public void withDraw(final int amount, AccountEntity debited) {
-        Date date = new Date();
+    public void withDraw(int amount) {
         if (amount > 0 && balance - amount >= 0) {
             balance = balance - amount;
         }
@@ -184,11 +175,12 @@ public class AccountEntity implements Serializable {
     * Attention : Le transfert sera possible vers un compte même si après transfert le solde dépasse 25000 euros, sinon il faut rajouter une vérification
      */
     @Transactional
-    public int transfert(final int amount, AccountEntity accountEntityDebited, AccountEntity accountEntityCredited) {
-        Date date = new Date();
-        if (accountEntityDebited.type.equals("CURRENT") && accountEntityCredited.type.equals("CURRENT") && amount > 0 && accountEntityDebited.balance - amount >= 0) {
-            double transactionDebit = accountEntityCredited.balance - amount;
-            double transactionCredit = accountEntityCredited.balance + amount;
+    public int transfert(AccountEntity from, AccountEntity to, int amount) {
+        if (from.type.equals("CURRENT") && to.type.equals("CURRENT") && amount > 0 && from.balance - amount >= 0) {
+            double transactionDebit = from.balance - amount;
+            double transactionCredit = to.balance + amount;
+        } else {
+            LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
         }
         return amount;
     }

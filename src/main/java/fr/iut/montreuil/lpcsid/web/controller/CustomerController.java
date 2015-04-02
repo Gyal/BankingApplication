@@ -44,7 +44,7 @@ public class CustomerController {
     private Mapper mapper;
 
     // GET / : Récupération de la liste des  users
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     Iterable<CustomerDto> listCustomer() {
@@ -75,10 +75,13 @@ public class CustomerController {
     }
 
     // POST/{id}: crée un compte pour le client
-    @RequestMapping(value = "/TEST/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
-        CustomerEntity customerEntity = mapper.map(customerDto, CustomerEntity.class);
+    public CustomerDto createCustomer(@RequestParam(value = "customerCiv", required = false) String customerCiv, @RequestParam(value = "customerLastName", required = true) String customerLastName, @RequestParam(value = "customerFirstName", required = true) String customerFirstName, @RequestParam(value = "customerLogin", required = true) String customerLogin, @RequestParam(value = "customerPassword", required = true) String customerPassword, @RequestParam(value = "customerDateBirth", required = true) String customerDateBirth, @RequestParam(value = "customerMail", required = true) String customerMail, @RequestParam(value = "customerPhone", required = true) String customerPhone, @RequestParam(value = "customerAdresse", required = true) String customerAdresse, @RequestParam(value = "customerVille", required = true) String customerVille, @RequestParam(value = "customerPays", required = true) String customerPays, @RequestParam(value = "customerCP", required = true) String customerCP) {
+
+        CustomerEntity customerEntity = new CustomerEntity(customerCiv, customerLastName, customerFirstName, customerDateBirth, customerAdresse, customerVille, customerPays, customerCP, customerMail, customerPhone, customerLogin, customerPassword);
+
+        CustomerDto customerDto = mapper.map(customerEntity, CustomerDto.class);
 
         CustomerEntity savedCustomer;
         try {

@@ -74,24 +74,4 @@ public class TransactionDto {
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
     }
-
-    public void virement(int numDebitedAccount, int numCreditedAccount, double amount, Date transactionDate) {
-        /* à récupérer de la base */
-        long idVirement = 123; /* Cette valeur sera à valeur + 1 du dernier virement de la base de données */
-        TransactionDto virement = new TransactionDto(idVirement, "Virement", numDebitedAccount, numCreditedAccount, amount, transactionDate);
-    }
-
-    public void depot(int numCreditedAccount, double amount, Date transactionDate) {
-        /* à récupérer de la base */
-        long idDepot = 123; /* Cette valeur sera à valeur + 1 du dernier dépot de la base de données */
-        int numDebitedAccount = 0;
-        TransactionDto virement = new TransactionDto(idDepot, "Depot", numDebitedAccount, numCreditedAccount, amount, transactionDate);
-    }
-
-    public void retrait(int numDebitedAccount, double amount, Date transactionDate) {
-        /* à récupérer de la base */
-        long idRetrait = 123; /* Cette valeur sera à valeur + 1 du dernier dépot de la base de données */
-        int numCreditedAccount = 0;
-        TransactionDto virement = new TransactionDto(idRetrait, "Depot", numDebitedAccount, numCreditedAccount, amount, transactionDate);
-    }
 }
