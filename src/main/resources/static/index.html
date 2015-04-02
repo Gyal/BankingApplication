@@ -29,12 +29,16 @@
     <div class="container-fluid" ng-controller="AccountCtrl">
         <div class="row row-centered">
             <p>hello: {{hello}}</p>
-            <div ng-click='clickHello()' class="btn btn btn-info">Say hello</div>
     <hr class="soft"/>
 
-            <div>
-                <div ng-repeat=" a in account">Account: {{a.id}}, {{a.libelle}}, {{a.balance}}</div>
-
+            <div id="accountList">
+                <h2> Liste des comptes</h2>
+                <ul>
+                    <li ng-repeat=" account in accounts">
+                        Account: {{account.id}}, {{account.libelle}}, {{account.balance}}
+                    </li>
+                </ul>
+                <div ng-click='updateAccounts()' class="btn btn btn-info">Mettre à jour la liste des comptes</div>
             </div>
 </center>
 </div>

@@ -2,10 +2,9 @@ package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,20 +14,29 @@ import java.util.List;
  */
 
 public class AccountDto {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountDto.class);
 
     private Long id;
-    private String libelle;
-    private double balance = 0;
-    private double MAX_BALANCE;
-    private String type;
-    private Date dateCreated;
-    private static double taxation;
 
-    @ManyToMany()// annotation pour tracer le type de base de l'objet
+    private String libelle;
+
+
+    private double balance = 0;
+
+
+    private double MAX_BALANCE;
+
+
+    private String type;
+
+
+    private Date dateCreated;
+
+    private double taxation;
+
+  
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
 
-
-    @OneToOne
     private CustomerEntity customer;
 
     /* Pour le dozer */
@@ -38,7 +46,6 @@ public class AccountDto {
     public static AccountDto newAccountDto() {
         return newAccountDto();
     }
-
 
     // Création d'un compte par l'utilisateur*/
     public AccountDto(String libelle, String type, CustomerEntity customer) {
@@ -57,7 +64,6 @@ public class AccountDto {
         this.customer = customer;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -69,7 +75,6 @@ public class AccountDto {
     public String getLibelle() {
         return libelle;
     }
-
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
@@ -77,7 +82,6 @@ public class AccountDto {
     public double getBalance() {
         return balance;
     }
-
     public void setBalance(double balance) {
         this.balance = balance;
     }
@@ -89,6 +93,7 @@ public class AccountDto {
     /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si PEL alors 85000*/
     public double setMaxBalance() {
         if (this.type.equals("CURRENT")) {
+            LOGGER.info("accountType is {} ", this.type);
             this.MAX_BALANCE = 25000;
         }
         if (this.type.equals("PEL")) {
@@ -117,7 +122,6 @@ public class AccountDto {
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -133,7 +137,6 @@ public class AccountDto {
     public List<TransactionEntity> getOperations() {
         return operations;
     }
-
     public void setOperations(List<TransactionEntity> operations) {
         this.operations = operations;
     }
@@ -141,7 +144,6 @@ public class AccountDto {
     public CustomerEntity getCustomer() {
         return customer;
     }
-
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
@@ -149,14 +151,13 @@ public class AccountDto {
     public double getMAX_BALANCE() {
         return MAX_BALANCE;
     }
-
     public void setMAX_BALANCE(double MAX_BALANCE) {
         this.MAX_BALANCE = MAX_BALANCE;
     }
 
     /* Deposit */
     // Opération Crédit(ajout)
-    public void deposit(final int amount) {
+    public void deposit(final int amount, AccountDto accountCredited) {
         Date date = new Date();
         if (amount >= 0 && amount + balance <= this.getMaxBalance()) {
             balance = balance + amount;
@@ -165,7 +166,7 @@ public class AccountDto {
 
     /* Withdrawal */
     // Opération Débit(retrait)
-    public void withDraw(final int amount) {
+    public void withDraw(final int amount, AccountDto debited) {
         Date date = new Date();
         if (amount > 0 && balance - amount >= 0) {
             balance = balance - amount;
@@ -177,13 +178,15 @@ public class AccountDto {
     * Si les comptes sont des comptes courant, le montant du transfert est <0 et après le transfert le solde du compte débité est <0 alors tranfert
     * Attention : Le transfert sera possible vers un compte même si après transfert le solde dépasse 25000 euros, sinon il faut rajouter une vérification
      */
-    @Transactional
-    public int transfert(final int amount, AccountDto accountDtoDebited, AccountDto accountDtoCredited) {
+    public int transfert(final int amount, AccountDto AccountDtoDebited, AccountDto AccountDtoCredited) {
         Date date = new Date();
-        if (accountDtoDebited.type == "CURRENT" && accountDtoCredited.type == "CURRENT" && amount > 0 && accountDtoDebited.balance - amount >= 0) {
-            double transactionDebit = accountDtoCredited.balance - amount;
-            double transactionCredit = accountDtoCredited.balance + amount;
+        if (AccountDtoDebited.type.equals("CURRENT") && AccountDtoCredited.type.equals("CURRENT") && amount > 0 && AccountDtoDebited.balance - amount >= 0) {
+            double transactionDebit = AccountDtoCredited.balance - amount;
+            double transactionCredit = AccountDtoCredited.balance + amount;
         }
         return amount;
     }
 }
+
+
+

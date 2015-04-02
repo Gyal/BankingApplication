@@ -11,13 +11,12 @@ application.service("accountService", function ($http) {
         },
 
 
-        getAccounts: function () {
-            $http.get("api/account/list").success(function (data) {
-                accounts: data;
-
+        getAccount: function () {
+            return $http.get("api/account/list").then(function (response) {
+                return {
+                    accounts: response.data
+                }
             });
-            return data;
-
         }
 
     };

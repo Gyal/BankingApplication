@@ -63,7 +63,7 @@ public class AccountDtoTest {
         double taxation = 0.0;
         CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
 
-        AccountEntity account = new AccountEntity(libelle, type, custom);
+        AccountEntity account = new AccountEntity();
         AccountDto accountDTO = mapper.map(account, AccountDto.class);
 
         LOGGER.info("ID accountDto is {}", accountDTO.getId());
@@ -89,7 +89,7 @@ public class AccountDtoTest {
         double taxation = 0.0;
         CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
 
-        AccountDto accountdto = new AccountDto(libelle, balance, max_balance, type, date, taxation, custom);
+        AccountDto accountdto = new AccountDto();
         AccountEntity account = mapper.map(accountDto, AccountEntity.class);
 
         LOGGER.info("ID account is {}", account.getId());
@@ -114,17 +114,39 @@ public class AccountDtoTest {
     @Test
     public void testDeposit() {
         LOGGER.info("Deposit");
+        Long id = 1L;
+        String libelle = "lib";
+        double balance = 10.2;
+        double max_balance = 3000;
+        String type = "CURRENT";
+        Date date = new Date();
+        double taxation = 0.0;
+        CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
+
+
         int amountDeposit = 10;
-        accountDto.deposit(amountDeposit);
+        AccountDto accountCredited = new AccountDto(libelle, type, custom);
+        accountDto.deposit(amountDeposit, accountCredited);
         assertEquals(10, accountDto.getBalance(), 10);
     }
 
     @Test
     public void testNegativeDeposit() {
         LOGGER.info("Negative deposit");
+        Long id = 1L;
+        String libelle = "lib";
+        double balance = 10.2;
+        double max_balance = 3000;
+        String type = "CURRENT";
+        Date date = new Date();
+        double taxation = 0.0;
+        CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
+
         int amountDeposit = -10;
+        AccountDto accountCredited = new AccountDto(libelle, type, custom);
+
         // initial balance=0
-        accountDto.deposit(amountDeposit);
+        accountDto.deposit(amountDeposit, accountCredited);
         double bal = accountDto.getBalance();
         assertTrue("Le solde du compte n'a pas changé car Negative withdrawals are not allowed", bal == 0.0);
     }
@@ -132,10 +154,23 @@ public class AccountDtoTest {
     @Test
     public void testWithdraw() {
         LOGGER.info("WithDraw");
+
+        LOGGER.info("Negative deposit");
+        Long id = 1L;
+        String libelle = "lib";
+        double balance = 10.2;
+        double max_balance = 3000;
+        String type = "CURRENT";
+        Date date = new Date();
+        double taxation = 0.0;
+        CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
+
+        int amountDeposit = -10;
+        AccountDto accountDebited = new AccountDto(libelle, type, custom);
         final int amountWithDraw = 200;
         // initial balance =0 , put in to 1000
         accountDto.setBalance(1000);
-        accountDto.withDraw(amountWithDraw);
+        accountDto.withDraw(amountDeposit, accountDebited);
         double bal = accountDto.getBalance();
         assertTrue("Le solde du compte est passé à 800", bal == 800);
     }
@@ -144,8 +179,18 @@ public class AccountDtoTest {
     public void testNegativeWithDraw() {
         LOGGER.info("Negative WithDraw");
         final int amountWithDraw = -200;
+        Long id = 1L;
+        String libelle = "lib";
+        double balance = 10.2;
+        double max_balance = 3000;
+        String type = "CURRENT";
+        Date date = new Date();
+        double taxation = 0.0;
+        CustomerEntity custom = new CustomerEntity(1L, "mr", "max", "mer", date, "bret", "st michel", "france", "91240", "melin", "055", "test1", "test2");
+        AccountDto accountDebited = new AccountDto(libelle, type, custom);
+
         // initial balance =0
-        accountDto.withDraw(amountWithDraw);
+        accountDto.withDraw(amountWithDraw, accountDebited);
         double bal = accountDto.getBalance();
         LOGGER.info("test{}", bal);
         assertTrue("Le solde du compte n'a pas changé car Negative withdrawals are not allowed", bal == 0.0);

@@ -40,9 +40,6 @@ public class CustomerDto {
 
     private List<AccountEntity> accounts;
 
-    public CustomerDto() {
-    }
-
     public CustomerDto(Long idCustomer, String civilities, String lastname, String firstName, Date dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         this.idCustomer = idCustomer;
         this.civilities = civilities;
@@ -59,15 +56,21 @@ public class CustomerDto {
         this.password = password;
     }
 
+    public CustomerDto() {
+    }
+
     //getter & setters
     public Long getIdCustomer() {
         return idCustomer;
     }
 
+    public void setIdCustomer(Long id) {
+        this.idCustomer = id;
+    }
+
     public String getName() {
         return lastname;
     }
-
     public void setName(String name) {
         this.lastname = name;
     }
@@ -75,7 +78,6 @@ public class CustomerDto {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -83,7 +85,6 @@ public class CustomerDto {
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
-
     public void setDateOfBirth(Date dateBirthDay) {
         this.dateOfBirth = dateBirthDay;
     }
@@ -91,7 +92,6 @@ public class CustomerDto {
     public String getStreet() {
         return street;
     }
-
     public void setStreet(String street) {
         this.street = street;
     }
@@ -99,7 +99,6 @@ public class CustomerDto {
     public String getCity() {
         return city;
     }
-
     public void setCity(String ville) {
         this.city = ville;
     }
@@ -115,7 +114,6 @@ public class CustomerDto {
     public String getMail() {
         return mail;
     }
-
     public void setMail(String mail) {
         this.mail = mail;
     }
@@ -123,7 +121,6 @@ public class CustomerDto {
     public String getCivilities() {
         return civilities;
     }
-
     public void setCivilities(String civilities) {
         this.civilities = civilities;
     }
@@ -139,7 +136,6 @@ public class CustomerDto {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -155,7 +151,6 @@ public class CustomerDto {
     public String getCountry() {
         return country;
     }
-
     public void setCountry(String country) {
         this.country = country;
     }
@@ -178,11 +173,5 @@ public class CustomerDto {
         CustomerDto newCustomer = new CustomerDto(idCustomer, civilities, lastname, firstName, dateOfBirth, street, city, country, zipCode, mail, phoneNumber, connexionLogin, password);
         return idCustomer; /* Récupération de l'id pour permettre le récapitulatif de l'inscription */
     }
-
-    public boolean connexion(String login, String pwd) {
-
-        if (this.connexionLogin == login && this.password == pwd) {
-            return true;
-        } else return false;
-    }
 }
+

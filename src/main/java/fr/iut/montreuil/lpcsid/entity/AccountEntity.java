@@ -21,11 +21,23 @@ public class AccountEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
     private Long id;
+
+    @Column(nullable = false)
     private String libelle;
+
+    @Column(nullable = false)
     private double balance = 0;
+
+    @Column(nullable = false)
     private double MAX_BALANCE;
+
+    @Column(nullable = false)
     private String type;
+
+    @Column(nullable = false)
     private Date dateCreated;
+
+    @Column(nullable = false)
     private double taxation;
 
     @ManyToMany()// annotation pour tracer le type de base de l'objet
@@ -154,7 +166,7 @@ public class AccountEntity implements Serializable {
 
     /* Withdrawal */
     // Opération Débit(retrait)
-    public void withDrawal(final int amount, AccountEntity debited) {
+    public void withDraw(final int amount, AccountEntity debited) {
         Date date = new Date();
         if (amount > 0 && balance - amount >= 0) {
             balance = balance - amount;
@@ -169,7 +181,7 @@ public class AccountEntity implements Serializable {
     @Transactional
     public int transfert(final int amount, AccountEntity accountEntityDebited, AccountEntity accountEntityCredited) {
         Date date = new Date();
-        if (accountEntityDebited.type == "CURRENT" && accountEntityCredited.type == "CURRENT" && amount > 0 && accountEntityDebited.balance - amount >= 0) {
+        if (accountEntityDebited.type.equals("CURRENT") && accountEntityCredited.type.equals("CURRENT") && amount > 0 && accountEntityDebited.balance - amount >= 0) {
             double transactionDebit = accountEntityCredited.balance - amount;
             double transactionCredit = accountEntityCredited.balance + amount;
         }

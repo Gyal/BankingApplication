@@ -1,5 +1,6 @@
 package fr.iut.montreuil.lpcsid.web.controller;
 
+import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
@@ -7,21 +8,22 @@ import fr.iut.montreuil.lpcsid.service.AccountService;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
 import fr.iut.montreuil.lpcsid.service.TransactionService;
 import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
-import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
 import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
-import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Lists.newArrayList;
+import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.NO_ENTITY_FOUND;
+import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.WRONG_ENTITY_INFORMATION;
 
 /**
  * Created by Mélina on 07/03/2015.
@@ -115,36 +117,27 @@ public class AccountController {
         if (accountType != "CURRENT" || accountType != "PEL") {
             throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
         } else {
-            try {
-                CustomerEntity customer = customerService.getCustomerById(id);
-                CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
-                AccountEntity accountEntity = new AccountEntity(accountName, accountType, customer);
-                accountEntity.setDateCreated();
-                accountEntity.setMaxBalance();
-                accountEntity.setTaxation();
-                AccountEntity accountSaved;
-                try {
-                    accountSaved = accountService.saveAccount(accountEntity);
-                    accountSaved.setMaxBalance();
-                    accountSaved.setTaxation();
 
-                    LOGGER.info("Account Creating id is{}, persisting.", accountEntity.getMAX_BALANCE());
+            CustomerEntity customer = customerService.getCustomerById(id);
+            CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
+            AccountEntity accountEntity = new AccountEntity(accountName, accountType, customer);
+            accountEntity.setDateCreated();
+            accountEntity.setMaxBalance();
+            accountEntity.setTaxation();
+            AccountEntity accountSaved;
 
-                    // Ajout du compte crée à l'utilisateur
-                    customer.getAccounts().add(accountEntity);
-                    customerService.saveCustomer(customer);
-                    LOGGER.info("Account id {}, as bean add to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
-                    return mapper.map(accountSaved, AccountDto.class);
+            accountSaved = accountService.saveAccount(accountEntity);
+            accountSaved.setMaxBalance();
+            accountSaved.setTaxation();
 
-                } catch (DataIntegrityViolationException e) {
-                    throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
-                }
+            LOGGER.info("Account Creating id is{}, persisting.", accountEntity.getMAX_BALANCE());
 
-            } catch (DataIntegrityException e) {
-                throw new DataIntegrityException(UNAUTHORIZED);
-            }
+            // Ajout du compte crée à l'utilisateur
+            customer.getAccounts().add(accountEntity);
+            customerService.saveCustomer(customer);
+            LOGGER.info("Account id {}, as bean add to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
 
-
+            return mapper.map(accountSaved, AccountDto.class);
         }
     }
 
@@ -265,11 +258,26 @@ public class AccountController {
         }
         /* Action */
         if (amountDebit > 0 && amountDebit + accountToDebit.getBalance() < accountToDebit.getMaxBalance()) {
-            accountToDebit.withDrawal(amountDebit, account);
+            accountToDebit.withDraw(amountDebit, account);
             accountService.saveAccount(accountToDebit);
 
             TransactionEntity transfertEntity = new TransactionEntity((long) account.getOperations().size(), "Transfert", amountDebit, today, null, accountToDebit);
             account.getOperations().add(transfertEntity);
         }
         }
+
+
+    // GET /account : Récupération de la liste des comptes
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    Iterable<AccountDto> listAccount() {
+        Iterable<AccountEntity> accounts = from(accountService.getAllAccounts()).toList();
+        Iterable<AccountDto> accountDtos = newArrayList();
+        mapper.map(accounts, accountDtos);
+        LOGGER.info("List Accounts is {}", accountDtos);
+
+        return accountDtos;
     }
+}
+

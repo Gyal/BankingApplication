@@ -6,18 +6,16 @@ application.controller('AccountCtrl', function ($scope, accountService) {
     $scope.accounts = [
         {
             id: "5",
-            libelle: "test5",
-            balance: "100"
+            libelle: "test5"
         },
         {
             id: "1",
-            libelle: "test",
-            balance: "3000"
+            libelle: "test"
         }
     ];
 
-    $scope.updateAccounts = function () {
-        $scope.accounts = accountService.getAccounts();
-        //alert($scope.accounts);
+    $scope.clickHello = function () {
+        $scope.accounts = accountService.getAccount();
+        alert($scope.accounts);
     };
 });
