@@ -1,8 +1,8 @@
 package fr.iut.montreuil.lpcsid.web.controller;
 
-import dto.TransactionDto;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 import fr.iut.montreuil.lpcsid.service.TransactionService;
+import fr.iut.montreuil.lpcsid.web.dto.TransactionDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
 import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
 import org.dozer.Mapper;

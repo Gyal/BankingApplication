@@ -30,11 +30,11 @@
         <div class="row row-centered">
             <p>hello: {{hello}}</p>
 
-            <div class="col-lg-5 col-centered well block ">Profil :{{profil}}</div>
-            <div class="col-lg-2 col-centered well block fixed">Etat Compte Courant:{{accounts.id}}</div>
-            <div class="col-lg-2 col-centered well block fixed">Etat Compte PEL</div>
+            <div class="col-lg-5 col-centered well block indexBoxSize">Profil :{{profil}}</div>
+            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte Courant:{{accounts.id}}</div>
+            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte PEL</div>
 
-            <div class="col-lg-5 col-centered well block fixed">
+            <div class="col-lg-5 col-centered well block indexBoxSize ">
                 <ul class="nav">
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
@@ -42,14 +42,18 @@
                             possibles) <b class="caret"></b></a>
 
                         <div class="list-group">
-                            <a href="api/accounts/" class="list-group-item">Visualiser mes comptes</a>
-                            <a href="api/transfer/" class="list-group-item">Réaliser un virement</a>
+                            <a id="seeAccounts" class="list-group-item" onclick="">Visualiser mes comptes</a>
+                            <a id="transfer" class="list-group-item" onclick="" value="transfer">Réaliser un
+                                virement</a>
+                            <a id="deposit" class="list-group-item" onclick="" value="deposit">Réaliser un dépot</a>
+                            <a id="withdraw" class="list-group-item" onclick="" value="withdraw">Réaliser un retrait</a>
+
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="col-xs-2 col-centered well block"> Histo Courant</div>
-            <div class="col-xs-2 col-centered well block"> Histo PEL</div>
+            <div class="col-xs-2 col-centered well block indexBoxSize"> Histo Courant</div>
+            <div class="col-xs-2 col-centered well block indexBoxSize "> Histo PEL</div>
         </div>
     </div>
     <hr class="soft"/>

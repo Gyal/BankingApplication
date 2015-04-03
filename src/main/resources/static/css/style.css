@@ -30,7 +30,6 @@
    }
    .col-centered {
        display:inline-block;/*aligner les div sur une ligne*/
-       float:none;
        /* reset the text-align */
        text-align:center;
        /* inline-block space fix */
@@ -40,8 +39,8 @@
 
 
    .col-fixed {
-       /* custom width */
-       width:320px;
+       /* custom wid   th */
+       width: 320px;
    }
    .col-min {
        /* custom min width */
@@ -82,4 +81,8 @@
        background-color: white;
        width: 400px;
        padding: 10px 5px 5px 20px;
+   }
+
+   .indexBoxSize {
+       height: 250px;
    }

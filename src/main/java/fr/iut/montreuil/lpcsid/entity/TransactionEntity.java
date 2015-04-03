@@ -10,22 +10,19 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "operation")
 public class TransactionEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "transaction_id")
+    @Column(name = "operation_id")
     private Long idTransaction;
 
     @Column(nullable = false)
     private String transactionType;
 
     @OneToOne
-    private AccountEntity NumDebitedAccount;
-
-    @OneToOne
-    private AccountEntity NumCreditedAccount;
+    private OperationDetailEntity operationDetail;
 
     @Column(nullable = false)
     private int amount;
@@ -38,22 +35,28 @@ public class TransactionEntity implements Serializable {
      *
      * @return Compte bancaire associé
      */
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
+    @OneToOne
     public AccountEntity account;
 
     public TransactionEntity() {
 
     }
 
-    public TransactionEntity(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+    // Créé par l'utilisateur
+    public TransactionEntity(String transactionType, int amount, Date transactionDate, AccountEntity account) {
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.account = account;
+    }
+
+    /*public TransactionEntity(Long idTransaction, String transactionType, int amount, Date transactionDate) {
         this.idTransaction = idTransaction;
         this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.NumCreditedAccount = NumCreditedAccount;
-        this.NumDebitedAccount = NumDebitedAccount;
-    }
+    }*/
+
 
     public Long getIdTransaction() {
         return idTransaction;
@@ -87,27 +90,19 @@ public class TransactionEntity implements Serializable {
         this.transactionDate = transactionDate;
     }
 
-    public AccountEntity getNumDebitedAccount() {
-        return NumDebitedAccount;
-    }
-
-    public void setNumDebitedAccount(AccountEntity numDebitedAccount) {
-        NumDebitedAccount = numDebitedAccount;
-    }
-
-    public AccountEntity getNumCreditedAccount() {
-        return NumCreditedAccount;
-    }
-
-    public void setNumCreditedAccount(AccountEntity numCreditedAccount) {
-        NumCreditedAccount = numCreditedAccount;
-    }
-
     public AccountEntity getAccount() {
         return account;
     }
 
     public void setAccount(AccountEntity account) {
         this.account = account;
+    }
+
+    public OperationDetailEntity getOperationDetail() {
+        return operationDetail;
+    }
+
+    public void setOperationDetail(OperationDetailEntity operationDetail) {
+        this.operationDetail = operationDetail;
     }
 }

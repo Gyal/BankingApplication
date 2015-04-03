@@ -2,9 +2,11 @@ package fr.iut.montreuil.lpcsid.web.controller;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
+import fr.iut.montreuil.lpcsid.entity.OperationDetailEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 import fr.iut.montreuil.lpcsid.service.AccountService;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
+import fr.iut.montreuil.lpcsid.service.OperationDetailService;
 import fr.iut.montreuil.lpcsid.service.TransactionService;
 import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
 import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
@@ -23,6 +25,7 @@ import java.util.List;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.NO_ENTITY_FOUND;
+import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.UNAUTHORIZED;
 import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.WRONG_ENTITY_INFORMATION;
 
 /**
@@ -48,6 +51,8 @@ public class AccountController {
     private CustomerService customerService;
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private OperationDetailService operationDetailService;
     @Autowired
     private Mapper mapper;
 
@@ -87,12 +92,14 @@ public class AccountController {
         LOGGER.info("UserGetted {}", userDto);
 
         // Vérification de la concordance entre le compte et l'utilisateur*/
+
         if (accountDto.getCustomer().getIdCustomer().equals(userDto.getIdCustomer())) {
             LOGGER.info("AccountGetted is mapped with the userGetted {}", accountDto + "" + userDto);
             return accountDto;
-
+        } else {
+            LOGGER.info("pas de concordance{}", accountDto.getCustomer().getIdCustomer().equals(userDto.getIdCustomer()));
+            throw new DataIntegrityException(UNAUTHORIZED);
         }
-        return accountDto;
     }
     /**************************************************************************************************************/
 
@@ -111,7 +118,7 @@ public class AccountController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDto createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
+    public void createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
 
         // Vérification du champ Type
         if (accountType.equals("CURRENT") || accountType.equals("SAVINGS")) {
@@ -124,20 +131,48 @@ public class AccountController {
             accountEntity.setTaxation();
             AccountEntity accountSaved;
 
-            accountSaved = accountService.saveAccount(accountEntity);
             // Ajout du compte crée à l'utilisateur
-            customer.getAccounts().add(accountEntity);
-            customerService.saveCustomer(customer);
-            LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
 
-            return mapper.map(accountSaved, AccountDto.class);
+            int compteurSAV = 0;
+            int compteurCUR = 0;
+
+            List<AccountEntity> accounts = customer.getAccounts();
+
+            for (AccountEntity account : accounts) {
+                if (account.getType().equals("CURRENT")) {
+                    compteurCUR = 1;
+                } else {
+                    compteurSAV = 1;
+                }
+            }
+            if (accountEntity.getType().equals("CURRENT")) {
+                if (compteurCUR == 0) {
+                    accountSaved = accountService.saveAccount(accountEntity);
+                    customer.getAccounts().add(accountEntity);
+                    customerService.saveCustomer(customer);
+                    LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
+
+                    // return mapper.map(accountSaved, AccountDto.class);
+                }
+            } else {
+                if (compteurSAV == 0) {
+                    accountSaved = accountService.saveAccount(accountEntity);
+                    customer.getAccounts().add(accountEntity);
+                    customerService.saveCustomer(customer);
+                    LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
+
+                    //  return mapper.map(accountSaved, AccountDto.class);
+                }
+            }
+
         } else {
-            LOGGER.info(" LOG: AccountType is NOK : not equals CURRENT OR SAVINGS {}", accountType);
+            LOGGER.info(" LOG: AccountType is NOK : not equals CURRENT OR SAVINGS or already existing {}", accountType);
 
             throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
 
         }
     }
+
 
     /****************************************************************************************************************/
 
@@ -157,110 +192,190 @@ public class AccountController {
      * *************************************************************************************************************************
      */
 
-    @RequestMapping(value = "/balance/{customer-id}", method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void transfert(@PathVariable("customer-id") final Long customerId, @RequestBody AccountDto accountDto, @RequestParam(value = "Amount", required = true) final int amountTransfer, @RequestParam(value = "TransfertType", required = true) String transfertType) {
+    /*@RequestMapping(value = "/balance/{customer-id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void makeOperation(@PathVariable("customer-id") final Long customerId,@RequestParam(value = "Amount", required = true) final int amount, @RequestParam(value = "deposit", required = false) String deposit,@RequestParam(value = "withdraw", required = false) String withdraw,@RequestParam(value = "transfer", required = false) String transfer ) {
 
         CustomerEntity customer = customerService.getCustomerById(customerId);
         List<AccountEntity> customerAccounts = customer.getAccounts();
+        AccountEntity currentAccount = null;
 
-        if (transfertType.equals("DEPOSIT")) {
-            for (AccountEntity customerAccount : customerAccounts) {
-                AccountEntity compteToDeposit = accountService.getAccountById(1L);
-                if (customerAccount.getId().equals(customerId)) {
-                    customerAccount.getId().equals(compteToDeposit.getId());
-                    {
-                        //apel de la méthode deposit
-                    }
+        for(AccountEntity customerAccount : customerAccounts) {
+            if(customerAccount.getType().equals("CURRENT")) {
+                currentAccount = customerAccount;
+            }
+        }
+
+        if (transfer.isEmpty() == false && currentAccount !=null) {
+            //renvoi vers la méthode transfert
+            LOGGER.info(" LOG: Méthode transfer {}", transfer);
+        }
+        if (deposit.isEmpty() == false) {
+            //renvoi vers la méthode deposit
+            LOGGER.info(" LOG: Méthode deposit {}", deposit);
+            accountCredited.deposit(amount);
+        }else{
+            LOGGER.info(" LOG: Aucun compte courant à créditer{}", currentAccount);
+
+        }
+
+        if (withdraw.isEmpty() == false  && currentAccount !=null) {
+            //renvoi vers la méthode withDraw
+            LOGGER.info(" LOG: Méthode withdraw {}", withdraw);
+            currentAccount.withDraw(amount);
+        }else{
+            LOGGER.info(" LOG: Aucun compte courant à débiter{}", currentAccount);
+
+        }
+
+    }
+          //  List<AccountEntity> customerAccounts = customer.getAccounts();
+
+*/
+    @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void deposit(@PathVariable(value = "customer-id") Long customerId, @RequestParam(value = "amount", required = true) final int amountDeposit, @RequestParam(value = "accountCredited", required = true) Long account) {
+        CustomerEntity customer = customerService.getCustomerById(customerId);
+        AccountEntity accountCredited = accountService.getAccountById(account);
+
+        Boolean accountCustomer = customer.getIdCustomer().equals(accountCredited.getCustomer().getIdCustomer());
+        if (accountCustomer.equals(true)) {
+
+
+            // AccountEntity account = mapper.map(accountCredited, AccountEntity.class);
+            // AccountEntity accountToDeposit = accountService.getAccountById(id);
+
+            int sommeOperationDeposit = 0;
+            List<TransactionEntity> operations = accountCredited.getOperations();
+            LOGGER.info("For account {}", accountCredited.getId());
+            LOGGER.info("Operations is:{}", operations);
+            Date today = new Date();
+
+            for (TransactionEntity operation : operations) {
+                if (operation.getTransactionType() == "DEPOSIT" && operation.getTransactionDate().getMonth() == today.getMonth()) {
+                    sommeOperationDeposit += operation.getAmount();
                 }
+            }
+        /* Informations logger */
+            if (amountDeposit + sommeOperationDeposit < 3000) {
+                LOGGER.info("Le montant maximum de dépot n'est pas encore atteint {}", amountDeposit + sommeOperationDeposit);
+            } else {
+                LOGGER.info("Le montant maximum de dépot est atteint {}", amountDeposit + sommeOperationDeposit);
+            }
+            if (amountDeposit > 0) {
+                LOGGER.info("Le montant déposé est supérieur à 0 :{}", amountDeposit);
+            } else {
+                LOGGER.info("Le montant déposé n'être pas supérieur à 0 :{}", amountDeposit);
+            }
+            if (amountDeposit + accountCredited.getBalance() < accountCredited.getMaxBalance()) {
+                LOGGER.info("Le plafond n'est pas encore atteint :{}", amountDeposit + accountCredited.getBalance());
+            } else {
+                LOGGER.info("Le plafond est atteint :{}", amountDeposit + accountCredited.getBalance());
+            }
+
+        /* Action si tout ce passe bien */
+            if (amountDeposit + sommeOperationDeposit < 3000 && amountDeposit > 0 && amountDeposit + accountCredited.getBalance() < accountCredited.getMaxBalance()) {
+                LOGGER.info("Verification {} {} {}", amountDeposit + sommeOperationDeposit < 3000, amountDeposit > 0, amountDeposit + accountCredited.getBalance() < accountCredited.getMaxBalance());
+                accountCredited.deposit(amountDeposit);
+                accountService.saveAccount(accountCredited);
+
+
+                TransactionEntity operation = new TransactionEntity("DEPOSIT", amountDeposit, today, accountCredited);
+                transactionService.saveTransaction(operation);
+                accountCredited.getOperations().add(operation);
+            }
+        } else {
+            LOGGER.info("pas de concordance{}", accountCustomer);
+            throw new DataIntegrityException(UNAUTHORIZED);
+
+        }
+
+    }
+
+    @RequestMapping(value = "/balance/{customer-id}/withDraw", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void withDraw(@PathVariable(value = "customer-id") Long customerId, @RequestParam(value = "amount", required = true) final int amountWithDraw, @RequestParam(value = "accountDebited", required = true) Long account) {
+        AccountEntity accountDebited = accountService.getAccountById(account);
+
+        CustomerEntity customer = customerService.getCustomerById(customerId);
+
+        Boolean accountCustomer = customer.getIdCustomer().equals(accountDebited.getCustomer().getIdCustomer());
+        if (accountCustomer.equals(true)) {
+
+            int sommeOperationDebit = 0;
+            List<TransactionEntity> operations = accountDebited.getOperations();
+            LOGGER.info("For account {}", accountDebited.getId());
+            LOGGER.info("Operations is:{}", operations);
+            Date today = new Date();
+
+            for (TransactionEntity operation : operations) {
+                if (operation.getTransactionType().equals("WITHDRAW")) {
+                    sommeOperationDebit = sommeOperationDebit + operation.getAmount();
+                }
+                if (sommeOperationDebit + amountWithDraw > 2500) {
+                    LOGGER.info("Le montant maximum de retrait est atteind {}", sommeOperationDebit);
+                }
+            }
+        /* Informations logger */
+            if (amountWithDraw > 0) {
+                LOGGER.info("La somme débité est supérieur à 0 {}", amountWithDraw);
+            } else {
+                LOGGER.info("La somme débité n'est pas supérieur à 0 {}", amountWithDraw);
+            }
+
+            if (amountWithDraw + accountDebited.getBalance() > accountDebited.getMaxBalance()) {
+                LOGGER.info("Le solde dépasse le plafond {}", amountWithDraw + accountDebited.getBalance());
+            } else {
+                LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountWithDraw + accountDebited.getBalance());
+            }
+        /* Action */
+            if (amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() < accountDebited.getMaxBalance()) {
+                accountDebited.withDraw(amountWithDraw);
+                accountService.saveAccount(accountDebited);
+
+                TransactionEntity operation = new TransactionEntity("WITHDRAW", amountWithDraw, today, accountDebited);
+                transactionService.saveTransaction(operation);
+                accountDebited.getOperations().add(operation);
+            } else {
+                LOGGER.info("pas de concordance{}", accountCustomer);
+                throw new DataIntegrityException(UNAUTHORIZED);
             }
         }
     }
 
-    //@RequestMapping(value = "/{id}/deposit", method = RequestMethod.POST)
-    public void DEPOSIT(@PathVariable long id, @RequestBody AccountDto accountDto,
-                        @RequestParam(value = "amount", required = true) final int amountDeposit) {
 
-        AccountEntity account = mapper.map(accountDto, AccountEntity.class);
-        AccountEntity accountToDeposit = accountService.getAccountById(id);
+    @RequestMapping(value = "/balance/{customer-id}/transfer", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void transfert(@PathVariable(value = "customer-id") Long customerId, @RequestParam(value = "amount", required = true) final int amountTransfer, @RequestParam(value = "from", required = true) Long from, @RequestParam(value = "to", required = true) Long to) {
+        AccountEntity accountDebited = accountService.getAccountById(from);
 
-        int sommeOperationDeposit = 0;
-        List<TransactionEntity> operations = account.getOperations();
-        LOGGER.info("For account {}", account.getId());
-        LOGGER.info("Operations is:{}", operations);
+        LOGGER.info("accountDebited  {}", accountDebited);
+
+        AccountEntity accountCredited = accountService.getAccountById(to);
+        LOGGER.info("accountCredited  {}", accountCredited);
+
+        CustomerEntity customer = customerService.getCustomerById(customerId);
+        LOGGER.info("customer {}", customer);
+
+        Boolean accountCustomer = customer.getIdCustomer().equals(accountDebited.getCustomer().getIdCustomer());
+        LOGGER.info("accountCustomer {}", customer);
+
         Date today = new Date();
 
-        for (TransactionEntity operation : operations) {
-            if (operation.getTransactionType() == "DEPOSIT" && operation.getTransactionDate().getMonth() == today.getMonth()) {
-                sommeOperationDeposit += operation.getAmount();
-            }
-            }
-        /* Informations logger */
-        if (amountDeposit + sommeOperationDeposit < 3000) {
-            LOGGER.info("Le montant maximum de dépot n'est pas encore atteint {}", amountDeposit + sommeOperationDeposit);
+        if (accountCustomer.equals(true)) {
+            LOGGER.info("TRUE{}", accountCustomer);
+            accountDebited.transfert(accountDebited, accountCredited, amountTransfer);
+
+            TransactionEntity operation = new TransactionEntity("WITHDRAW", amountTransfer, today, accountDebited);
+            transactionService.saveTransaction(operation);
+
+            OperationDetailEntity operationDetailEntity = new OperationDetailEntity(from, to, operation);
+            operationDetailService.saveOperationDetail(operationDetailEntity);
+            accountDebited.getOperations().add(operation);
+
         } else {
-            LOGGER.info("Le montant maximum de dépot est atteint {}", amountDeposit + sommeOperationDeposit);
-        }
-        if (amountDeposit > 0) {
-            LOGGER.info("Le montant déposé est supérieur à 0 :{}", amountDeposit);
-        } else {
-            LOGGER.info("Le montant déposé n'être pas supérieur à 0 :{}", amountDeposit);
-        }
-        if (amountDeposit + accountToDeposit.getBalance() < accountToDeposit.getMaxBalance()) {
-            LOGGER.info("Le plafond n'est pas encore atteint :{}", amountDeposit + accountToDeposit.getBalance());
-        } else {
-            LOGGER.info("Le plafond est atteint :{}", amountDeposit + accountToDeposit.getBalance());
-        }
-
-        /* Action si tout ce passe bien */
-        if (amountDeposit + sommeOperationDeposit > 3000 && amountDeposit > 0 && amountDeposit + accountToDeposit.getBalance() < accountToDeposit.getMaxBalance()) {
-            accountToDeposit.deposit(amountDeposit);
-            accountService.saveAccount(accountToDeposit);
-
-            TransactionEntity transfertEntity = new TransactionEntity((long) account.getOperations().size(), "Transfert", amountDeposit, today, accountToDeposit, null);
-            account.getOperations().add(transfertEntity);
-        }
-        }
-
-    // @RequestMapping(value = "/{id}/withdraw", method = RequestMethod.POST)
-    public void WITHDRAW(@PathVariable long id, @RequestBody AccountDto accountDto,
-                         @RequestParam(value = "amount", required = true) final int amountDebit) {
-        AccountEntity account = mapper.map(accountDto, AccountEntity.class);
-        AccountEntity accountToDebit = accountService.getAccountById(id);
-
-        int sommeOperationDebit = 0;
-        List<TransactionEntity> operations = account.getOperations();
-        LOGGER.info("For account {}", account.getId());
-        LOGGER.info("Operations is:{}", operations);
-        Date today = new Date();
-
-        for (TransactionEntity operation : operations) {
-            if (operation.getTransactionType() == "WITHDRAWAL") {
-                sommeOperationDebit = sommeOperationDebit + operation.getAmount();
-            }
-            if (sommeOperationDebit + amountDebit > 2500) {
-                LOGGER.info("Le montant maximum de retrait est atteind {}", sommeOperationDebit);
-            }
-            }
-        /* Informations logger */
-        if (amountDebit > 0) {
-            LOGGER.info("La somme débité est supérieur à 0 {}", amountDebit);
-        } else {
-            LOGGER.info("La somme débité n'est pas supérieur à 0 {}", amountDebit);
-        }
-
-        if (amountDebit + accountToDebit.getBalance() > accountToDebit.getMaxBalance()) {
-            LOGGER.info("Le solde dépasse le plafond {}", amountDebit + accountToDebit.getBalance());
-        } else {
-            LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountDebit + accountToDebit.getBalance());
-        }
-        /* Action */
-        if (amountDebit > 0 && amountDebit + accountToDebit.getBalance() < accountToDebit.getMaxBalance()) {
-            accountToDebit.withDraw(amountDebit);
-            accountService.saveAccount(accountToDebit);
-
-            TransactionEntity transfertEntity = new TransactionEntity((long) account.getOperations().size(), "Transfert", amountDebit, today, null, accountToDebit);
-            account.getOperations().add(transfertEntity);
+            LOGGER.info("pas de concordance{}", accountCustomer);
+            throw new DataIntegrityException(UNAUTHORIZED);
         }
         }
 

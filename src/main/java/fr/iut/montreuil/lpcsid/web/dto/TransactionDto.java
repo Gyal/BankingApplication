@@ -1,4 +1,6 @@
-package dto;
+package fr.iut.montreuil.lpcsid.web.dto;
+
+import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 
 import java.util.Date;
 
@@ -7,63 +9,73 @@ import java.util.Date;
  */
 
 public class TransactionDto {
+
     private Long idTransaction;
 
-    private String transactionName;
+    private String transactionType;
 
-    private int NumDebitedAccount;
+    private AccountEntity NumDebitedAccount;
 
-    private int NumCreditedAccount;
 
-    private double amount;
+    private AccountEntity NumCreditedAccount;
+
+
+    private int amount;
 
     private Date transactionDate;
 
+    /**
+     * Récupération du compte bancaire associé
+     *
+     * @return Compte bancaire associé
+     */
+
+    public AccountEntity account;
+
     public TransactionDto() {
+
     }
 
-    public TransactionDto(Long idTransaction, String transactionName, int numDebitedAccount, int numCreditedAccount, double amount, Date transactionDate) {
-        this.idTransaction = idTransaction;
-        this.transactionName = transactionName;
-        this.NumDebitedAccount = numDebitedAccount;
-        this.NumCreditedAccount = numCreditedAccount;
+    // Créé par l'utilisateur
+    public TransactionDto(String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+        this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
+        this.NumCreditedAccount = NumCreditedAccount;
+        this.NumDebitedAccount = NumDebitedAccount;
     }
+
+    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+        this.idTransaction = idTransaction;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.NumCreditedAccount = NumCreditedAccount;
+        this.NumDebitedAccount = NumDebitedAccount;
+    }
+
 
     public Long getIdTransaction() {
         return idTransaction;
     }
 
-    public String getTransactionName() {
-        return transactionName;
+    public void setIdTransaction(Long id) {
+        this.idTransaction = id;
     }
 
-    public void setTransactionName(String transactionName) {
-        this.transactionName = transactionName;
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public int getNumDebitedAccount() {
-        return NumDebitedAccount;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
-    public void setNumDebitedAccount(int numDebitedAccount) {
-        NumDebitedAccount = numDebitedAccount;
-    }
-
-    public int getNumCreditedAccount() {
-        return NumCreditedAccount;
-    }
-
-    public void setNumCreditedAccount(int numCreditedAccount) {
-        NumCreditedAccount = numCreditedAccount;
-    }
-
-    public double getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -73,5 +85,29 @@ public class TransactionDto {
 
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public AccountEntity getNumDebitedAccount() {
+        return NumDebitedAccount;
+    }
+
+    public void setNumDebitedAccount(AccountEntity numDebitedAccount) {
+        NumDebitedAccount = numDebitedAccount;
+    }
+
+    public AccountEntity getNumCreditedAccount() {
+        return NumCreditedAccount;
+    }
+
+    public void setNumCreditedAccount(AccountEntity numCreditedAccount) {
+        NumCreditedAccount = numCreditedAccount;
+    }
+
+    public AccountEntity getAccount() {
+        return account;
+    }
+
+    public void setAccount(AccountEntity account) {
+        this.account = account;
     }
 }
