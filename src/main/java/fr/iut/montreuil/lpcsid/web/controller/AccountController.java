@@ -381,12 +381,10 @@ public class AccountController {
 
 
     // GET /account : Récupération de la liste des comptes
-    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
-    public
-    @ResponseBody
-    Iterable<AccountDto> listAccount() {
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public List<AccountDto> listAccount() {
         Iterable<AccountEntity> accounts = from(accountService.getAllAccounts()).toList();
-        Iterable<AccountDto> accountDtos = newArrayList();
+        List<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
 
