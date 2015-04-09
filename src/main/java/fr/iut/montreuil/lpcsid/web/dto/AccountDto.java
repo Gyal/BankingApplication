@@ -16,23 +16,14 @@ import java.util.List;
 
 public class AccountDto {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountDto.class);
-
     private Long id;
-
     private String libelle;
-
     private double balance = 0;
-
     private double MAX_BALANCE;
-
     private String type;
-
     private Date dateCreated;
-
     private double taxation;
-
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
-
     private CustomerEntity customer;
 
     /* Pour le dozer */
@@ -98,7 +89,7 @@ public class AccountDto {
 
             this.MAX_BALANCE = 850000;
         }
-        return this.MAX_BALANCE;
+        return MAX_BALANCE;
     }
 
     public double getTaxation() {
@@ -115,7 +106,7 @@ public class AccountDto {
 
             this.taxation = 0.06;
         }
-        return this.taxation;
+        return taxation;
     }
 
     public String getType() {
@@ -129,8 +120,9 @@ public class AccountDto {
         return dateCreated;
     }
 
-    public void setDateCreated() {
+    public Date setDateCreated() {
         this.dateCreated = new Date();
+        return dateCreated;
     }
 
     public List<TransactionEntity> getOperations() {
@@ -172,13 +164,16 @@ public class AccountDto {
      */
     @Transactional
     public int transfert(AccountDto from, AccountDto to, int amount) {
-        if (from.type.equals("CURRENT") && to.type.equals("CURRENT") && amount > 0 && from.balance - amount >= 0) {
-            double transactionDebit = from.balance - amount;
-            double transactionCredit = to.balance + amount;
+        if (from.getType().equals("CURRENT") && to.getType().equals("CURRENT") && amount > 0 && from.getBalance() - amount >= 0) {
+            double balanceFrom = from.getBalance();
+            balanceFrom = from.getBalance() - amount;
+            double balanceTo = from.getBalance();
+            balanceTo = to.getBalance() + amount;
+            LOGGER.info(" Transaction ok ");
+
         } else {
             LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
         }
         return amount;
     }
 }
-

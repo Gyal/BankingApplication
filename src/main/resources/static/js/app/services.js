@@ -1,25 +1,17 @@
-// déclaration d'un service,  singleton en paramètre que les modules et angular
-
-
-application.service("accountService", function ($http) {
-    return {
-
-        // définition de la fonction sayHello du service accountService
-        sayHello: function (msg) {
-            alert(msg);
-
-        },
-
-
-        getAccounts: function () {
-            $http.get("api/account/list").success(function (data) {
-                accounts: data;
-
-            });
-            return data;
-
-        }
-
+(function (angular) {
+    var AccountFactory = function ($resource) {
+        return $resource('/api/account/list', {
+            //  id: 'account-id'
+        }, {
+            update: {
+                method: 'PUT'
+            },
+            remove: {
+                method: 'DELETE'
+            }
+        });
     };
 
-});
+    AccountFactory.$inject = ['$resource'];
+    angular.module('bankingApp.services').factory('accountService', AccountFactory);
+}(angular));

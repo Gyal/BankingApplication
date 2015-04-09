@@ -3,5 +3,8 @@
  */
 
 // Déclaration de l'application
-var application = angular.module('bankingApp', ['ngResource']
-);
+(function () {
+    angular.module("bankingApp.controllers", []);
+    angular.module("bankingApp.services", []);
+    angular.module("bankingApp", ["ngResource", "bankingApp.controllers", "bankingApp.services"]);
+}(angular));

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="fr" ng-app="bankingApp">
+<html lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -10,7 +10,7 @@
     </link>
 </head>
 
-<body>
+<body ng-app="bankingApp">
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -21,27 +21,46 @@
 </nav>
 
 
-<div id="page"></div>
 <h3>Page d'accueil </h3>
-<center>
 
 
     <div class="container-fluid" ng-controller="AccountCtrl">
-        <div class="row row-centered">
-            <p>hello: {{hello}}</p>
-    <hr class="soft"/>
 
-            <div id="accountList">
+
+        <div id="accountList">
                 <h2> Liste des comptes</h2>
-                <ul>
-                    <li ng-repeat=" account in accounts">
-                        Account: {{account.id}}, {{account.libelle}}, {{account.balance}}
-                    </li>
-                </ul>
-                <div ng-click='updateAccounts()' class="btn btn btn-info">Mettre à jour la liste des comptes</div>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Libelle</th>
+                    <th>Type de compte</th>
+                    <th>Balance</th>
+                    <th>MaxBalance</th>
+                    <th>Imposition</th>
+                    <th>CustomerID</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="account in accounts">
+                    <td>{{ account.id }}</td>
+                    <td>{{ account.libelle }}</td>
+                    <td>{{ account.type }}</td>
+                    <td>{{ account.balance }}</td>
+                    <td>{{ account.maxBalance }}</td>
+                    <td>{{ account.taxation }}</td>
+                    <td>{{ account.customer.idCustomer}}</td>
+
+
+                </tr>
+                </tbody>
+            </table>
             </div>
-</center>
-</div>
+
+    </div>
+
+
 </body>
 <script src="angular/angular.min.js"></script>
 <script src="angular/angular-resource.min.js"></script>

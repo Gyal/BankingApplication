@@ -102,7 +102,7 @@ public class AccountEntity implements Serializable {
 
             this.MAX_BALANCE = 850000;
         }
-        return this.MAX_BALANCE;
+        return MAX_BALANCE;
     }
 
     public double getTaxation() {
@@ -119,7 +119,7 @@ public class AccountEntity implements Serializable {
 
             this.taxation = 0.06;
         }
-        return this.taxation;
+        return taxation;
     }
 
     public String getType() {
@@ -133,8 +133,9 @@ public class AccountEntity implements Serializable {
         return dateCreated;
     }
 
-    public void setDateCreated() {
+    public Date setDateCreated() {
         this.dateCreated = new Date();
+        return dateCreated;
     }
 
     public List<TransactionEntity> getOperations() {

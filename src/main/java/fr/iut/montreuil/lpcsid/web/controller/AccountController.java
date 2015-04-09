@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
-import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.NO_ENTITY_FOUND;
-import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.UNAUTHORIZED;
-import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.WRONG_ENTITY_INFORMATION;
+import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
 
 /**
  * Created by Mélina on 07/03/2015.
@@ -75,6 +72,10 @@ public class AccountController {
         // Récupération du compte en BDD avec l'ID fournis
         AccountEntity accountGetted = accountService.getAccountById(accountId);
         AccountDto accountDto = mapper.map(accountGetted, AccountDto.class);
+        LOGGER.info("Max Balance{}", accountDto.getMaxBalance());
+        LOGGER.info("Imposition{}", accountDto.getTaxation());
+        LOGGER.info("DateCreated{}", accountDto.getTaxation());
+
         if (null == accountDto) {
             LOGGER.info("Aucun compte n'est trouvé avec l'ID mappé : {}", accountDto);
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
@@ -152,7 +153,6 @@ public class AccountController {
                     customerService.saveCustomer(customer);
                     LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
 
-                    // return mapper.map(accountSaved, AccountDto.class);
                 }
             } else {
                 if (compteurSAV == 0) {
@@ -383,10 +383,15 @@ public class AccountController {
     // GET /account : Récupération de la liste des comptes
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<AccountDto> listAccount() {
-        Iterable<AccountEntity> accounts = from(accountService.getAllAccounts()).toList();
+        Iterable<AccountEntity> accounts = accountService.getAllAccounts();
         List<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
+       /* for (AccountDto account:accountDtos){
+            LOGGER.info("Max Balance{}", account.getMaxBalance());
+            LOGGER.info("Imposition{}", account.getTaxation());
+            LOGGER.info("DateCreated{}", account.getTaxation());
+        }*/
 
         return accountDtos;
     }
