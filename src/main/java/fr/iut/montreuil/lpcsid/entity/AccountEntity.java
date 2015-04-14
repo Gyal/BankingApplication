@@ -87,40 +87,22 @@ public class AccountEntity implements Serializable {
         this.balance = balance;
     }
 
-    public double getMaxBalance() {
+    public double getMAX_BALANCE() {
         return MAX_BALANCE;
     }
 
-    /* SetMaxBalance : Si c'est un compte courant alors MAX_BALANCE = 2500, si SAVINGS alors 85000*/
-    public double setMaxBalance() {
-        if (this.type.equals("CURRENT")) {
-            LOGGER.info(" LOG: accountType is {}, so MAX_BALANCE is setted to 25000 ", this.type);
-            this.MAX_BALANCE = 25000;
-        }
-        if (this.type.equals("SAVINGS")) {
-            LOGGER.info(" LOG:accountType is {}, so MAX_BALANCE is setted to 850000 ", this.type);
-
-            this.MAX_BALANCE = 850000;
-        }
-        return MAX_BALANCE;
+    public void setMAX_BALANCE(double MAX_BALANCE) {
+        this.MAX_BALANCE = MAX_BALANCE;
     }
 
     public double getTaxation() {
         return taxation;
     }
 
-    public double setTaxation() {
-        if (this.type.equals("SAVINGS")) {
-            LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0 ", this.type);
-            this.taxation = 0;
-        }
-        if (this.type.equals("SAVINGS")) {
-            LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0.06 ", this.type);
-
-            this.taxation = 0.06;
-        }
-        return taxation;
+    public void setTaxation(double taxation) {
+        this.taxation = taxation;
     }
+
 
     public String getType() {
         return type;
@@ -133,9 +115,8 @@ public class AccountEntity implements Serializable {
         return dateCreated;
     }
 
-    public Date setDateCreated() {
-        this.dateCreated = new Date();
-        return dateCreated;
+    public void setDateCreated(Date date) {
+        this.dateCreated = date;
     }
 
     public List<TransactionEntity> getOperations() {
@@ -157,7 +138,7 @@ public class AccountEntity implements Serializable {
     /* Deposit */
     // Opération Crédit(ajout)
     public void deposit(final int amount) {
-        if (amount >= 0 && amount + balance <= this.getMaxBalance()) {
+        if (amount >= 0 && amount + balance <= this.getMAX_BALANCE()) {
             balance = balance + amount;
         }
     }

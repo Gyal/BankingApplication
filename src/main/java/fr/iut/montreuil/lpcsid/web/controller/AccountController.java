@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
 
@@ -73,7 +72,7 @@ public class AccountController {
         // Récupération du compte en BDD avec l'ID fournis
         AccountEntity accountGetted = accountService.getAccountById(accountId);
         AccountDto accountDto = mapper.map(accountGetted, AccountDto.class);
-        LOGGER.info("Max Balance{}", accountDto.getMaxBalance());
+        LOGGER.info("Max Balance{}", accountDto.getMAX_BALANCE());
         LOGGER.info("Imposition{}", accountDto.getTaxation());
         LOGGER.info("DateCreated{}", accountDto.getTaxation());
 
@@ -123,18 +122,32 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
 
-        // Vérification du champ Type
+        // Vérification du champ Type sinon lève une exception WRONG_ENTITY_INFORMATION
         if (accountType.equals("CURRENT") || accountType.equals("SAVINGS")) {
-            LOGGER.info("LOG: accountType is OK : equals CURRENT OR SAVINGS{}");
+            LOGGER.info("LOG: accountType is OK : equals CURRENT OR SAVINGS, continue{}");
             CustomerEntity customer = customerService.getCustomerById(id);
             CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
             AccountEntity accountEntity = new AccountEntity(accountName, accountType, customer);
-            accountEntity.setDateCreated();
-            accountEntity.setMaxBalance();
-            accountEntity.setTaxation();
-            AccountEntity accountSaved;
+            double MAX_BALANCE = 0;
+            double taxation = 0;
+            // Mise à jour du montant de l'impot+de la balanceMax en fonction du type de oompte
+            //  Si c'est un compte courant alors MAX_BALANCE = 2500 et taxation = 0, si SAVINGS alors 85000 et taxation = 0.06*/
+            if (accountEntity.getType().equals("CURRENT")) {
+                LOGGER.info(" LOG: accountType is {}, so MAX_BALANCE is setted to 25000 ", accountEntity.getType());
+                MAX_BALANCE = 25000;
+                LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0 ", accountEntity.getType());
+                taxation = 0;
+            }
+            if (accountEntity.getType().equals("SAVINGS")) {
+                LOGGER.info(" LOG:accountType is {}, so MAX_BALANCE is setted to 850000 ", accountEntity.getType());
+                MAX_BALANCE = 850000;
+                LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0.06 ", accountEntity.getType());
+                taxation = 0.06;
+            }
 
-            // Ajout du compte crée à l'utilisateur
+            accountEntity.setMAX_BALANCE(MAX_BALANCE);
+            accountEntity.setTaxation(taxation);
+            accountEntity.setDateCreated(new Date());
 
             int compteurSAV = 0;
             int compteurCUR = 0;
@@ -144,13 +157,15 @@ public class AccountController {
             for (AccountEntity account : accounts) {
                 if (account.getType().equals("CURRENT")) {
                     compteurCUR = 1;
+                    LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a déjà un compte courrant");
                 } else {
                     compteurSAV = 1;
+                    LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a déjà un compte PEL");
                 }
             }
             if (accountEntity.getType().equals("CURRENT")) {
                 if (compteurCUR == 0) {
-                    accountSaved = accountService.saveAccount(accountEntity);
+                    accountEntity = accountService.saveAccount(accountEntity);
                     customer.getAccounts().add(accountEntity);
                     customerService.saveCustomer(customer);
                     LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
@@ -158,7 +173,7 @@ public class AccountController {
                 }
             } else {
                 if (compteurSAV == 0) {
-                    accountSaved = accountService.saveAccount(accountEntity);
+                    accountEntity = accountService.saveAccount(accountEntity);
                     customer.getAccounts().add(accountEntity);
                     customerService.saveCustomer(customer);
                     LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
@@ -236,7 +251,9 @@ public class AccountController {
 */
     @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void deposit(@PathVariable(value = "customer-id") Long customerId, @RequestParam(value = "amount", required = true) final int amountDeposit, @RequestParam(value = "accountCredited", required = true) Long account) {
+    public void deposit(@PathVariable(value = "customer-id") Long customerId,
+                        @RequestParam(value = "amount", required = true) final int amountDeposit,
+                        @RequestParam(value = "accountCredited", required = true) Long account) {
         CustomerEntity customer = customerService.getCustomerById(customerId);
         AccountEntity accountCredited = accountService.getAccountById(account);
 
@@ -269,15 +286,15 @@ public class AccountController {
             } else {
                 LOGGER.info("Le montant déposé n'être pas supérieur à 0 :{}", amountDeposit);
             }
-            if (amountDeposit + accountCredited.getBalance() < accountCredited.getMaxBalance()) {
+            if (amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE()) {
                 LOGGER.info("Le plafond n'est pas encore atteint :{}", amountDeposit + accountCredited.getBalance());
             } else {
                 LOGGER.info("Le plafond est atteint :{}", amountDeposit + accountCredited.getBalance());
             }
 
         /* Action si tout ce passe bien */
-            if (amountDeposit + sommeOperationDeposit < 3000 && amountDeposit > 0 && amountDeposit + accountCredited.getBalance() < accountCredited.getMaxBalance()) {
-                LOGGER.info("Verification {} {} {}", amountDeposit + sommeOperationDeposit < 3000, amountDeposit > 0, amountDeposit + accountCredited.getBalance() < accountCredited.getMaxBalance());
+            if (amountDeposit + sommeOperationDeposit < 3000 && amountDeposit > 0 && amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE()) {
+                LOGGER.info("Verification {} {} {}", amountDeposit + sommeOperationDeposit < 3000, amountDeposit > 0, amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE());
                 accountCredited.deposit(amountDeposit);
                 accountService.saveAccount(accountCredited);
 
@@ -296,7 +313,9 @@ public class AccountController {
 
     @RequestMapping(value = "/balance/{customer-id}/withDraw", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void withDraw(@PathVariable(value = "customer-id") Long customerId, @RequestParam(value = "amount", required = true) final int amountWithDraw, @RequestParam(value = "accountDebited", required = true) Long account) {
+    public void withDraw(@PathVariable(value = "customer-id") Long customerId,
+                         @RequestParam(value = "amount", required = true) final int amountWithDraw,
+                         @RequestParam(value = "accountDebited", required = true) Long account) {
         AccountEntity accountDebited = accountService.getAccountById(account);
 
         CustomerEntity customer = customerService.getCustomerById(customerId);
@@ -325,13 +344,13 @@ public class AccountController {
                 LOGGER.info("La somme débité n'est pas supérieur à 0 {}", amountWithDraw);
             }
 
-            if (amountWithDraw + accountDebited.getBalance() > accountDebited.getMaxBalance()) {
+            if (amountWithDraw + accountDebited.getBalance() > accountDebited.getMAX_BALANCE()) {
                 LOGGER.info("Le solde dépasse le plafond {}", amountWithDraw + accountDebited.getBalance());
             } else {
                 LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountWithDraw + accountDebited.getBalance());
             }
         /* Action */
-            if (amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() < accountDebited.getMaxBalance()) {
+            if (amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() < accountDebited.getMAX_BALANCE()) {
                 accountDebited.withDraw(amountWithDraw);
                 accountService.saveAccount(accountDebited);
 
@@ -348,7 +367,10 @@ public class AccountController {
 
     @RequestMapping(value = "/balance/{customer-id}/transfer", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void transfert(@PathVariable(value = "customer-id") Long customerId, @RequestParam(value = "amount", required = true) final int amountTransfer, @RequestParam(value = "from", required = true) Long from, @RequestParam(value = "to", required = true) Long to) {
+    public void transfert(@PathVariable(value = "customer-id") Long customerId,
+                          @RequestParam(value = "amount", required = true) final int amountTransfer,
+                          @RequestParam(value = "from", required = true) Long from,
+                          @RequestParam(value = "to", required = true) Long to) {
         AccountEntity accountDebited = accountService.getAccountById(from);
 
         LOGGER.info("accountDebited  {}", accountDebited);
@@ -384,7 +406,11 @@ public class AccountController {
     // GET /account : Récupération de la liste des comptes
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<AccountDto> listAccount() {
-        List<AccountEntity> accounts = from(accountService.getAllAccounts()).toList();
+        Iterable<AccountEntity> accounts = accountService.getAllAccounts();
+
+        for (AccountEntity account : accounts) {
+            LOGGER.info("account info Max BlANCE{}", account.getMAX_BALANCE());
+        }
         List<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
