@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html lang="fr" ng-app="bankingApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Banking Application</title>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    </link>
+    <link href="../css/style.css" rel="stylesheet">
+    </link>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Accueil</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<form class="form-inline jal" action="http://localhost:8080/api/account/1" method="POST">
+    <div class="well">
+        <h2> Création d'un compte </h2>
+
+        <div class="control-group">
+            <label class="control-label">Nom du compte</label>
+
+            <div class="controls">
+                <input id="accountName" type="text" name="accountName" placeholder="Nom du compte"/>
+            </div>
+        </div>
+
+        <!-- liste déroulante Type de compte -->
+        <div class="form-group">
+            <label>Type de compte</label>
+
+            <div class="row">
+                <div class="col-sm-10">
+                    <select name="accountType" id="listeAccount" class="form-control">
+                        <option value="CURRENT">Courant</option>
+                        <option value="SAVINGS">PEL</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr class="soft"/>
+        <div class="controls">
+            <button type="submit" class="btn btn-warning">Enregistrer</button>
+            <button type="reset" class="btn btn-primary">Annuler</button>
+        </div>
+    </div>
+
+</form>
+</body>
+<script src="../angular-1.3.15/angular.min.js"></script>
+<script src="../angular-1.3.15/angular-resource.min.js"></script>
+<script src="../angular-1.3.15/angular-route.min.js"></script>
+<script src="../js/app/application.js"></script>
+<script src="../js/app/controllers.js"></script>
+<script src="../js/app/services.js"></script>
+
+
+</html>

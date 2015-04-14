@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
 
@@ -85,7 +86,8 @@ public class AccountController {
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
         CustomerEntity userGetted = customerService.getCustomerById(customerId);
-        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
+        CustomerDto userDto = new CustomerDto();
+        mapper.map(userGetted, CustomerDto.class);
         if (null == userDto) {
             LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
@@ -377,22 +379,15 @@ public class AccountController {
             LOGGER.info("pas de concordance{}", accountCustomer);
             throw new DataIntegrityException(UNAUTHORIZED);
         }
-        }
-
+    }
 
     // GET /account : Récupération de la liste des comptes
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<AccountDto> listAccount() {
-        Iterable<AccountEntity> accounts = accountService.getAllAccounts();
+        List<AccountEntity> accounts = from(accountService.getAllAccounts()).toList();
         List<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
-       /* for (AccountDto account:accountDtos){
-            LOGGER.info("Max Balance{}", account.getMaxBalance());
-            LOGGER.info("Imposition{}", account.getTaxation());
-            LOGGER.info("DateCreated{}", account.getTaxation());
-        }*/
-
         return accountDtos;
     }
 }

@@ -47,7 +47,7 @@ public class AccountDto {
         this.balance = balance;
         this.MAX_BALANCE = setMaxBalance();
         this.type = type;
-        this.dateCreated = new Date();
+        this.dateCreated = dateCreated;
         this.taxation = setTaxation();
         this.customer = customer;
     }

@@ -65,10 +65,10 @@ public class AccountEntity implements Serializable {
     public AccountEntity(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation, CustomerEntity customer) {
         this.libelle = libelle;
         this.balance = balance;
-        this.MAX_BALANCE = setMaxBalance();
+        this.MAX_BALANCE = MAX_BALANCE;
         this.type = type;
-        this.dateCreated = new Date();
-        this.taxation = setTaxation();
+        this.dateCreated = dateCreated;
+        this.taxation = taxation;
         this.customer = customer;
     }
 
