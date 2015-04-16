@@ -26,7 +26,7 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
-    CustomerEntity userConnexion(@RequestParam(value = "connexionLogin", required = true) String connexionLogin, @RequestParam(value = "password", required = true) String connexionPassword) {
+    Long userConnexion(@RequestParam(value = "connexionLogin", required = false) String connexionLogin, @RequestParam(value = "password", required = false) String connexionPassword) {
 
         String login = connexionLogin;
         String password = connexionPassword;
@@ -58,7 +58,7 @@ public class LoginController {
                 }
             }
         }
-        return userConnexion;
+        return userConnexion.getIdCustomer();
     }
 
 }

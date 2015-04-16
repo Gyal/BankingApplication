@@ -54,6 +54,8 @@ public class AccountController {
     private Mapper mapper;
 
 
+CustomerEntity customerTest = new CustomerEntity();
+
     /**
      * ***********************************************************************************************************
      * <p/>
@@ -70,12 +72,8 @@ public class AccountController {
     AccountDto getUserAccount(@PathVariable(value = "account-id") Long accountId, @PathVariable(value = "customer-id") Long customerId) {
 
         // Récupération du compte en BDD avec l'ID fournis
-        AccountEntity accountGetted = accountService.getAccountById(accountId);
+         AccountEntity accountGetted = accountService.getAccountById(accountId);
         AccountDto accountDto = mapper.map(accountGetted, AccountDto.class);
-        LOGGER.info("Max Balance{}", accountDto.getMAX_BALANCE());
-        LOGGER.info("Imposition{}", accountDto.getTaxation());
-        LOGGER.info("DateCreated{}", accountDto.getTaxation());
-
         if (null == accountDto) {
             LOGGER.info("Aucun compte n'est trouvé avec l'ID mappé : {}", accountDto);
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
@@ -84,9 +82,12 @@ public class AccountController {
 
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
-        CustomerEntity userGetted = customerService.getCustomerById(customerId);
-        CustomerDto userDto = new CustomerDto();
-        mapper.map(userGetted, CustomerDto.class);
+        //CustomerEntity userGetted = customerService.getCustomerById(customerId);
+
+        CustomerEntity userGetted = customerTest;
+        userGetted.setIdCustomer(customerId);
+
+        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
         if (null == userDto) {
             LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
@@ -94,6 +95,9 @@ public class AccountController {
         LOGGER.info("UserGetted {}", userDto);
 
         // Vérification de la concordance entre le compte et l'utilisateur*/
+
+        LOGGER.info("AccountId {}", accountDto.getCustomer().getIdCustomer());
+        LOGGER.info("USER {}", userDto.getIdCustomer());
 
         if (accountDto.getCustomer().getIdCustomer().equals(userDto.getIdCustomer())) {
             LOGGER.info("AccountGetted is mapped with the userGetted {}", accountDto + "" + userDto);
@@ -152,8 +156,10 @@ public class AccountController {
             int compteurSAV = 0;
             int compteurCUR = 0;
 
+            //Récupération de la liste des comptes
             List<AccountEntity> accounts = customer.getAccounts();
 
+            // Parcours de la liste des comptes
             for (AccountEntity account : accounts) {
                 if (account.getType().equals("CURRENT")) {
                     compteurCUR = 1;
@@ -249,7 +255,7 @@ public class AccountController {
           //  List<AccountEntity> customerAccounts = customer.getAccounts();
 
 */
-    @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.POST)
+    @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void deposit(@PathVariable(value = "customer-id") Long customerId,
                         @RequestParam(value = "amount", required = true) final int amountDeposit,
@@ -339,7 +345,7 @@ public class AccountController {
             }
         /* Informations logger */
             if (amountWithDraw > 0) {
-                LOGGER.info("La somme débité est supérieur à 0 {}", amountWithDraw);
+                LOGGER.info("La somme débité est supérieur à 0 : {}", amountWithDraw);
             } else {
                 LOGGER.info("La somme débité n'est pas supérieur à 0 {}", amountWithDraw);
             }
@@ -350,7 +356,7 @@ public class AccountController {
                 LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountWithDraw + accountDebited.getBalance());
             }
         /* Action */
-            if (amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() < accountDebited.getMAX_BALANCE()) {
+            if (accountDebited.getBalance()-amountWithDraw >= 0&& amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() <= accountDebited.getMAX_BALANCE()) {
                 accountDebited.withDraw(amountWithDraw);
                 accountService.saveAccount(accountDebited);
 

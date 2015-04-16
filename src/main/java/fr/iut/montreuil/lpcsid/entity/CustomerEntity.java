@@ -60,6 +60,9 @@ public class CustomerEntity implements Serializable {
 
 
     // Par l'utilisateur
+    public CustomerEntity(Long id){
+        this.idCustomer = id;
+    }
 
     public CustomerEntity(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         this.civilities = civilities;

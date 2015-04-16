@@ -1,0 +1,38 @@
+<center>
+    <div class="container-fluid" ng-controller="AccountCtrl">
+
+
+        <div id="accountList">
+            <h2> Liste des comptes</h2>
+
+            <h1>{{ model.message }}</h1>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Libelle</th>
+                    <th>Type de compte</th>
+                    <th>Balance</th>
+                    <th>MaxBalance</th>
+                    <th>Imposition</th>
+                    <th>CustomerID</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="account in accounts">
+                    <td>{{ account.id }}</td>
+                    <td>{{ account.libelle }}</td>
+                    <td>{{ account.type }}</td>
+                    <td>{{ account.balance }}</td>
+                    <td>{{ account.max_BALANCE }}</td>
+                    <td>{{ account.taxation }}</td>
+                    <td>{{ account.customer.idCustomer}}</td>
+
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</center>

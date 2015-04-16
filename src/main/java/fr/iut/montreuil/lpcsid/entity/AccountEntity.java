@@ -61,6 +61,7 @@ public class AccountEntity implements Serializable {
         this.customer = customer;
     }
 
+
     public AccountEntity(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation, CustomerEntity customer) {
         this.libelle = libelle;
         this.balance = balance;

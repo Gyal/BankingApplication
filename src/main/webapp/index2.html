@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="fr" ng-app="bankingApp">
+<html lang="fr" >
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -10,7 +10,7 @@
     </link>
 </head>
 
-<body>
+<body ng-app="bankingApp">
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -26,11 +26,10 @@
 <center>
 
 
-    <div class="container-fluid" ng-web.controller="AccountCtrl">
+    <div class="container-fluid" ng-controller="LoginCtrl">
         <div class="row row-centered">
-            <p>hello: {{hello}}</p>
 
-            <div class="col-lg-5 col-centered well block indexBoxSize">Profil :{{profil}}</div>
+            <div class="col-lg-5 col-centered well block indexBoxSize">Profil :{{user}}</div>
             <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte Courant:{{accounts.id}}</div>
             <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte PEL</div>
 

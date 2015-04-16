@@ -1,0 +1,43 @@
+<center>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Accueil</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <form class="form-inline jal" action="http://localhost:8080/api/account/balance/1/transfer" method="POST">
+        <div class="well">
+            <div class="control-group">
+                <label class="control-label">Montant Transféré</label>
+
+                <div class="controls">
+                    <input id="Amount" type="text" name="amount" placeholder="Montant transféré"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">From</label>
+
+                <div class="controls">
+                    <input id="from" type="text" name="from" placeholder="from"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">To</label>
+
+                <div class="controls">
+                    <input id="to" type="text" name="to" placeholder="to"/>
+                </div>
+            </div>
+
+
+            <hr class="soft"/>
+            <div class="controls">
+                <button type="submit" class="btn btn-warning">Enregistrer</button>
+                <button type="reset" class="btn btn-primary">Annuler</button>
+            </div>
+        </div>
+
+    </form>
+</center>
