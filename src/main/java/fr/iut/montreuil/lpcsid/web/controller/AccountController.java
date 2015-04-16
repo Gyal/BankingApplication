@@ -407,7 +407,7 @@ public class AccountController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<AccountDto> listAccount() {
         Iterable<AccountEntity> accounts = accountService.getAllAccounts();
-
+        LOGGER.info("List Account is {}", accounts);
         for (AccountEntity account : accounts) {
             LOGGER.info("account info Max BlANCE{}", account.getMAX_BALANCE());
         }

@@ -55,7 +55,6 @@ public class AccountDto {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -77,7 +76,6 @@ public class AccountDto {
     public double getMAX_BALANCE() {
         return MAX_BALANCE;
     }
-
     public void setMAX_BALANCE(double MAX_BALANCE) {
         this.MAX_BALANCE = MAX_BALANCE;
     }
@@ -85,10 +83,10 @@ public class AccountDto {
     public double getTaxation() {
         return taxation;
     }
-
     public void setTaxation(double taxation) {
         this.taxation = taxation;
     }
+
     public String getType() {
         return type;
     }
@@ -99,10 +97,10 @@ public class AccountDto {
     public Date getDateCreated() {
         return dateCreated;
     }
-
     public void setDateCreated(Date date) {
         this.dateCreated = date;
     }
+
     public List<TransactionEntity> getOperations() {
         return operations;
     }
@@ -116,7 +114,6 @@ public class AccountDto {
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
-
 
 
     /* Deposit */
@@ -139,19 +136,24 @@ public class AccountDto {
     /*
     * Si les comptes sont des comptes courant, le montant du transfert est <0 et après le transfert le solde du compte débité est <0 alors tranfert
     * Attention : Le transfert sera possible vers un compte même si après transfert le solde dépasse 25000 euros, sinon il faut rajouter une vérification
-     */
+    */
     @Transactional
     public int transfert(AccountDto from, AccountDto to, int amount) {
-        if (from.getType().equals("CURRENT") && to.getType().equals("CURRENT") && amount > 0 && from.getBalance() - amount >= 0) {
-            double balanceFrom = from.getBalance();
-            balanceFrom = from.getBalance() - amount;
-            double balanceTo = from.getBalance();
-            balanceTo = to.getBalance() + amount;
-            LOGGER.info(" Transaction ok ");
-
-        } else {
-            LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
+        if (from.getType().equals("CURRENT") && to.getType().equals("CURRENT") && amount > 0 && from.getBalance() - amount >= 0 && to.getBalance() + amount < 25000){
+            double balanceFrom = from.getBalance() - amount;
+            double balanceTo = to.getBalance() + amount;
+            from.setBalance(balanceFrom);
+            LOGGER.info("Le compte a bien été débité : ", from.getBalance());
+            LOGGER.info("Nouveau solde du débiteur : ", to.getBalance());
+            to.setBalance(balanceTo);
+            LOGGER.info("Le compte a bien été crédité : ", to.getId());
+            LOGGER.info("Nouveau solde du créditeur : ", from.getId());
+            return amount;
         }
-        return amount;
+        else
+        {
+            LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
+            return 0;
+        }
     }
 }

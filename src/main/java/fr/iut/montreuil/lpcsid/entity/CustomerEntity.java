@@ -98,7 +98,6 @@ public class CustomerEntity implements Serializable {
     public Long getIdCustomer() {
         return idCustomer;
     }
-
     public void setIdCustomer(Long id) {
         this.idCustomer = id;
     }
@@ -120,7 +119,6 @@ public class CustomerEntity implements Serializable {
     public String getDateOfBirth() {
         return dateOfBirth;
     }
-
     public void setDateOfBirth(String dateBirthDay) {
         this.dateOfBirth = dateBirthDay;
     }
@@ -142,7 +140,6 @@ public class CustomerEntity implements Serializable {
     public String getZipCode() {
         return zipCode;
     }
-
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
@@ -164,7 +161,6 @@ public class CustomerEntity implements Serializable {
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
     public void setPhoneNumber(String number) {
         this.phoneNumber = number;
     }
@@ -195,16 +191,9 @@ public class CustomerEntity implements Serializable {
     public String getConnexionLogin() {
         return connexionLogin;
     }
-
     public void setConnexionLogin(String connexionLogin) {
         this.connexionLogin = connexionLogin;
     }
 
-    public long inscription(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
-        /* à récupérer de la base */
-        long idCustomer = 123; /* Cette valeur sera à valeur + 1 du l'id du dernière inscrit de la base de données */
-        CustomerEntity newCustomer = new CustomerEntity(idCustomer, civilities, lastname, firstName, dateOfBirth, street, city, country, zipCode, mail, phoneNumber, connexionLogin, password);
-        return idCustomer; /* Récupération de l'id pour permettre le récapitulatif de l'inscription */
-    }
 }
 

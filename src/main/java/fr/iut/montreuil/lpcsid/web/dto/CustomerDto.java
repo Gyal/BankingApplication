@@ -37,7 +37,7 @@ public class CustomerDto {
 
     private String password;
 
-    private List<AccountEntity> accounts;
+    private List<AccountDto> accounts;
 
     public CustomerDto(Long idCustomer, String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         this.idCustomer = idCustomer;
@@ -62,7 +62,6 @@ public class CustomerDto {
     public Long getIdCustomer() {
         return idCustomer;
     }
-
     public void setIdCustomer(Long id) {
         this.idCustomer = id;
     }
@@ -84,7 +83,6 @@ public class CustomerDto {
     public String getDateOfBirth() {
         return dateOfBirth;
     }
-
     public void setDateOfBirth(String dateBirthDay) {
         this.dateOfBirth = dateBirthDay;
     }
@@ -106,7 +104,6 @@ public class CustomerDto {
     public String getZipCode() {
         return zipCode;
     }
-
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
@@ -128,7 +125,6 @@ public class CustomerDto {
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
     public void setPhoneNumber(String number) {
         this.phoneNumber = number;
     }
@@ -143,7 +139,6 @@ public class CustomerDto {
     public String getLastname() {
         return lastname;
     }
-
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
@@ -155,23 +150,16 @@ public class CustomerDto {
         this.country = country;
     }
 
-    public List<AccountEntity> getAccounts() {
+    public List<AccountDto> getAccounts() {
         return accounts;
     }
 
     public String getConnexionLogin() {
         return connexionLogin;
     }
-
     public void setConnexionLogin(String connexionLogin) {
         this.connexionLogin = connexionLogin;
     }
 
-    public long inscription(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
-        /* à récupérer de la base */
-        long idCustomer = 123; /* Cette valeur sera à valeur + 1 du l'id du dernière inscrit de la base de données */
-        CustomerDto newCustomer = new CustomerDto(idCustomer, civilities, lastname, firstName, dateOfBirth, street, city, country, zipCode, mail, phoneNumber, connexionLogin, password);
-        return idCustomer; /* Récupération de l'id pour permettre le récapitulatif de l'inscription */
-    }
 }
 
