@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -56,13 +57,56 @@ public class AccountController {
 
 CustomerEntity customerTest = new CustomerEntity();
 
+
     /**
      * ***********************************************************************************************************
-     * <p/>
+     *
+     * Method: RecurringTaxSAVINGS
+     * Type : Scheduled pour les comptes EPARGNE UNIQUEMENT
+     * Prélèvement du montant de la taxe du compte tous les ans (0.06% du solde)
+     *
+     * *************************************************************************************************************
+     */
+
+
+    //Prélévement de l'impot une fois par ans ( 31557600000 milliseconde) pour le compte SAVINGS pour faire le test : mettre 60000 qui correspond à une minute
+    //@Scheduled(fixedRateString = "60000")
+    /*String day=;
+    String month =;
+    */
+    @Scheduled( cron = " 0 0 1 1 1 *")
+    public void RecurringTaxSAVINGS() {
+        LOGGER.info("Scheduler launched at {}", new Date());
+        Iterable<AccountEntity> accountList = accountService.getAllAccounts();
+        LOGGER.info("List : {}",accountList);
+
+        for (AccountEntity account : accountList) {
+            if ("SAVINGS".equals(account.getType()) ) {
+                LOGGER.info("ID account will be taxed : {}", account.getId());
+                double balance = account.getBalance();
+                LOGGER.info("Initial balance {}", account.getBalance());
+
+                double deduct = account.getTaxation() * balance;
+                LOGGER.info("Deduct Amount {}",deduct/100);
+                 account.setBalance(balance - deduct/100);
+                LOGGER.info("Balance after taxation{}",balance);
+                accountService.saveAccount(account);
+
+                // ici il faudra utiliser la méthode withdraw pour plus de simplicité
+            }
+
+        }
+    }
+
+
+
+    /**
+     * ***********************************************************************************************************
+     *
      * Method: {account-id}/{customer-id}
      * Type : GET
      * Donne les infos du compte client checks droits" et détail true donne les opérations éffectuées sur le compte
-     * <p/>
+     *
      * *************************************************************************************************************
      */
 
@@ -82,8 +126,6 @@ CustomerEntity customerTest = new CustomerEntity();
 
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
-        //CustomerEntity userGetted = customerService.getCustomerById(customerId);
-
         CustomerEntity userGetted = customerTest;
         userGetted.setIdCustomer(customerId);
 
@@ -127,7 +169,7 @@ CustomerEntity customerTest = new CustomerEntity();
     public void createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
 
         // Vérification du champ Type sinon lève une exception WRONG_ENTITY_INFORMATION
-        if (accountType.equals("CURRENT") || accountType.equals("SAVINGS")) {
+        if (("CURRENT").equals(accountType) || ("SAVINGS").equals(accountType)) {
             LOGGER.info("LOG: accountType is OK : equals CURRENT OR SAVINGS, continue{}");
             CustomerEntity customer = customerService.getCustomerById(id);
             CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
@@ -136,13 +178,13 @@ CustomerEntity customerTest = new CustomerEntity();
             double taxation = 0;
             // Mise à jour du montant de l'impot+de la balanceMax en fonction du type de oompte
             //  Si c'est un compte courant alors MAX_BALANCE = 2500 et taxation = 0, si SAVINGS alors 85000 et taxation = 0.06*/
-            if (accountEntity.getType().equals("CURRENT")) {
+            if (("CURRENT").equals(accountEntity.getType())) {
                 LOGGER.info(" LOG: accountType is {}, so MAX_BALANCE is setted to 25000 ", accountEntity.getType());
                 MAX_BALANCE = 25000;
                 LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0 ", accountEntity.getType());
                 taxation = 0;
             }
-            if (accountEntity.getType().equals("SAVINGS")) {
+            if (("SAVINGS").equals(accountEntity.getType())) {
                 LOGGER.info(" LOG:accountType is {}, so MAX_BALANCE is setted to 850000 ", accountEntity.getType());
                 MAX_BALANCE = 850000;
                 LOGGER.info(" LOG: accountType is {}, so taxation is setted to 0.06 ", accountEntity.getType());
@@ -161,7 +203,7 @@ CustomerEntity customerTest = new CustomerEntity();
 
             // Parcours de la liste des comptes
             for (AccountEntity account : accounts) {
-                if (account.getType().equals("CURRENT")) {
+                if (("CURRENT").equals(account.getType())) {
                     compteurCUR = 1;
                     LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a déjà un compte courrant");
                 } else {
@@ -169,7 +211,7 @@ CustomerEntity customerTest = new CustomerEntity();
                     LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a déjà un compte PEL");
                 }
             }
-            if (accountEntity.getType().equals("CURRENT")) {
+            if (("CURRENT").equals(accountEntity.getType())) {
                 if (compteurCUR == 0) {
                     accountEntity = accountService.saveAccount(accountEntity);
                     customer.getAccounts().add(accountEntity);
@@ -336,7 +378,7 @@ CustomerEntity customerTest = new CustomerEntity();
             Date today = new Date();
 
             for (TransactionEntity operation : operations) {
-                if (operation.getTransactionType().equals("WITHDRAW")) {
+                if (("WITHDRAW").equals(operation.getTransactionType())) {
                     sommeOperationDebit = sommeOperationDebit + operation.getAmount();
                 }
                 if (sommeOperationDebit + amountWithDraw > 2500) {
@@ -413,14 +455,32 @@ CustomerEntity customerTest = new CustomerEntity();
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<AccountDto> listAccount() {
         Iterable<AccountEntity> accounts = accountService.getAllAccounts();
-        LOGGER.info("List Account is {}", accounts);
-        for (AccountEntity account : accounts) {
-            LOGGER.info("account info Max BlANCE{}", account.getMAX_BALANCE());
-        }
         List<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
         return accountDtos;
+  }
+
+
+
+
+    @RequestMapping(value = "/{customer-id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody public CustomerDto getUserAccounts(@PathVariable(value = "customer-id") Long customerId) {
+
+        // Récupération de l'utilisateur en BDD avec l'ID fournis
+        CustomerEntity userGetted = customerService.getCustomerById(customerId);
+        userGetted.setIdCustomer(customerId);
+
+        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
+        if (null == userDto) {
+            LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
+            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        }
+        LOGGER.info("User {}", userDto.getLastname());
+
+
+        LOGGER.info("Comptes:{}", userDto.getAccounts());
+        return userDto;
     }
 }
 

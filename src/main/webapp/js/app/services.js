@@ -1,51 +1,51 @@
-angular.module('bankingApp.services')
+angular.module('bankingApp.services', ['ngCookies'])
 
+//*************Controleur permettant l'affichage de la liste de compte ******************************************************/
     .factory('accountService', function ($resource) {
-        return $resource('/api/account/list', {
-            update: {
-                method: 'PUT'
-            },
-            remove: {
-                method: 'DELETE'
-            }
-        })
+        return $resource('/api/account/list');
     })
-    .factory('userService', function ($resource) {
-        return $resource('/api/account/:id', {
-            id: '@id'
-        });
+    /****************************************************************************************************************************/
+
+//*************Controleur permettant l'affichage de la page index: avec l'id l'utilisateur récupéré du coookie **************/
+    .factory('userService', function ($resource, $cookieStore) {
+        var idCustomerCookie = $cookieStore.get('user');
+        // alert(idCustomerCookie);
+        return $resource('/api/account/:id',
+            {id: "@id"},
+            {
+                query: {method: 'GET', params: {id: idCustomerCookie}}
+            })
     })
+    /***************************************************************************************************************************/
 
+    /*************Controleur permettant la connexion d'un utilisateur et le stockage de son id dans un cookie :
+    *l'id de l'user est rnvoyé par la méthode api/connexion*********************************************************************/
+    .factory('loginService', function ($http, $location, $cookieStore) {
 
-    .factory('loginService', function ($http, $q) {
-        var self = this;
-        self.currentUser = {};
-
-        var login = function (username, password, callback) {
+        var login = function (username, password) {
             var req = {
                 method: 'POST',
                 url: '/api/connexion/',
                 headers: {
-                    'Content-Type':  'charset=UTF-8'
+                    'Content-Type': 'charset=UTF-8'
                 },
-                data: { test: 'test' }
-            }
-
-        }
-           /* var req = {
                 params: {
-                    connexionLogin: username,
-                    password: password
+                    "connexionLogin": username,
+                    "password": password
                 }
             };
-            $http.post('/api/connexion/', req)
-                .success(function (data, status) {
-                    self.currentUser = data;
-                    callback(data);
-                });
+            $http(req).success(function (data) {
+
+                // Transfert de l'id de l'utilisateur par cookie
+                $cookieStore.put('user', data);
+                $location.path('/account/' + data);
+
+            });
         };
-*/
+
         return {
+            // si pas return de login : la requete ne se sera exécuté en GET
             login: login
         };
     });
+/***************************************************************************************************************************/

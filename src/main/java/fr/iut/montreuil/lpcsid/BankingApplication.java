@@ -1,5 +1,7 @@
 package fr.iut.montreuil.lpcsid;
 
+import fr.iut.montreuil.lpcsid.service.AccountService;
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by Mélina on 07/03/2015.
@@ -19,17 +22,21 @@ import org.springframework.http.HttpStatus;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
+@EnableScheduling// active les tâches Scheduling
 public class BankingApplication  extends SpringBootServletInitializer{
-
+    AccountService accountService;
+    Logger logger;
     public static void main(final String[] args) throws Exception {
         SpringApplication.run(BankingApplication.class, args);
+
     }
 
 
     // ServletInitializer
    @Override
     protected final SpringApplicationBuilder configure(final SpringApplicationBuilder application){
-        return application.sources(BankingApplication.class);
+       return application.sources(BankingApplication.class);
+
     }
 
     @Bean
@@ -47,4 +54,6 @@ public class BankingApplication  extends SpringBootServletInitializer{
             }
         };
     }
+
+
 }

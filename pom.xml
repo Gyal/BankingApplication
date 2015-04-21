@@ -22,6 +22,13 @@
         <guava.version>16.0.1</guava.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- SONAR for Mysql -->
+        <sonar.jdbc.url>jdbc:mysql://127.0.0.1:3306/sonar?useUnicode=true&amp;characterEncoding=utf8</sonar.jdbc.url>
+        <sonar.jdbc.driver>com.mysql.jdbc.Driver</sonar.jdbc.driver>
+        <sonar.jdbc.username>sonar</sonar.jdbc.username>
+        <sonar.jdbc.password>sonar</sonar.jdbc.password>
+        <!-- Sonar server URL -->
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
     </properties>
 
     <dependencies>
@@ -147,10 +154,11 @@
             <artifactId>spring-tx</artifactId>
             <version>4.1.4.RELEASE</version>
         </dependency>
+        <!-- Lombok-->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>4.1.4.RELEASE</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.2</version>
         </dependency>
 
     </dependencies>
@@ -163,6 +171,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Sonnar -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.3</version>
             </plugin>
 
         </plugins>

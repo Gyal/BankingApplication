@@ -1,36 +1,9 @@
-<!DOCTYPE HTML>
-<html lang="fr" >
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <title>Banking Application</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    </link>
-    <link href="css/style.css" rel="stylesheet">
-    </link>
-</head>
-
-<body ng-app="bankingApp">
-
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Accueil</a></li>
-        </ul>
-    </div>
-</nav>
-
-
-<div id="page"></div>
-<h3>Page d'accueil </h3>
-<center>
-
-
-    <div class="container-fluid" ng-controller="LoginCtrl">
+    <div class="container-fluid" ng-controller="UserCtrl">
         <div class="row row-centered">
 
-            <div class="col-lg-5 col-centered well block indexBoxSize">Profil :{{user}}</div>
-            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte Courant:{{accounts.id}}</div>
+            <div class="col-lg-5 col-centered well block indexBoxSize">Profil : {{user.civilities}} {{user.lastname}}  {{user.firstName}}</br> Votre id utilisateur est le :{{user.idCustomer}} </div>
+            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte Courant:{{user.accounts}}</div>
             <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte PEL</div>
 
             <div class="col-lg-5 col-centered well block indexBoxSize ">
@@ -56,17 +29,3 @@
         </div>
     </div>
     <hr class="soft"/>
-
-
-</center>
-</div>
-</body>
-<script src="angular-1.3.15/angular.min.js"></script>
-<script src="angular-1.3.15/angular-resource.min.js"></script>
-<script src="angular-1.3.15/angular-route.min.js"></script>
-<script src="js/app/application.js"></script>
-<script src="js/app/controllers.js"></script>
-<script src="js/app/services.js"></script>
-
-
-</html>

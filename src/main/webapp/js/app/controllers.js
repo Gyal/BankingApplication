@@ -1,4 +1,4 @@
-angular.module("bankingApp.controllers")
+angular.module("bankingApp.controllers",['ngCookies'])
 
     .controller("AccountCtrl", function ($scope, accountService) {
 
@@ -8,13 +8,14 @@ angular.module("bankingApp.controllers")
 
     })
 
-    .controller('LoginCtrl', function ($scope, loginService) {
+    .controller('LoginCtrl', function ($scope, loginService,$cookieStore) {
         $scope.username = "test";
         $scope.password = "test";
 
         $scope.login = function () {
             loginService.login($scope.username, $scope.password, function (response) {
                 $scope.user = response || [];
+
             });
         }
 
@@ -23,7 +24,14 @@ angular.module("bankingApp.controllers")
     .controller('UserCtrl', function ($scope, userService) {
 
         userService.query(function (response) {
+
             $scope.user = response || [];
+            //ajout d'un cookie
+
+
+           // $window.sessionStorage.token = response.token;
+
+
         });
     })
 

@@ -152,7 +152,7 @@ public class AccountEntity implements Serializable {
     */
     @Transactional
     public int transfert(AccountEntity from, AccountEntity to, int amount) {
-        if (from.getType().equals("CURRENT") && to.getType().equals("CURRENT") && amount > 0 && from.getBalance() - amount >= 0 && to.getBalance() + amount < 25000){
+        if (("CURRENT").equals(from.getType()) && ("CURRENT").equals(to.getType()) && amount > 0 && from.getBalance() - amount >= 0 && to.getBalance() + amount < 25000){
             double balanceFrom = from.getBalance() - amount;
             double balanceTo = to.getBalance() + amount;
             from.setBalance(balanceFrom);
@@ -168,6 +168,7 @@ public class AccountEntity implements Serializable {
             LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
             return 0;
         }
+
     }
 }
 

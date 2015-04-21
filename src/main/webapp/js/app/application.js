@@ -21,6 +21,7 @@
             .when('/newCustomer', {templateUrl: '/template/createCustomer.html'})
             .when('/error404', {templateUrl: '404.html'})
             .when('/:id', {templateUrl: '/template/test.html'})
+            .when('/account/:id', {templateUrl: '/index2.html'})
             .otherwise({redirectTo: '/'});
     });
     angular.module("bankingApp.controllers", []);
