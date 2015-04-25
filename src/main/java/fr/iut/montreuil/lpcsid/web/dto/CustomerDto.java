@@ -36,8 +36,8 @@ public class CustomerDto {
     private String connexionLogin;
 
     private String password;
+    private List<AccountEntity> accounts;
 
-    private List<AccountDto> accounts;
 
     public CustomerDto(Long idCustomer, String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         this.idCustomer = idCustomer;
@@ -56,6 +56,9 @@ public class CustomerDto {
     }
 
     public CustomerDto() {
+    }
+    public static CustomerDto newCustomerDto() {
+        return newCustomerDto();
     }
 
     //getter & setters
@@ -150,10 +153,9 @@ public class CustomerDto {
         this.country = country;
     }
 
-    public List<AccountDto> getAccounts() {
+    public List<AccountEntity> getAccounts() {
         return accounts;
     }
-
     public String getConnexionLogin() {
         return connexionLogin;
     }

@@ -2,7 +2,6 @@ package fr.iut.montreuil.lpcsid.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,13 +54,16 @@ public class CustomerEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany
-    private List<AccountEntity> accounts = new ArrayList<AccountEntity>();
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<AccountEntity> accounts;
 
 
     // Par l'utilisateur
     public CustomerEntity(Long id){
         this.idCustomer = id;
+    }
+    public static CustomerEntity newCustomerEntity() {
+        return newCustomerEntity();
     }
 
     public CustomerEntity(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
@@ -175,9 +177,7 @@ public class CustomerEntity implements Serializable {
         this.password = password;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
+    public String getLastname() {return lastname;}
     public void setLastname(String lastname) { this.lastname = lastname; }
 
     public String getCountry() {
@@ -186,17 +186,13 @@ public class CustomerEntity implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
-
     public List<AccountEntity> getAccounts() {
         return accounts;
     }
-
     public String getConnexionLogin() {
         return connexionLogin;
     }
     public void setConnexionLogin(String connexionLogin) {
         this.connexionLogin = connexionLogin;
     }
-
 }
-

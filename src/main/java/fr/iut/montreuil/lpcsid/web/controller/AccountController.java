@@ -55,16 +55,16 @@ public class AccountController {
     private Mapper mapper;
 
 
-CustomerEntity customerTest = new CustomerEntity();
+    CustomerEntity customerTest = new CustomerEntity();
 
 
     /**
      * ***********************************************************************************************************
-     *
+     * <p/>
      * Method: RecurringTaxSAVINGS
      * Type : Scheduled pour les comptes EPARGNE UNIQUEMENT
      * Prélèvement du montant de la taxe du compte tous les ans (0.06% du solde)
-     *
+     * <p/>
      * *************************************************************************************************************
      */
 
@@ -74,22 +74,22 @@ CustomerEntity customerTest = new CustomerEntity();
     /*String day=;
     String month =;
     */
-    @Scheduled( cron = " 0 0 1 1 1 *")
+    @Scheduled(cron = " 0 0 1 1 1 *")
     public void RecurringTaxSAVINGS() {
         LOGGER.info("Scheduler launched at {}", new Date());
         Iterable<AccountEntity> accountList = accountService.getAllAccounts();
-        LOGGER.info("List : {}",accountList);
+        LOGGER.info("List : {}", accountList);
 
         for (AccountEntity account : accountList) {
-            if ("SAVINGS".equals(account.getType()) ) {
+            if ("SAVINGS".equals(account.getType())) {
                 LOGGER.info("ID account will be taxed : {}", account.getId());
                 double balance = account.getBalance();
                 LOGGER.info("Initial balance {}", account.getBalance());
 
                 double deduct = account.getTaxation() * balance;
-                LOGGER.info("Deduct Amount {}",deduct/100);
-                 account.setBalance(balance - deduct/100);
-                LOGGER.info("Balance after taxation{}",balance);
+                LOGGER.info("Deduct Amount {}", deduct / 100);
+                account.setBalance(balance - deduct / 100);
+                LOGGER.info("Balance after taxation{}", balance);
                 accountService.saveAccount(account);
 
                 // ici il faudra utiliser la méthode withdraw pour plus de simplicité
@@ -99,14 +99,13 @@ CustomerEntity customerTest = new CustomerEntity();
     }
 
 
-
     /**
      * ***********************************************************************************************************
-     *
+     * <p/>
      * Method: {account-id}/{customer-id}
      * Type : GET
      * Donne les infos du compte client checks droits" et détail true donne les opérations éffectuées sur le compte
-     *
+     * <p/>
      * *************************************************************************************************************
      */
 
@@ -116,7 +115,7 @@ CustomerEntity customerTest = new CustomerEntity();
     AccountDto getUserAccount(@PathVariable(value = "account-id") Long accountId, @PathVariable(value = "customer-id") Long customerId) {
 
         // Récupération du compte en BDD avec l'ID fournis
-         AccountEntity accountGetted = accountService.getAccountById(accountId);
+        AccountEntity accountGetted = accountService.getAccountById(accountId);
         AccountDto accountDto = mapper.map(accountGetted, AccountDto.class);
         if (null == accountDto) {
             LOGGER.info("Aucun compte n'est trouvé avec l'ID mappé : {}", accountDto);
@@ -398,7 +397,7 @@ CustomerEntity customerTest = new CustomerEntity();
                 LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountWithDraw + accountDebited.getBalance());
             }
         /* Action */
-            if (accountDebited.getBalance()-amountWithDraw >= 0&& amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() <= accountDebited.getMAX_BALANCE()) {
+            if (accountDebited.getBalance() - amountWithDraw >= 0 && amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() <= accountDebited.getMAX_BALANCE()) {
                 accountDebited.withDraw(amountWithDraw);
                 accountService.saveAccount(accountDebited);
 
@@ -459,17 +458,36 @@ CustomerEntity customerTest = new CustomerEntity();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
         return accountDtos;
-  }
+    }
 
 
 
 
-    @RequestMapping(value = "/{customer-id}", method = RequestMethod.GET, produces = "application/json")
+  /*  @RequestMapping(value = "/{customer-id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody public CustomerDto getUserAccounts(@PathVariable(value = "customer-id") Long customerId) {
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
         CustomerEntity userGetted = customerService.getCustomerById(customerId);
-        userGetted.setIdCustomer(customerId);
+      //  userGetted.setIdCustomer(customerId);
+
+        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
+        if (null == userDto) {
+            LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
+            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        }
+        LOGGER.info("User {}", userDto.getLastname());
+
+
+        LOGGER.info("Comptes:{}", userDto.getAccounts());
+        return userDto;
+    }*/
+
+    @RequestMapping(value = "/{customer-id}", method = RequestMethod.GET, produces = "application/json")
+    public CustomerDto getUserAccounts(@PathVariable(value = "customer-id") Long customerId) {
+
+        // Récupération de l'utilisateur en BDD avec l'ID fournis
+        CustomerEntity userGetted = customerService.getCustomerById(customerId);
+        //  userGetted.setIdCustomer(customerId);
 
         CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
         if (null == userDto) {

@@ -3,7 +3,6 @@ package fr.iut.montreuil.lpcsid.web.controller;
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
-import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
 import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
 import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
@@ -64,7 +63,7 @@ public class CustomerController {
     CustomerDto getCustomerById(@PathVariable long id) {
         CustomerEntity customer = customerService.getCustomerById(id);
         CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
-        List<AccountDto> accountEntities = customerDto.getAccounts();
+        List<AccountEntity> accountEntities = customerDto.getAccounts();
         if (null == customer) {
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
         }
