@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
 
@@ -453,7 +454,8 @@ public class AccountController {
     // GET /account : Récupération de la liste des comptes
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<AccountDto> listAccount() {
-        Iterable<AccountEntity> accounts = accountService.getAllAccounts();
+        List<AccountEntity> accounts = from(accountService.getAllAccounts()).toList();
+        //Iterable<AccountEntity> accounts = accountService.getAllAccounts();
         List<AccountDto> accountDtos = newArrayList();
         mapper.map(accounts, accountDtos);
         LOGGER.info("List Accounts is {}", accountDtos);
@@ -487,17 +489,19 @@ public class AccountController {
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
         CustomerEntity userGetted = customerService.getCustomerById(customerId);
-        //  userGetted.setIdCustomer(customerId);
+        CustomerDto userDto =mapper.map(userGetted, CustomerDto.class);
+        if (userDto.equals(null)) {
+            LOGGER.info("in exception");
 
-        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
-        if (null == userDto) {
             LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        } else {
+            LOGGER.info("User {}", userDto.getLastname());
+
+            LOGGER.info("Comptes:{}", userGetted.getAccounts());
+            LOGGER.info("Comptes:{}", userDto.getAccounts());
+
         }
-        LOGGER.info("User {}", userDto.getLastname());
-
-
-        LOGGER.info("Comptes:{}", userDto.getAccounts());
         return userDto;
     }
 }

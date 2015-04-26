@@ -8,7 +8,7 @@ angular.module("bankingApp.controllers",['ngCookies'])
 
     })
 
-    .controller('LoginCtrl', function ($scope, loginService,$cookieStore) {
+    .controller('LoginCtrl', function ($scope, loginService) {
         $scope.username = "test";
         $scope.password = "test";
 

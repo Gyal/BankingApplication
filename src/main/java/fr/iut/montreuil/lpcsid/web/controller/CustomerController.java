@@ -59,8 +59,7 @@ public class CustomerController {
     // GET / : Récupération d'un user par son ID
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
     public
-    @ResponseBody
-    CustomerDto getCustomerById(@PathVariable long id) {
+    @ResponseBody CustomerDto getCustomerById(@PathVariable long id) {
         CustomerEntity customer = customerService.getCustomerById(id);
         CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
         List<AccountEntity> accountEntities = customerDto.getAccounts();

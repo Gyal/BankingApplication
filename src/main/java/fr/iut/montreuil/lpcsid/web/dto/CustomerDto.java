@@ -156,6 +156,9 @@ public class CustomerDto {
     public List<AccountEntity> getAccounts() {
         return accounts;
     }
+    public void setAccounts(List<AccountEntity> accounts) {
+        this.accounts = accounts;
+    }
     public String getConnexionLogin() {
         return connexionLogin;
     }

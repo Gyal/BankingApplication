@@ -154,12 +154,6 @@
             <artifactId>spring-tx</artifactId>
             <version>4.1.4.RELEASE</version>
         </dependency>
-        <!-- Lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.2</version>
-        </dependency>
 
     </dependencies>
 
