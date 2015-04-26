@@ -61,12 +61,19 @@ public class OperationDetailEntity implements Serializable {
         this.id = id;
     }
 
-
     public TransactionEntity getOperation() {
         return operation;
     }
 
     public void setOperation(TransactionEntity operation) {
         this.operation = operation;
+    }
+
+    public Long getDebitedAccount() {
+        return debitedAccount;
+    }
+
+    public void setDebitedAccount(Long debitedAccount) {
+        this.debitedAccount = debitedAccount;
     }
 }

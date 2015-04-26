@@ -50,13 +50,29 @@ public class TransactionEntity implements Serializable {
         this.account = account;
     }
 
-    /*public TransactionEntity(Long idTransaction, String transactionType, int amount, Date transactionDate) {
+    public TransactionEntity(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity account) {
         this.idTransaction = idTransaction;
         this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
-    }*/
+        this.account = account;
+    }
 
+    // Créé par l'utilisateur
+    public TransactionEntity(String transactionType, int amount, Date transactionDate, OperationDetailEntity operationDetail) {
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.operationDetail = operationDetail;
+    }
+
+    public TransactionEntity(Long idTransaction, String transactionType, int amount, Date transactionDate, OperationDetailEntity operationDetail) {
+        this.idTransaction = idTransaction;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.operationDetail = operationDetail;
+    }
 
     public Long getIdTransaction() {
         return idTransaction;
