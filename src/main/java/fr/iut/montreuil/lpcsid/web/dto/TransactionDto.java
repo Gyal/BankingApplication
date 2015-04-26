@@ -14,30 +14,45 @@ public class TransactionDto {
 
     private String transactionType;
 
-    private AccountEntity NumDebitedAccount;
+    private AccountDto NumDebitedAccount;
 
-
-    private AccountEntity NumCreditedAccount;
-
+    private AccountDto NumCreditedAccount;
 
     private int amount;
 
     private Date transactionDate;
 
+    private OperationDetailDto operationDetail;
     /**
      * Récupération du compte bancaire associé
      *
      * @return Compte bancaire associé
      */
 
-    public AccountEntity account;
+    public AccountDto account;
 
     public TransactionDto() {
 
     }
 
     // Créé par l'utilisateur
-    public TransactionDto(String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+    public TransactionDto(String transactionType, int amount, Date transactionDate, AccountDto account) {
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.account = account;
+    }
+
+    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountDto account) {
+        this.idTransaction = idTransaction;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.account = account;
+    }
+
+    // Créé par l'utilisateur
+    public TransactionDto(String transactionType, int amount, Date transactionDate, AccountDto NumDebitedAccount, AccountDto NumCreditedAccount) {
         this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
@@ -45,7 +60,7 @@ public class TransactionDto {
         this.NumDebitedAccount = NumDebitedAccount;
     }
 
-    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountDto NumDebitedAccount, AccountDto NumCreditedAccount) {
         this.idTransaction = idTransaction;
         this.transactionType = transactionType;
         this.amount = amount;
@@ -54,7 +69,21 @@ public class TransactionDto {
         this.NumDebitedAccount = NumDebitedAccount;
     }
 
+    // Créé par l'utilisateur
+    public TransactionDto(String transactionType, int amount, Date transactionDate, OperationDetailDto operationDetail) {
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.operationDetail = operationDetail;
+    }
 
+    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, OperationDetailDto operationDetail) {
+        this.idTransaction = idTransaction;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.operationDetail = operationDetail;
+    }
     public Long getIdTransaction() {
         return idTransaction;
     }
@@ -87,27 +116,35 @@ public class TransactionDto {
         this.transactionDate = transactionDate;
     }
 
-    public AccountEntity getNumDebitedAccount() {
+    public AccountDto getNumDebitedAccount() {
         return NumDebitedAccount;
     }
 
-    public void setNumDebitedAccount(AccountEntity numDebitedAccount) {
+    public void setNumDebitedAccount(AccountDto numDebitedAccount) {
         NumDebitedAccount = numDebitedAccount;
     }
 
-    public AccountEntity getNumCreditedAccount() {
+    public AccountDto getNumCreditedAccount() {
         return NumCreditedAccount;
     }
 
-    public void setNumCreditedAccount(AccountEntity numCreditedAccount) {
+    public void setNumCreditedAccount(AccountDto numCreditedAccount) {
         NumCreditedAccount = numCreditedAccount;
     }
 
-    public AccountEntity getAccount() {
+    public AccountDto getAccount() {
         return account;
     }
 
-    public void setAccount(AccountEntity account) {
+    public void setAccount(AccountDto account) {
         this.account = account;
+    }
+
+    public OperationDetailDto getOperationDetail() {
+        return operationDetail;
+    }
+
+    public void setOperationDetail(OperationDetailDto operationDetail) {
+        this.operationDetail = operationDetail;
     }
 }

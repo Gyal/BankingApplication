@@ -108,7 +108,6 @@ public class CustomerController {
         return mapper.map(updatedCustomer, CustomerDto.class);
     }
 
-
     // DELETE delete/{id} : suppression d'un user de tel id, renvoi le statut NOCONTENT
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -119,5 +118,4 @@ public class CustomerController {
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
         }
     }
-
 }
