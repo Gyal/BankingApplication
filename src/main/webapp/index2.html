@@ -3,8 +3,16 @@
         <div class="row row-centered">
 
             <div class="col-lg-5 col-centered well block indexBoxSize">Profil : {{user.civilities}} {{user.lastname}}  {{user.firstName}}</br> Votre id utilisateur est le :{{user.idCustomer}} </div>
-            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte Courant:{{user.accounts}}</div>
-            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte PEL</div>
+            <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte Courant:
+                <div ng-repeat="test in user.accounts">
+                    Id du compte {{test.id}}</br>
+                   Libelle du compte {{test.libelle}}
+                    </br>
+                   Date{{test.dateCreated | date}}
+                </div>
+            </div>
+
+        <div class="col-lg-2 col-centered well block indexBoxSize">Etat Compte PEL</div>
 
             <div class="col-lg-5 col-centered well block indexBoxSize ">
                 <ul class="nav">
@@ -14,8 +22,8 @@
                             possibles) <b class="caret"></b></a>
 
                         <div class="list-group">
-                            <a href="indexAccount.html" id="seeAccounts" class="list-group-item"onclick=""  >Visualiser mes comptes</a>
-                            <a href="transfer.html" id="transfer" class="list-group-item" onclick="" value="transfer">Réaliser un
+                            <a id="seeAccounts" class="list-group-item" ng-click="SeeUserAccount(2)"  >Visualiser mes comptes</a>
+                            <a href="/#/transfer" id="transfer" class="list-group-item" onclick="" value="transfer" ng-click="transfer()">Réaliser un
                                 virement</a>
                             <a href="template/deposit.html" id="deposit" class="list-group-item" onclick="" value="deposit">Réaliser un dépot</a>
                             <a href="template/withDraw.html"  id="withdraw" class="list-group-item" onclick="" value="withdraw">Réaliser un retrait</a>
