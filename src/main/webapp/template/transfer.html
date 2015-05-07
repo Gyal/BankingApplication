@@ -1,43 +1,88 @@
 <center>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Accueil</a></li>
-            </ul>
+
+    <div class="row" ng-controller="TransferCtrl">
+        <div class="col-xs-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>From:</h4><!-- liste déroulante Type de compte -->
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <select name="from" id="from" class="form-control" ng-model="from">
+                                        <option value="1" >Compte1</option>
+                                        <option value="1" ng-options="from">Compte2</option>
+                                    </select>
+                                    <!--<input type="text" ng-model="from"/>-->
+                                </div>
+                            </div>
+                        </div>
+                    </a></h4>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        Address <br>
+                        details <br>
+                        more <br>
+                    </p>
+                </div>
+            </div>
+
         </div>
-    </nav>
+        <div class="col-xs-1">
+            <img class="btn" src="../bootstrap/images/arrows-button-Right.png"/>
+        </div>
 
-    <form class="form-inline jal" action="http://localhost:8080/api/account/balance/1/transfer" method="POST">
-        <div class="well">
-            <div class="control-group">
-                <label class="control-label">Montant Transféré</label>
+        <div class="row">
+            <div class="col-xs-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>To: </h4><!-- liste déroulante Type de compte -->
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <select name="toTest" id="toTest" class="form-control" ng-model="toTest">
+                                            <option value="7">Compte1</option>
+                                            <option value="7">Compte2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </a></h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Address <br>
+                            details <br>
+                            more <br>
+                        </p>
+                    </div>
+                </div>
 
-                <div class="controls">
-                    <input id="Amount" type="text" name="amount" placeholder="Montant transféré"/>
+            </div>
+
+        </div>
+        <!-- / end client details section -->
+        <div class=" row well col-xs-5 form-horizontal">
+
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="amount">Montant</label>
+
+                <div class="col-sm-9">
+                    <input class="form-control" id="amount" type="text" name="amount" placeholder="Montant transféré"  ng-model="amount"/>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label">From</label>
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="date">Date</label>
 
-                <div class="controls">
-                    <input id="from" type="text" name="from" placeholder="from"/>
+                <div class="col-sm-9">
+                    <input class="form-control" id="date" type="text" name="date" placeholder="Date"/>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label">To</label>
-
-                <div class="controls">
-                    <input id="to" type="text" name="to" placeholder="to"/>
-                </div>
-            </div>
-
-
             <hr class="soft"/>
             <div class="controls">
-                <button type="submit" class="btn btn-warning">Enregistrer</button>
+                <button type="submit" class="btn btn-warning" ng-click="transfer()">Enregistrer</button>
                 <button type="reset" class="btn btn-primary">Annuler</button>
             </div>
         </div>
-
-    </form>
+    </div>
 </center>

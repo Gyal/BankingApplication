@@ -22,7 +22,8 @@
             .when('/error404', {templateUrl: '404.html'})
             .when('/:id', {templateUrl: '/template/transfer.html'})
             .when('/account/:id', {templateUrl: '/index2.html'})
-            .when('/account/view', {templateUrl: '/indexAccount.html'})
+           // .when('/account/view', {templateUrl: '/indexAccount.html'})
+            .when('/account/list/:id', {templateUrl: '/indexAccount.html'})
             .otherwise({redirectTo: '/'});
     });
     angular.module("bankingApp.controllers", []);

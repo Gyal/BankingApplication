@@ -5,16 +5,66 @@ angular.module('bankingApp.services', ['ngCookies'])
         return $resource('/api/account/list');
     })
     /****************************************************************************************************************************/
+    .factory('transferService', function ($cookieStore, $http) {
+        var transfer = function (amount, from, to) {
+           /* alert(from);
+            alert(to);
+            alert(amount);*/
+          //  alert("tgggest");
+            var idCustomerCookie = $cookieStore.get('user');
+            //alert(idCustomerCookie);
+            var req = {
+                method: 'POST',
+                url: '/api/account/balance/'+idCustomerCookie+'/transfer',
+                headers: {
+                    'Content-Type': 'charset=UTF-8'
+                },
+                params: {
+                    "amount": amount,
+                    "from":from,
+                    "toTest":to
+                }
+            };
+            $http(req).success(function (data) {
+
+                // Transfert de l'id de l'utilisateur par cookie
+                alert("heo");
+
+            });
+        };
+
+        return {
+            // si pas return de login : la requete ne se sera exécuté en GET
+            transfer: transfer
+        };
+
+
+
+      /*  return $resource('/api/account/transfer',
+            {
+                query: {method: 'POST'}
+            } );*/
+    })
+
+
 
 //*************Controleur permettant l'affichage de la page index: avec l'id l'utilisateur récupéré du coookie **************/
     .factory('userService', function ($resource, $cookieStore) {
         var idCustomerCookie = $cookieStore.get('user');
         // alert(idCustomerCookie);
-        return $resource('/api/account/:id',
+        var SeeUserAccount = function ($location){
+          //  alert("test");
+          //  $location.path("/api/account/:id");
+        }
+
+        return {
+            SeeUserAccount: SeeUserAccount
+        },
+            $resource('/api/account/:id',
             {id: "@id"},
             {
                 query: {method: 'GET', params: {id: idCustomerCookie}}
-            })
+            });
     })
     /***************************************************************************************************************************/
 
@@ -47,5 +97,5 @@ angular.module('bankingApp.services', ['ngCookies'])
             // si pas return de login : la requete ne se sera exécuté en GET
             login: login
         };
-    });
-/***************************************************************************************************************************/
+
+    })
