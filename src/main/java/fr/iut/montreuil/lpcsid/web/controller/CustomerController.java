@@ -59,7 +59,8 @@ public class CustomerController {
     // GET / : Récupération d'un user par son ID
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
     public
-    @ResponseBody CustomerDto getCustomerById(@PathVariable long id) {
+    @ResponseBody
+    CustomerDto getCustomerById(@PathVariable long id) {
         CustomerEntity customer = customerService.getCustomerById(id);
         CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
         List<AccountEntity> accountEntities = customerDto.getAccounts();
@@ -108,6 +109,7 @@ public class CustomerController {
         return mapper.map(updatedCustomer, CustomerDto.class);
     }
 
+
     // DELETE delete/{id} : suppression d'un user de tel id, renvoi le statut NOCONTENT
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -118,4 +120,5 @@ public class CustomerController {
             throw new ErrorNotFoundException(NO_ENTITY_FOUND);
         }
     }
+
 }
