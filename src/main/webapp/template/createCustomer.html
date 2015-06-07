@@ -8,7 +8,14 @@
                 <label class="control-label">Civilité</label>
 
                 <div class="controls">
-                    <input id="customerCiv" type="text" name="customerCiv" placeholder="Mr/Mme"/>
+                    <select name="customerCiv" id="customerCiv" >
+                        <option value="Mlle">Mlle</option>
+                        <option value="Mme">Mme</option>
+                        <option value ="Mr">Mr</option>
+
+
+                    </select>
+
                 </div>
             </div>
             <div class="control-group">
@@ -45,7 +52,7 @@
                 <label class="control-label">Date de naissance</label>
 
                 <div class="controls">
-                    <input id="customerDateBirth" type="text" name="customerDateBirth" placeholder="Date de naissance"/>
+                    <input id="datepicker" type="text" name="customerDateBirth" placeholder="Date de naissance"/>
                 </div>
             </div>
             <div class="control-group">
@@ -100,3 +107,8 @@
         </div>
     </form>
 </center>
+<script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+    });
+</script>

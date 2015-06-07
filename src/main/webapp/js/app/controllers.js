@@ -5,25 +5,36 @@ angular.module("bankingApp.controllers", ['ngCookies'])
             $scope.accounts = response || [];
         });
         $scope.melina = function () {
-         alert("Hello");
-            accountService.transfer = function(response){
-                    $scope.test = response || [];
-                }       };
+            alert("Hello");
+        };
     }
 )
 
 
     // Transfer
 
-    .controller("TransferCtrl", function ($scope, transferService) {
-        alert($scope.from);
-        //$scope.amount=5;
-        //$scope.from ="222";
-        $scope.transfer = function (){
+    .controller("TransferCtrl", function ($scope, transferService, userService) {
+        //var vm = this;
+        userService.query(function (response) {
+            $scope.user = response || [];
+           // Ajout de données fictives $scope.user.accounts.unshift({id:2, libelle:"test"});
+            /* $scope.from=$scope.user.accounts[0];
+            $scope.toTest=$scope.user.accounts[0];
+            $scope.accountCredited=$scope.user.accounts[0];
+            $scope.accountDebited=$scope.user.accounts[0];*/
 
-            transferService.transfer($scope.amount, $scope.from, $scope.toTest,function (response) {
+        });
 
-               // $scope.test = response || [];
+        $scope.transfer = function () {
+            transferService.transfer($scope.amount, $scope.from, $scope.toTest, function (response) {
+            });
+        }
+        $scope.deposit = function () {
+          transferService.deposit($scope.amount, $scope.accountCredited, function (response) {
+            });
+        }
+        $scope.withdraw = function () {
+            transferService.withdraw($scope.amount, $scope.accountDebited, function (response) {
             });
         }
     }
@@ -40,21 +51,19 @@ angular.module("bankingApp.controllers", ['ngCookies'])
 
             });
         }
+        $scope.logOut = function () {
+            loginService.logOut();
+        }
 
     })
 
     .controller('UserCtrl', function ($scope, userService, $location) {
         $scope.SeeUserAccount = function (id) {
             $location.path("/account/list/:" + id);
-            //alert("test");
-            //userService.SeeUserAccount();
         }
 
         userService.query(function (response) {
-
             $scope.user = response || [];
-            //ajout d'un cookie
-            // $window.sessionStorage.token = response.token;
 
 
         });

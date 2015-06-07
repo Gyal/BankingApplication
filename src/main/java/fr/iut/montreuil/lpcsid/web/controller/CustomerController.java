@@ -5,7 +5,7 @@ import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
 import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
-import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
+import fr.iut.montreuil.lpcsid.web.exception.NotFoundException;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class CustomerController {
         CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
         List<AccountEntity> accountEntities = customerDto.getAccounts();
         if (null == customer) {
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+            throw new NotFoundException(NO_ENTITY_FOUND);
         }
         LOGGER.info("Customer is {}, return.", customerDto);
         LOGGER.info("List account is {}", accountEntities);
@@ -100,7 +100,7 @@ public class CustomerController {
         CustomerEntity customerToUpdate = customerService.getCustomerById(id);
 
         if (null == customerToUpdate) {
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+            throw new NotFoundException(NO_ENTITY_FOUND);
         }
 
         customer.setIdCustomer(customerToUpdate.getIdCustomer());
@@ -117,7 +117,7 @@ public class CustomerController {
         try {
             customerService.deleteCustomer(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+            throw new NotFoundException(NO_ENTITY_FOUND);
         }
     }
 

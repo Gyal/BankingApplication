@@ -70,14 +70,6 @@ public class CustomerDto {
     public void setIdCustomer(Long id) {
         this.idCustomer = id;
     }
-
-    public String getName() {
-        return lastname;
-    }
-    public void setName(String name) {
-        this.lastname = name;
-    }
-
     public String getFirstName() {
         return firstName;
     }

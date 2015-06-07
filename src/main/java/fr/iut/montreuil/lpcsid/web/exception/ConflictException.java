@@ -6,16 +6,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Created by Mélina on 15/03/2015.
+ * Created by Mélina on 10/05/2015.
  */
 
-//400
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class DataIntegrityException extends RuntimeException {
+//409
+@ResponseStatus(HttpStatus.CONFLICT)
+public class ConflictException extends RuntimeException {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotFoundException.class);
-    public DataIntegrityException(ErrorCode errorCode) {
+    public ConflictException(ErrorCode errorCode) {
         super(errorCode.getErrMsg());
         LOGGER.info(errorCode.getErrMsg());
+
 
     }
 }

@@ -4,7 +4,7 @@ import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 import fr.iut.montreuil.lpcsid.service.TransactionService;
 import fr.iut.montreuil.lpcsid.web.dto.TransactionDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
-import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
+import fr.iut.montreuil.lpcsid.web.exception.NotFoundException;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class TransactionController {
         TransactionEntity transaction = transactionService.getTransactionById(id);
         TransactionDto transactionDto = mapper.map(transaction, TransactionDto.class);
         if (null == transaction) {
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+            throw new NotFoundException(NO_ENTITY_FOUND);
         }
         LOGGER.info("Transaction is {}, return.", transactionDto);
         transactionService.saveTransaction(transaction);

@@ -11,7 +11,7 @@ import fr.iut.montreuil.lpcsid.service.TransactionService;
 import fr.iut.montreuil.lpcsid.web.dto.AccountDto;
 import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
-import fr.iut.montreuil.lpcsid.web.exception.ErrorNotFoundException;
+import fr.iut.montreuil.lpcsid.web.exception.NotFoundException;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,41 +111,37 @@ public class AccountController {
      */
 
     @RequestMapping(value = "/{account-id}/{customer-id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
     public
     @ResponseBody
     AccountDto getUserAccount(@PathVariable(value = "account-id") Long accountId, @PathVariable(value = "customer-id") Long customerId) {
 
         // Récupération du compte en BDD avec l'ID fournis
         AccountEntity accountGetted = accountService.getAccountById(accountId);
-        AccountDto accountDto = mapper.map(accountGetted, AccountDto.class);
-        if (null == accountDto) {
-            LOGGER.info("Aucun compte n'est trouvé avec l'ID mappé : {}", accountDto);
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        if (null == accountGetted) {
+            throw new NotFoundException(NO_ENTITY_FOUND);
         }
+        AccountDto accountDto = mapper.map(accountGetted, AccountDto.class);
         LOGGER.info("AccountGetted {}", accountDto);
 
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
-        CustomerEntity userGetted = customerTest;
-        userGetted.setIdCustomer(customerId);
-
-        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
-        if (null == userDto) {
-            LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+        CustomerEntity userGetted = customerService.getCustomerById(customerId);
+        if (null == userGetted) {
+            LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userGetted);
+            throw new NotFoundException(NO_ENTITY_FOUND);
         }
+        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
         LOGGER.info("UserGetted {}", userDto);
 
         // Vérification de la concordance entre le compte et l'utilisateur*/
-
-        LOGGER.info("AccountId {}", accountDto.getCustomer().getIdCustomer());
-        LOGGER.info("USER {}", userDto.getIdCustomer());
-
         if (accountDto.getCustomer().getIdCustomer().equals(userDto.getIdCustomer())) {
             LOGGER.info("AccountGetted is mapped with the userGetted {}", accountDto + "" + userDto);
             return accountDto;
         } else {
-            LOGGER.info("pas de concordance{}", accountDto.getCustomer().getIdCustomer().equals(userDto.getIdCustomer()));
+            LOGGER.info("Le compte n'appartient pas ) l'utilisateur demandé{}", accountDto.getCustomer().getIdCustomer().equals(userDto.getIdCustomer()));
+            LOGGER.info("AccountId {}", accountDto.getCustomer().getIdCustomer());
+            LOGGER.info("USER {}", userDto.getIdCustomer());
             throw new DataIntegrityException(UNAUTHORIZED);
         }
     }
@@ -155,7 +151,7 @@ public class AccountController {
     /**
      * ***********************************************************************************************************
      * <p/>
-     * Method: api/account/{id}
+     * Method: api/account/{customer-id}
      * Type : POST
      * Enregistrement d'un nouveau compte, renvoi un statut CREATED
      *
@@ -164,13 +160,13 @@ public class AccountController {
      * *************************************************************************************************************
      */
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{customer-id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createAccount(@PathVariable("id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
+    public void createAccount(@PathVariable("customer-id") long id, @RequestParam(value = "accountName", required = true) String accountName, @RequestParam(value = "accountType", required = true) String accountType) {
 
         // Vérification du champ Type sinon lève une exception WRONG_ENTITY_INFORMATION
         if (("CURRENT").equals(accountType) || ("SAVINGS").equals(accountType)) {
-            LOGGER.info("LOG: accountType is OK : equals CURRENT OR SAVINGS, continue{}");
+            LOGGER.info("LOG: accountType is OK : equals CURRENT OR SAVINGS, continue");
             CustomerEntity customer = customerService.getCustomerById(id);
             CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
             AccountEntity accountEntity = new AccountEntity(accountName, accountType, customer);
@@ -194,6 +190,7 @@ public class AccountController {
             accountEntity.setMAX_BALANCE(MAX_BALANCE);
             accountEntity.setTaxation(taxation);
             accountEntity.setDateCreated(new Date());
+            accountEntity.setCustomer(customer);
 
             int compteurSAV = 0;
             int compteurCUR = 0;
@@ -205,10 +202,10 @@ public class AccountController {
             for (AccountEntity account : accounts) {
                 if (("CURRENT").equals(account.getType())) {
                     compteurCUR = 1;
-                    LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a déjà un compte courrant");
+                    LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a au moins un compte courrant");
                 } else {
                     compteurSAV = 1;
-                    LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a déjà un compte PEL");
+                    LOGGER.info(" l'utilisateur d'id {}", customer.getIdCustomer() + " a au moins un compte PEL");
                 }
             }
             if (("CURRENT").equals(accountEntity.getType())) {
@@ -216,6 +213,7 @@ public class AccountController {
                     accountEntity = accountService.saveAccount(accountEntity);
                     customer.getAccounts().add(accountEntity);
                     customerService.saveCustomer(customer);
+
                     LOGGER.info(" LOG: Account id {}, as bean added to the customer id {}.", accountEntity.getId(), customer.getIdCustomer());
 
                 }
@@ -242,61 +240,10 @@ public class AccountController {
     /****************************************************************************************************************/
 
 
-
-    /* PUT/balance/{customer-id}:  crédit ou débit d’argent sur le compte client (conditions comptes, alimenter historique opération client)
-     transfère de l’argent du compte de customer-id vers le compte customer-id-crediteur (check conditions compte alimenter historique opérations sur les comptes)
-    */
-
-   /* @RequestMapping(value = "/balance/{customer-id}", method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    //public void balance(@PathVariable long id) {
-        // a faire
-    }*/
-
     /**
      * *************************************************************************************************************************
      */
 
-    /*@RequestMapping(value = "/balance/{customer-id}", method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.OK)
-    public void makeOperation(@PathVariable("customer-id") final Long customerId,@RequestParam(value = "Amount", required = true) final int amount, @RequestParam(value = "deposit", required = false) String deposit,@RequestParam(value = "withdraw", required = false) String withdraw,@RequestParam(value = "transfer", required = false) String transfer ) {
-
-        CustomerEntity customer = customerService.getCustomerById(customerId);
-        List<AccountEntity> customerAccounts = customer.getAccounts();
-        AccountEntity currentAccount = null;
-
-        for(AccountEntity customerAccount : customerAccounts) {
-            if(customerAccount.getType().equals("CURRENT")) {
-                currentAccount = customerAccount;
-            }
-        }
-
-        if (transfer.isEmpty() == false && currentAccount !=null) {
-            //renvoi vers la méthode transfert
-            LOGGER.info(" LOG: Méthode transfer {}", transfer);
-        }
-        if (deposit.isEmpty() == false) {
-            //renvoi vers la méthode deposit
-            LOGGER.info(" LOG: Méthode deposit {}", deposit);
-            accountCredited.deposit(amount);
-        }else{
-            LOGGER.info(" LOG: Aucun compte courant à créditer{}", currentAccount);
-
-        }
-
-        if (withdraw.isEmpty() == false  && currentAccount !=null) {
-            //renvoi vers la méthode withDraw
-            LOGGER.info(" LOG: Méthode withdraw {}", withdraw);
-            currentAccount.withDraw(amount);
-        }else{
-            LOGGER.info(" LOG: Aucun compte courant à débiter{}", currentAccount);
-
-        }
-
-    }
-          //  List<AccountEntity> customerAccounts = customer.getAccounts();
-
-*/
     @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void deposit(@PathVariable(value = "customer-id") Long customerId,
@@ -341,8 +288,10 @@ public class AccountController {
             }
 
         /* Action si tout ce passe bien */
+            try {
             if (amountDeposit + sommeOperationDeposit < 3000 && amountDeposit > 0 && amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE()) {
                 LOGGER.info("Verification {} {} {}", amountDeposit + sommeOperationDeposit < 3000, amountDeposit > 0, amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE());
+
                 accountCredited.deposit(amountDeposit);
                 accountService.saveAccount(accountCredited);
 
@@ -351,25 +300,30 @@ public class AccountController {
                 transactionService.saveTransaction(operation);
                 accountCredited.getOperations().add(operation);
             }
+                } catch (DataIntegrityException e) {
+                    throw new DataIntegrityException(BAD_REQUEST);
+                }
+
         } else {
             LOGGER.info("pas de concordance{}", accountCustomer);
             throw new DataIntegrityException(UNAUTHORIZED);
 
         }
-
     }
 
-    @RequestMapping(value = "/balance/{customer-id}/withDraw", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/balance/{customer-id}/withdraw", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void withDraw(@PathVariable(value = "customer-id") Long customerId,
+    public void withdraw(@PathVariable(value = "customer-id") Long customerId,
                          @RequestParam(value = "amount", required = true) final int amountWithDraw,
                          @RequestParam(value = "accountDebited", required = true) Long account) {
         AccountEntity accountDebited = accountService.getAccountById(account);
 
         CustomerEntity customer = customerService.getCustomerById(customerId);
+        LOGGER.info("type{}", accountDebited.getType());
 
         Boolean accountCustomer = customer.getIdCustomer().equals(accountDebited.getCustomer().getIdCustomer());
-        if (accountCustomer.equals(true)) {
+        if (accountCustomer.equals(true) && ("CURRENT").equals(accountDebited.getType())) {
 
             int sommeOperationDebit = 0;
             List<TransactionEntity> operations = accountDebited.getOperations();
@@ -405,37 +359,37 @@ public class AccountController {
                 TransactionEntity operation = new TransactionEntity("WITHDRAW", amountWithDraw, today, accountDebited);
                 transactionService.saveTransaction(operation);
                 accountDebited.getOperations().add(operation);
-            } else {
-                LOGGER.info("pas de concordance{}", accountCustomer);
-                throw new DataIntegrityException(UNAUTHORIZED);
             }
+        } else {
+            LOGGER.info("pas de concordance{}", accountCustomer);
+            throw new DataIntegrityException(UNAUTHORIZED);
         }
     }
 
 
-    @RequestMapping(value = "/balance/{customer-id}/transfer", method = RequestMethod.POST)
+    @RequestMapping(value = "/balance/{customer-id}/transfer", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void transfert(@PathVariable(value = "customer-id") Long customerId,
                           @RequestParam(value = "amount", required = true) final int amountTransfer,
                           @RequestParam(value = "from", required = true) Long from,
-                          @RequestParam(value = "to", required = true) Long to) {
+                          @RequestParam(value = "toTest", required = true) Long to) {
         AccountEntity accountDebited = accountService.getAccountById(from);
 
-        LOGGER.info("accountDebited  {}", accountDebited);
+        LOGGER.info("accountDebited  exist {}", accountDebited);
 
         AccountEntity accountCredited = accountService.getAccountById(to);
-        LOGGER.info("accountCredited  {}", accountCredited);
+        LOGGER.info("accountCredited exist {}", accountCredited);
 
         CustomerEntity customer = customerService.getCustomerById(customerId);
         LOGGER.info("customer {}", customer);
 
         Boolean accountCustomer = customer.getIdCustomer().equals(accountDebited.getCustomer().getIdCustomer());
-        LOGGER.info("accountCustomer {}", customer);
+        LOGGER.info("accountCustomer exist{}", customer);
 
         Date today = new Date();
 
         if (accountCustomer.equals(true)) {
-            LOGGER.info("TRUE{}", accountCustomer);
+            LOGGER.info(" Le compte appartiend bien à l'utilisateur qui initie la demande TRUE{}", accountCustomer);
             accountDebited.transfert(accountDebited, accountCredited, amountTransfer);
 
             TransactionEntity operation = new TransactionEntity("WITHDRAW", amountTransfer, today, accountDebited);
@@ -463,38 +417,17 @@ public class AccountController {
     }
 
 
-
-
-  /*  @RequestMapping(value = "/{customer-id}", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody public CustomerDto getUserAccounts(@PathVariable(value = "customer-id") Long customerId) {
-
-        // Récupération de l'utilisateur en BDD avec l'ID fournis
-        CustomerEntity userGetted = customerService.getCustomerById(customerId);
-      //  userGetted.setIdCustomer(customerId);
-
-        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
-        if (null == userDto) {
-            LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
-        }
-        LOGGER.info("User {}", userDto.getLastname());
-
-
-        LOGGER.info("Comptes:{}", userDto.getAccounts());
-        return userDto;
-    }*/
-
     @RequestMapping(value = "/{customer-id}", method = RequestMethod.GET, produces = "application/json")
     public CustomerDto getUserAccounts(@PathVariable(value = "customer-id") Long customerId) {
 
         // Récupération de l'utilisateur en BDD avec l'ID fournis
         CustomerEntity userGetted = customerService.getCustomerById(customerId);
-        CustomerDto userDto =mapper.map(userGetted, CustomerDto.class);
+        CustomerDto userDto = mapper.map(userGetted, CustomerDto.class);
         if (userDto.equals(null)) {
             LOGGER.info("in exception");
 
             LOGGER.info("Aucun utilisateur n'est trouvé avec l'ID mappé : {}", userDto);
-            throw new ErrorNotFoundException(NO_ENTITY_FOUND);
+            throw new NotFoundException(NO_ENTITY_FOUND);
         } else {
             LOGGER.info("User {}", userDto.getLastname());
 
