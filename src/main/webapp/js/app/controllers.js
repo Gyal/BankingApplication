@@ -52,6 +52,7 @@ angular.module("bankingApp.controllers", ['ngCookies'])
             });
         }
         $scope.logOut = function () {
+            alert("test");
             loginService.logOut();
         }
 

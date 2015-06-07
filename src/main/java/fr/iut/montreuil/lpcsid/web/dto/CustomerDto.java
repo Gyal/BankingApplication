@@ -12,17 +12,29 @@ public class CustomerDto {
 
     //Variables
     private Long idCustomer;
+
     private String civilities;
+
     private String lastname;
+
     private String firstName;
+
     private String dateOfBirth;
+
     private String street;
+
     private String city;
+
     private String country;
+
     private String zipCode;
+
     private String mail;
+
     private String phoneNumber;
+
     private String connexionLogin;
+
     private String password;
     private List<AccountEntity> accounts;
 
@@ -42,21 +54,7 @@ public class CustomerDto {
         this.connexionLogin = connexionLogin;
         this.password = password;
     }
-    public CustomerDto(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
-        this.idCustomer = idCustomer;
-        this.civilities = civilities;
-        this.lastname = lastname;
-        this.firstName = firstName;
-        this.dateOfBirth = dateOfBirth;
-        this.street = street;
-        this.city = city;
-        this.country = country;
-        this.zipCode = zipCode;
-        this.mail = mail;
-        this.phoneNumber = phoneNumber;
-        this.connexionLogin = connexionLogin;
-        this.password = password;
-    }
+
     public CustomerDto() {
     }
     public static CustomerDto newCustomerDto() {
@@ -149,6 +147,9 @@ public class CustomerDto {
 
     public List<AccountEntity> getAccounts() {
         return accounts;
+    }
+    public void setAccounts(List<AccountEntity> accounts) {
+        this.accounts = accounts;
     }
     public String getConnexionLogin() {
         return connexionLogin;
