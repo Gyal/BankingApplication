@@ -4,7 +4,6 @@ import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,13 +35,6 @@ public class AccountDto implements Serializable {
     }
 
 
-    // Création d'un compte par l'utilisateur*/
-    public AccountDto(String libelle, String type, CustomerEntity customer) {
-        this.libelle = libelle;
-        this.type = type;
-        this.customer = customer;
-    }
-
     public AccountDto(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation, CustomerEntity customer) {
         this.libelle = libelle;
         this.balance = balance;
@@ -56,6 +48,7 @@ public class AccountDto implements Serializable {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -63,6 +56,7 @@ public class AccountDto implements Serializable {
     public String getLibelle() {
         return libelle;
     }
+
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
@@ -70,6 +64,7 @@ public class AccountDto implements Serializable {
     public double getBalance() {
         return balance;
     }
+
     public void setBalance(double balance) {
         this.balance = balance;
     }
@@ -77,6 +72,7 @@ public class AccountDto implements Serializable {
     public double getMAX_BALANCE() {
         return MAX_BALANCE;
     }
+
     public void setMAX_BALANCE(double MAX_BALANCE) {
         this.MAX_BALANCE = MAX_BALANCE;
     }
@@ -84,6 +80,7 @@ public class AccountDto implements Serializable {
     public double getTaxation() {
         return taxation;
     }
+
     public void setTaxation(double taxation) {
         this.taxation = taxation;
     }
@@ -91,6 +88,7 @@ public class AccountDto implements Serializable {
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -98,6 +96,7 @@ public class AccountDto implements Serializable {
     public Date getDateCreated() {
         return dateCreated;
     }
+
     public void setDateCreated(Date date) {
         this.dateCreated = date;
     }
@@ -105,6 +104,7 @@ public class AccountDto implements Serializable {
     public List<TransactionEntity> getOperations() {
         return operations;
     }
+
     public void setOperations(List<TransactionEntity> operations) {
         this.operations = operations;
     }
@@ -112,6 +112,7 @@ public class AccountDto implements Serializable {
     public CustomerEntity getCustomer() {
         return customer;
     }
+
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
@@ -138,7 +139,7 @@ public class AccountDto implements Serializable {
     * Si les comptes sont des comptes courant, le montant du transfert est <0 et après le transfert le solde du compte débité est <0 alors tranfert
     * Attention : Le transfert sera possible vers un compte même si après transfert le solde dépasse 25000 euros, sinon il faut rajouter une vérification
     */
-    @Transactional
+   /* @Transactional
     public int transfert(AccountDto from, AccountDto to, int amount) {
         if (from.getType().equals("CURRENT") && to.getType().equals("CURRENT") && amount > 0 && from.getBalance() - amount >= 0 && to.getBalance() + amount < 25000){
             double balanceFrom = from.getBalance() - amount;
@@ -150,12 +151,51 @@ public class AccountDto implements Serializable {
             LOGGER.info("Le compte a bien été crédité : ", to.getId());
             LOGGER.info("Nouveau solde du créditeur : ", from.getId());
             return amount;
-            test
         }
         else
         {
             LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
             return 0;
         }
+    }*/
+
+    public boolean transfert(AccountDto from, AccountDto to, int amount) {
+        String current = "CURRENT";
+        Boolean currentIsTrue = current.equals(from.getType()) && current.equals(to.getType());
+        Boolean amountIsTrue = amount > 0;
+        Boolean soldePositive = from.getBalance() - amount >= 0;
+        Boolean maxBalanceAtteign = to.getBalance() + amount < 25000;
+
+        if (!currentIsTrue.equals(true)) {
+            LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
+            return false;
+        }
+        if (!amountIsTrue.equals(true)) {
+            LOGGER.info(" LOG: le montant est inférieur à 0 ", amountIsTrue);
+            return false;
+        }
+        if (!soldePositive.equals(true)) {
+            LOGGER.info(" LOG: le solde du compte à débiter n'est pas suffisant");
+            return false;
+        }
+        if (!maxBalanceAtteign.equals(true)) {
+            LOGGER.info(" LOG: Le compte à créditer attein le montant maximum autorié", to.getMAX_BALANCE());
+            return false;
+        }
+
+        if (amountIsTrue.equals(true) & currentIsTrue.equals(true) & soldePositive.equals(true) && maxBalanceAtteign.equals(true)) {
+            double balanceFrom = from.getBalance() - amount;
+            double balanceTo = to.getBalance() + amount;
+            from.setBalance(balanceFrom);
+            LOGGER.info("Le compte a bien été débité : ", from.getBalance());
+            LOGGER.info("Nouveau solde du débiteur : ", to.getBalance());
+            to.setBalance(balanceTo);
+            LOGGER.info("Le compte a bien été crédité : ", to.getId());
+            LOGGER.info("Nouveau solde du créditeur : ", from.getId());
+            return true;
+        } else {
+            LOGGER.info(" Le traitement à échouer");
+        }
+        return false;
     }
 }

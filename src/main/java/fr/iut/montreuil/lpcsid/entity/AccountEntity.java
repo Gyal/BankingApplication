@@ -193,7 +193,7 @@ public class AccountEntity implements Serializable {
             return false;
         }
         if (!amountIsTrue.equals(true)) {
-            LOGGER.info(" LOG: le montant est inférieur à 0 ", amountIsTrue);
+            LOGGER.info(" LOG: le montant est inférieur à 0 {} ", amountIsTrue);
             return false;
         }
         if (!soldePositive.equals(true)) {
@@ -201,7 +201,7 @@ public class AccountEntity implements Serializable {
             return false;
         }
         if (!maxBalanceAtteign.equals(true)) {
-            LOGGER.info(" LOG: Le compte à créditer atteind le montant maximum autorié", to.getMAX_BALANCE());
+            LOGGER.info(" LOG: Le compte à créditer atteint le montant maximum autorié", to.getMAX_BALANCE());
             return false;
         }
 
@@ -209,11 +209,11 @@ public class AccountEntity implements Serializable {
             double balanceFrom = from.getBalance() - amount;
             double balanceTo = to.getBalance() + amount;
             from.setBalance(balanceFrom);
-            LOGGER.info("Le compte a bien été débité : ", from.getBalance());
-            LOGGER.info("Nouveau solde du débiteur : ", to.getBalance());
+            LOGGER.info("Le compte a bien été débité : {} ", from.getBalance());
+            LOGGER.info("Nouveau solde du débiteur : {} ", to.getBalance());
             to.setBalance(balanceTo);
-            LOGGER.info("Le compte a bien été crédité : ", to.getId());
-            LOGGER.info("Nouveau solde du créditeur : ", from.getId());
+            LOGGER.info("Le compte a bien été crédité : {} ", to.getId());
+            LOGGER.info("Nouveau solde du créditeur : {}", from.getId());
             return true;
         } else {
             LOGGER.info(" Le traitement à échouer");
