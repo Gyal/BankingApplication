@@ -19,6 +19,12 @@ public class OperationDetailDto implements Serializable {
     public OperationDetailDto() {
     }
 
+    public OperationDetailDto(Long id,Long from, Long to, TransactionEntity operation) {
+        this.id =id;
+        this.debitedAccount = from;
+        this.creditedAccount = to;
+        this.operation = operation;
+    }
     public OperationDetailDto(Long from, Long to, TransactionEntity operation) {
         this.debitedAccount = from;
         this.creditedAccount = to;
@@ -29,43 +35,33 @@ public class OperationDetailDto implements Serializable {
         return newOperationDetail();
     }
 
-    public Long getDebittedAccount() {
-        return debitedAccount;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDebittedAccount(Long debittedAccount) {
-        this.debitedAccount = debittedAccount;
+
+    public Long getDebitedAccount() {
+        return debitedAccount;
+    }
+    public void setDebitedAccount(Long debitedAccount) {
+        this.debitedAccount = debitedAccount;
     }
 
     public Long getCreditedAccount() {
         return creditedAccount;
     }
-
     public void setCreditedAccount(Long creditedAccount) {
         this.creditedAccount = creditedAccount;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public TransactionEntity getOperation() {
         return operation;
     }
-
     public void setOperation(TransactionEntity operation) {
         this.operation = operation;
     }
 
-    public Long getDebitedAccount() {
-        return debitedAccount;
-    }
-
-    public void setDebitedAccount(Long debitedAccount) {
-        this.debitedAccount = debitedAccount;
-    }
 }

@@ -39,6 +39,11 @@ public class CustomerDto implements Serializable {
     private String password;
     private List<AccountEntity> accounts;
 
+    public CustomerDto() {
+    }
+    public static CustomerDto newCustomerDto() {
+        return newCustomerDto();
+    }
 
     public CustomerDto(Long idCustomer, String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
         this.idCustomer = idCustomer;
@@ -56,15 +61,9 @@ public class CustomerDto implements Serializable {
         this.password = password;
     }
 
-    public CustomerDto() {
-    }
 
     public CustomerDto(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
 
-    }
-
-    public static CustomerDto newCustomerDto() {
-        return newCustomerDto();
     }
 
     //getter & setters

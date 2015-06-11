@@ -61,11 +61,9 @@ public class CustomerEntity implements Serializable {
     @OneToMany(cascade=CascadeType.ALL)
     private List<AccountEntity> accounts;
 
-
-    // Par l'utilisateur
-    public CustomerEntity(Long id){
-        this.idCustomer = id;
+    public CustomerEntity() {
     }
+    // Par l'utilisateur
     public static CustomerEntity newCustomerEntity() {
         return newCustomerEntity();
     }
@@ -101,8 +99,6 @@ public class CustomerEntity implements Serializable {
         this.password = password;
     }
 
-    public CustomerEntity() {
-    }
     //getter & setters
     public Long getIdCustomer() {
         return idCustomer;

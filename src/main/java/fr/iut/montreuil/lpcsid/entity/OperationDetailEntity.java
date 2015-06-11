@@ -26,6 +26,12 @@ public class OperationDetailEntity implements Serializable {
     /* Pour le dozer */
     public OperationDetailEntity() {
     }
+    public OperationDetailEntity(Long id,Long from, Long to, TransactionEntity operation) {
+        this.id =id;
+        this.debitedAccount = from;
+        this.creditedAccount = to;
+        this.operation = operation;
+    }
 
     public OperationDetailEntity(Long from, Long to, TransactionEntity operation) {
         this.debitedAccount = from;
@@ -37,43 +43,33 @@ public class OperationDetailEntity implements Serializable {
         return newOperationDetail();
     }
 
-    public Long getDebittedAccount() {
-        return debitedAccount;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDebittedAccount(Long debittedAccount) {
-        this.debitedAccount = debittedAccount;
+
+    public Long getDebitedAccount() {
+        return debitedAccount;
+    }
+    public void setDebitedAccount(Long debitedAccount) {
+        this.debitedAccount = debitedAccount;
     }
 
     public Long getCreditedAccount() {
         return creditedAccount;
     }
-
     public void setCreditedAccount(Long creditedAccount) {
         this.creditedAccount = creditedAccount;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public TransactionEntity getOperation() {
         return operation;
     }
-
     public void setOperation(TransactionEntity operation) {
         this.operation = operation;
     }
 
-    public Long getDebitedAccount() {
-        return debitedAccount;
-    }
-
-    public void setDebitedAccount(Long debitedAccount) {
-        this.debitedAccount = debitedAccount;
-    }
 }
