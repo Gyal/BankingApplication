@@ -2,13 +2,14 @@ package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by youniik-nana on 12/03/15.
  */
 
-public class CustomerDto {
+public class CustomerDto implements Serializable {
 
     //Variables
     private Long idCustomer;
@@ -57,6 +58,11 @@ public class CustomerDto {
 
     public CustomerDto() {
     }
+
+    public CustomerDto(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
+
+    }
+
     public static CustomerDto newCustomerDto() {
         return newCustomerDto();
     }

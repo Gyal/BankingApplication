@@ -1,5 +1,7 @@
 package fr.iut.montreuil.lpcsid.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "account")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope=AccountEntity.class)
+
 public class AccountEntity implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountEntity.class);
     @Id
@@ -41,7 +45,7 @@ public class AccountEntity implements Serializable {
     private double taxation;
 
     // To do : à supprimer et à configurer dans le repository
-    @ManyToMany()// annotation pour tracer le type de base de l'objet
+    @OneToMany(cascade=CascadeType.ALL)// annotation pour tracer le type de base de l'objet
     private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
 
     @OneToOne

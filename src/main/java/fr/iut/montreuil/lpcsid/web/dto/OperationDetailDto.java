@@ -2,66 +2,70 @@ package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
 
+import java.io.Serializable;
+
 /**
  * Created by Mélina on 03/04/2015.
  */
-public class OperationDetailDto {
+
+public class OperationDetailDto implements Serializable {
+
     private Long id;
-
-
-    private Long from;
-
-
-    private Long to;
-
-
+    private Long debitedAccount;
+    private Long creditedAccount;
     private TransactionEntity operation;
 
     /* Pour le dozer */
     public OperationDetailDto() {
     }
 
-    public static OperationDetailDto newOperationDetailDto() {
-        return newOperationDetailDto();
+    public OperationDetailDto(Long from, Long to, TransactionEntity operation) {
+        this.debitedAccount = from;
+        this.creditedAccount = to;
+        this.operation = operation;
     }
 
-    public OperationDetailDto(Long from, Long to, TransactionEntity operation) {
-        this.from = from;
-        this.to = to;
-        this.operation = operation;
+    public static OperationDetailDto newOperationDetail() {
+        return newOperationDetail();
+    }
+
+    public Long getDebittedAccount() {
+        return debitedAccount;
+    }
+
+    public void setDebittedAccount(Long debittedAccount) {
+        this.debitedAccount = debittedAccount;
+    }
+
+    public Long getCreditedAccount() {
+        return creditedAccount;
+    }
+
+    public void setCreditedAccount(Long creditedAccount) {
+        this.creditedAccount = creditedAccount;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setFrom(Long from) {
-        this.from = from;
-    }
-
-    public void setTo(Long to) {
-        this.to = to;
+    public TransactionEntity getOperation() {
+        return operation;
     }
 
     public void setOperation(TransactionEntity operation) {
         this.operation = operation;
     }
 
-
-    public Long getId() {
-        return id;
+    public Long getDebitedAccount() {
+        return debitedAccount;
     }
 
-    public Long getFrom() {
-        return from;
-    }
-
-    public Long getTo() {
-        return to;
-    }
-
-    public TransactionEntity getOperation() {
-        return operation;
+    public void setDebitedAccount(Long debitedAccount) {
+        this.debitedAccount = debitedAccount;
     }
 }
-

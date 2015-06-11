@@ -93,6 +93,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/fr/iut/montreuil/lpcsid/web/dto/OperationDetailDto.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/fr/iut/montreuil/lpcsid/web/dto/TransactionDto.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/fr/iut/montreuil/lpcsid/web/exception/ConflictException.java">
           <value>
             <set />
@@ -244,6 +254,21 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/webapp/transfer.html">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/dtoTest/CustomerDtoTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/dtoTest/TransactionDtoTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/entityTest/TransactionEntityTest.java">
           <value>
             <set />
           </value>

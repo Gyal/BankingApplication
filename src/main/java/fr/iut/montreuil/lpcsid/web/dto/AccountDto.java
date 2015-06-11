@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by youniik-nana on 10/03/15.
  */
 
-public class AccountDto {
+public class AccountDto implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountDto.class);
     private Long id;
     private String libelle;

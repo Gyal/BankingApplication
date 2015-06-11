@@ -1,27 +1,23 @@
 package fr.iut.montreuil.lpcsid.web.dto;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
+import fr.iut.montreuil.lpcsid.entity.OperationDetailEntity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by youniik-nana on 12/03/15.
+ * Created by NIIRO on 18/02/2015.
+ * Modify By melina on 15/03/2015.
  */
 
-public class TransactionDto {
+public class TransactionDto implements Serializable {
 
     private Long idTransaction;
-
     private String transactionType;
 
-    private AccountEntity NumDebitedAccount;
-
-
-    private AccountEntity NumCreditedAccount;
-
-
+    private OperationDetailEntity operationDetail;
     private int amount;
-
     private Date transactionDate;
 
     /**
@@ -37,23 +33,43 @@ public class TransactionDto {
     }
 
     // Créé par l'utilisateur
-    public TransactionDto(String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+    public TransactionDto(String transactionType, int amount, Date transactionDate, AccountEntity account) {
         this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.NumCreditedAccount = NumCreditedAccount;
-        this.NumDebitedAccount = NumDebitedAccount;
+        this.account = account;
     }
 
-    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity NumDebitedAccount, AccountEntity NumCreditedAccount) {
+    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, AccountEntity account) {
         this.idTransaction = idTransaction;
         this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.NumCreditedAccount = NumCreditedAccount;
-        this.NumDebitedAccount = NumDebitedAccount;
+        this.account = account;
     }
 
+    // Créé par l'utilisateur
+    public TransactionDto(String transactionType, int amount, Date transactionDate, OperationDetailEntity operationDetail) {
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.operationDetail = operationDetail;
+    }
+
+    public TransactionDto(Long idTransaction, String transactionType, int amount, Date transactionDate, OperationDetailEntity operationDetail) {
+        this.idTransaction = idTransaction;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.operationDetail = operationDetail;
+    }
+
+    public TransactionDto(String type, int amount, Date date, OperationDetailDto operationDetail) {
+    }
+
+    public TransactionDto(String type, int amount, Date date, AccountDto account) {
+
+    }
 
     public Long getIdTransaction() {
         return idTransaction;
@@ -87,27 +103,19 @@ public class TransactionDto {
         this.transactionDate = transactionDate;
     }
 
-    public AccountEntity getNumDebitedAccount() {
-        return NumDebitedAccount;
-    }
-
-    public void setNumDebitedAccount(AccountEntity numDebitedAccount) {
-        NumDebitedAccount = numDebitedAccount;
-    }
-
-    public AccountEntity getNumCreditedAccount() {
-        return NumCreditedAccount;
-    }
-
-    public void setNumCreditedAccount(AccountEntity numCreditedAccount) {
-        NumCreditedAccount = numCreditedAccount;
-    }
-
     public AccountEntity getAccount() {
         return account;
     }
 
     public void setAccount(AccountEntity account) {
         this.account = account;
+    }
+
+    public OperationDetailEntity getOperationDetail() {
+        return operationDetail;
+    }
+
+    public void setOperationDetail(OperationDetailEntity operationDetail) {
+        this.operationDetail = operationDetail;
     }
 }

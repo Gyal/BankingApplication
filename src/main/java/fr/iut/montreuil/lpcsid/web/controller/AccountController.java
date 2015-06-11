@@ -255,10 +255,6 @@ public class AccountController {
         Boolean accountCustomer = customer.getIdCustomer().equals(accountCredited.getCustomer().getIdCustomer());
         if (accountCustomer.equals(true)) {
 
-
-            // AccountEntity account = mapper.map(accountCredited, AccountEntity.class);
-            // AccountEntity accountToDeposit = accountService.getAccountById(id);
-
             int sommeOperationDeposit = 0;
             List<TransactionEntity> operations = accountCredited.getOperations();
             LOGGER.info("For account {}", accountCredited.getId());
@@ -299,6 +295,7 @@ public class AccountController {
                 TransactionEntity operation = new TransactionEntity("DEPOSIT", amountDeposit, today, accountCredited);
                 transactionService.saveTransaction(operation);
                 accountCredited.getOperations().add(operation);
+                accountService.saveAccount(accountCredited);
             }
                 } catch (DataIntegrityException e) {
                     throw new DataIntegrityException(BAD_REQUEST);
