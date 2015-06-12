@@ -1,14 +1,13 @@
 package fr.iut.montreuil.lpcsid.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by Mélina on 03/04/2015.
  */
 @Entity
 @Table(name = "operationDetail")
-public class OperationDetailEntity implements Serializable {
+public class OperationDetailEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "operationDetail_id")

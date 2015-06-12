@@ -1,7 +1,5 @@
 package fr.iut.montreuil.lpcsid.web.dto;
 
-import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
-
 import java.io.Serializable;
 
 /**
@@ -13,55 +11,48 @@ public class OperationDetailDto implements Serializable {
     private Long id;
     private Long debitedAccount;
     private Long creditedAccount;
-    private TransactionEntity operation;
+
+    private Long idTransaction;
 
     /* Pour le dozer */
     public OperationDetailDto() {
     }
 
-    public OperationDetailDto(Long id,Long from, Long to, TransactionEntity operation) {
+    public OperationDetailDto(Long id,Long from, Long to, Long idTransaction) {
         this.id =id;
         this.debitedAccount = from;
         this.creditedAccount = to;
-        this.operation = operation;
+        this.idTransaction = idTransaction;
     }
-    public OperationDetailDto(Long from, Long to, TransactionEntity operation) {
+    public OperationDetailDto(Long from, Long to, Long idTransaction) {
         this.debitedAccount = from;
         this.creditedAccount = to;
-        this.operation = operation;
+        this.idTransaction = idTransaction;
     }
 
     public static OperationDetailDto newOperationDetail() {
         return newOperationDetail();
     }
-
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-
     public Long getDebitedAccount() {
         return debitedAccount;
     }
+
     public void setDebitedAccount(Long debitedAccount) {
         this.debitedAccount = debitedAccount;
     }
-
-    public Long getCreditedAccount() {
-        return creditedAccount;
-    }
-    public void setCreditedAccount(Long creditedAccount) {
-        this.creditedAccount = creditedAccount;
+    public Long getIdTransaction() {
+        return idTransaction;
     }
 
-    public TransactionEntity getOperation() {
-        return operation;
+    public void setIdTransaction(Long idTransaction) {
+        this.idTransaction = idTransaction;
     }
-    public void setOperation(TransactionEntity operation) {
-        this.operation = operation;
-    }
-
 }

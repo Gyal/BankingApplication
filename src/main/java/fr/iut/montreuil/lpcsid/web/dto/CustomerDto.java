@@ -1,7 +1,5 @@
 package fr.iut.montreuil.lpcsid.web.dto;
 
-import fr.iut.montreuil.lpcsid.entity.AccountEntity;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class CustomerDto implements Serializable {
     private String connexionLogin;
 
     private String password;
-    private List<AccountEntity> accounts;
+    private List<AccountDto> accounts;
 
     public CustomerDto() {
     }
@@ -150,10 +148,10 @@ public class CustomerDto implements Serializable {
         this.country = country;
     }
 
-    public List<AccountEntity> getAccounts() {
+    public List<AccountDto> getAccounts() {
         return accounts;
     }
-    public void setAccounts(List<AccountEntity> accounts) {
+    public void setAccounts(List<AccountDto> accounts) {
         this.accounts = accounts;
     }
     public String getConnexionLogin() {

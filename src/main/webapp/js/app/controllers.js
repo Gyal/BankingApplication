@@ -1,15 +1,21 @@
 angular.module("bankingApp.controllers", ['ngCookies'])
 
-    .controller("AccountCtrl", function ($scope, accountService) {
+    .controller("AccountCtrl", function ($scope, accountService, operationService) {
         accountService.query(function (response) {
             $scope.accounts = response || [];
         });
         $scope.melina = function () {
             alert("Hello");
         };
-    }
-)
 
+        $scope.getOperations = function (id) {
+            operationService.asyncGetAccountOperation(id).then(function (response) {
+                $scope.operations = response.data;
+            })
+        }
+    }
+
+)
 
     // Transfer
 

@@ -64,6 +64,13 @@ public class TransactionDto implements Serializable {
         this.operationDetail = operationDetail;
     }
 
+    public TransactionDto(String type, int amount, Date date, OperationDetailDto operationDetail) {
+    }
+
+    public TransactionDto(String type, int amount, Date date, AccountDto account) {
+
+    }
+
     public Long getIdTransaction() {
         return idTransaction;
     }

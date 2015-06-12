@@ -2,6 +2,7 @@ package fr.iut.montreuil.lpcsid.web.controller;
 
 import fr.iut.montreuil.lpcsid.entity.AccountEntity;
 import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
+import fr.iut.montreuil.lpcsid.repository.CustomerRepository;
 import fr.iut.montreuil.lpcsid.service.CustomerService;
 import fr.iut.montreuil.lpcsid.web.dto.CustomerDto;
 import fr.iut.montreuil.lpcsid.web.exception.DataIntegrityException;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +41,8 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     @Autowired
+    private CustomerRepository customerRepository;
+    @Autowired
     private Mapper mapper;
 
     // GET / : Récupération de la liste des  users
@@ -48,7 +50,7 @@ public class CustomerController {
     public
     @ResponseBody
     Iterable<CustomerDto> listCustomer() {
-        final Iterable<CustomerEntity> customerEntities = this.customerService.getAllCustomers();
+        final Iterable<CustomerEntity> customerEntities = this.customerRepository.findAll();
         Iterable<CustomerDto> customerDtos = newArrayList();
         mapper.map(customerEntities, customerDtos);
         LOGGER.info("List Customers is {}", customerDtos);
@@ -60,16 +62,16 @@ public class CustomerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody CustomerDto getCustomerById(@PathVariable long id) {
-        CustomerEntity customer = customerService.getCustomerById(id);
+        CustomerEntity customer = customerRepository.findOne(id);
         CustomerDto customerDto = mapper.map(customer, CustomerDto.class);
-        List<AccountEntity> accountEntities = customerDto.getAccounts();
+        List<AccountEntity> accountEntities = customer.getAccounts();
         if (null == customer) {
             throw new NotFoundException(NO_ENTITY_FOUND);
         }
         LOGGER.info("Customer is {}, return.", customerDto);
         LOGGER.info("List account is {}", accountEntities);
 
-        customerService.saveCustomer(customer);
+        customerRepository.save(customer);
         return customerDto;
     }
 
@@ -84,7 +86,7 @@ public class CustomerController {
 
         CustomerEntity savedCustomer;
         try {
-            savedCustomer = customerService.saveCustomer(customerEntity);
+            savedCustomer = customerRepository.save(customerEntity);
             LOGGER.info("Customer Creating id is{}, persisting.", customerEntity.getIdCustomer());
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityException(WRONG_ENTITY_INFORMATION);
@@ -95,17 +97,7 @@ public class CustomerController {
     // PUT /update/{id} : modification des information d'un user
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public CustomerDto updateCustomer(@PathVariable long id, @RequestBody CustomerDto customerDto) {
-        CustomerEntity customer = mapper.map(customerDto, CustomerEntity.class);
-        CustomerEntity customerToUpdate = customerService.getCustomerById(id);
-
-        if (null == customerToUpdate) {
-            throw new NotFoundException(NO_ENTITY_FOUND);
-        }
-
-        customer.setIdCustomer(customerToUpdate.getIdCustomer());
-        CustomerEntity updatedCustomer = customerService.saveCustomer(customer);
-
-        return mapper.map(updatedCustomer, CustomerDto.class);
+        return customerService.updateCustomer(id, customerDto);
     }
 
 
@@ -113,11 +105,7 @@ public class CustomerController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable(value = "id") Long id) {
-        try {
-            customerService.deleteCustomer(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException(NO_ENTITY_FOUND);
-        }
+       customerService.deleteCustomer(id);
     }
 
 }

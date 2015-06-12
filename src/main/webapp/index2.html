@@ -1,63 +1,107 @@
+<div class="container-fluid" ng-controller="UserCtrl">
+    <div class="row row-centered">
 
-    <div class="container-fluid" ng-controller="UserCtrl">
-        <div class="row row-centered">
-
-            <div class="col-lg-5 col-centered well block indexBoxSize">
-                <b>Bonjour, {{user.civilities}} {{user.lastname}}  {{user.firstName}}</br> Votre id utilisateur est le :{{user.idCustomer}}</b>
-            </div>
-            <div class="col-lg-2 col-centered  well block indexBoxSize">
-                <b><ins><p class="text-left">Etat du Compte Courant</p></ins></b>
-
-                <div class="text-left" ng-repeat="test in user.accounts" ng-if="test.type == 'CURRENT'">
-                    </br><b>Compte No : </b> {{test.id}}
-                   <b> {{test.libelle}}</b>
-                    <p ng-if ="test.balance <0" class="text-error" > </br>Balance :  {{ test.balance}} euros</p>
-                    <p ng-if ="test.balance >0"><h3 class = "text-success glyphicon glyphicon-plus"> {{ test.balance}}euros</h3></p>
-                    </br>
-
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-centered  well block indexBoxSize ">
-
-                <b><ins><p class="text-left">Etat du Compte PEL</p></ins></b>
-                <div class="text-left" ng-repeat="test in user.accounts" ng-if="test.type == 'SAVINGS'">
-                    </br><b>Compte No : </b> {{test.id}}
-                    <b> {{test.libelle}}</b>
-                    <p ng-if ="test.balance <0" class="text-error" > </br>Balance :  {{ test.balance}} euros</p>
-                    <p ng-if ="test.balance >0"><h3 class = "text-success glyphicon glyphicon-plus"> {{ test.balance}}euros</h3></p>
-                    </br>
-
-                </div>
-            </div>
-
-
-            <div class="col-lg-5 col-centered well block indexBoxSize ">
-                <ul class="nav">
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown">
-                        <p data-toggle="dropdown" class="dropdown-toggle" >
-                           <b> Liste des activités ( actions possibles) </b>
-                            <b class="caret"></b>
-                        </p>
-
-                        <div class="list-group">
-                            <a id="seeAccounts" class="list-group-item" ng-click="SeeUserAccount(2)"  >Visualiser mes comptes</a>
-                            <a href="/#/account/transfer" id="transfer" class="list-group-item" onclick="" value="transfer" ng-click="transfer()">Réaliser un
-                                virement</a>
-
-                            <a href="/#/account/deposit" id="deposit" class="list-group-item" onclick="" value="deposit">Réaliser un dépot</a>
-                            <a href="/#/account/withdraw"  id="withdraw" class="list-group-item" onclick="" value="withdraw">Réaliser un retrait</a>
-
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-xs-2 col-centered well block indexBoxSize"><b><ins><p class="text-left">Histo Courant</p></ins></b></div>
-            <div class="text-left" ng-repeat="HistoCurrent in user.accounts.operations" ng-if="HistoCurrent.length <1 ">
-                test operation
-                </div>
-            <div class="col-xs-2 col-centered well block indexBoxSize "><b><ins><p class="text-left">Histo PEL</p></ins></b></div>
+        <div class="col-lg-5 col-centered well block indexBoxSize">
+            <b>Bonjour, {{user.civilities}} {{user.lastname}} {{user.firstName}}</br> Votre id utilisateur est le
+                :{{user.idCustomer}}</b>
         </div>
+        <div class="col-lg-2 col-centered  well block indexBoxSize">
+            <b>
+                <ins><p class="text-left">Etat du Compte Courant</p></ins>
+            </b>
+
+            <div class="text-left" ng-repeat="test in user.accounts" ng-if="test.type == 'CURRENT'">
+                </br><b>Compte No : </b> {{test.id}}
+                <b> {{test.libelle}}</b>
+
+                <p ng-if="test.balance <0" class="text-error"> </br>Balance : {{ test.balance}} euros</p>
+
+                <p ng-if="test.balance >0">
+
+                <h3 class="text-success glyphicon glyphicon-plus"> {{ test.balance}}euros</h3></p>
+                </br>
+
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-centered  well block indexBoxSize ">
+
+            <b>
+                <ins><p class="text-left">Etat du Compte PEL</p></ins>
+            </b>
+
+            <div class="text-left" ng-repeat="test in user.accounts" ng-if="test.type == 'SAVINGS'">
+                </br><b>Compte No : </b> {{test.id}}
+                <b> {{test.libelle}}</b>
+
+                <p ng-if="test.balance <0" class="text-error"> </br>Balance : {{ test.balance}} euros</p>
+
+                <p ng-if="test.balance >0">
+
+                <h3 class="text-success glyphicon glyphicon-plus"> {{ test.balance}}euros</h3></p>
+                </br>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-5 col-centered well block indexBoxSize ">
+            <ul class="nav">
+                <li class="divider-vertical"></li>
+                <li class="dropdown">
+                    <p data-toggle="dropdown" class="dropdown-toggle">
+                        <b> Liste des activités ( actions possibles) </b>
+                        <b class="caret"></b>
+                    </p>
+
+                    <div class="list-group">
+                        <a id="seeAccounts" class="list-group-item" ng-click="SeeUserAccount(2)">Visualiser mes
+                            comptes</a>
+                        <a href="/#/account/transfer" id="transfer" class="list-group-item" onclick="" value="transfer"
+                           ng-click="transfer()">Réaliser un
+                            virement</a>
+
+                        <a href="/#/account/deposit" id="deposit" class="list-group-item" onclick="" value="deposit">Réaliser
+                            un dépot</a>
+                        <a href="/#/account/withdraw" id="withdraw" class="list-group-item" onclick="" value="withdraw">Réaliser
+                            un retrait</a>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="col-xs-2 col-centered well block indexBoxSize"  ng-repeat="HistoCurrent in operations"><b>
+            <ins><p class="text-left">Histo Courant</p></ins>
+            {{operations.length}}
+        </b></div>
+        <div class="col-xs-2 col-centered well block indexBoxSize"><b>
+            <ins><p class="text-left">Histo PEL</p></ins>
+        </b></div>
+
+
+        <div ng-controller="AccountCtrl">
+            <a id="test" class="list-group-item" ng-click="getOperations(1)"> Visualiser mes comptes</a>
+            {{operations.length}}
+            </br>
+
+
+
+        </div>
+        <div class="text-left" ng-repeat="HistoCurrent in operations">
+            ng-if="HistoCurrent.length <1 "
+            test operation CURRENT
+
+        </div>
+
+        <div class="text-left col-xs-2" ng-repeat="HistoSaving in operations"><b>
+            <ins><p class="text-left">Histo PEL</p></ins>
+        </b>
+            test operation SavinGs  col-centered well block indexBoxSize
+        </div>
+
+
     </div>
-    <hr class="soft"/>
+</div>
+<hr class="soft"/>

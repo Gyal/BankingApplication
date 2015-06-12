@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Mélina on 07/03/2015.
@@ -19,7 +16,7 @@ import java.util.List;
 @Table(name = "account")
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope=AccountEntity.class)
 
-public class AccountEntity implements Serializable {
+public class AccountEntity{
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountEntity.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,8 +42,8 @@ public class AccountEntity implements Serializable {
     private double taxation;
 
     // To do : à supprimer et à configurer dans le repository
-    @OneToMany(cascade=CascadeType.ALL)// annotation pour tracer le type de base de l'objet
-    private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
+    /*@OneToMany(cascade=CascadeType.ALL)// annotation pour tracer le type de base de l'objet
+    private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();*/
 
     @OneToOne
     private CustomerEntity customer;
@@ -141,14 +138,6 @@ public class AccountEntity implements Serializable {
 
     public void setDateCreated(Date date) {
         this.dateCreated = date;
-    }
-
-    public List<TransactionEntity> getOperations() {
-        return operations;
-    }
-
-    public void setOperations(List<TransactionEntity> operations) {
-        this.operations = operations;
     }
 
     public CustomerEntity getCustomer() {

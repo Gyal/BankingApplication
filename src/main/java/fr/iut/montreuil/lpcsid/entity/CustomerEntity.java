@@ -1,10 +1,6 @@
 package fr.iut.montreuil.lpcsid.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "customer")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="idCustomer", scope=CustomerEntity.class)
-public class CustomerEntity implements Serializable {
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="idCustomer", scope=CustomerEntity.class)
+public class CustomerEntity{
 
     //Variables
     @Id

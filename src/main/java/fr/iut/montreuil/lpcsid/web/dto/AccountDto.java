@@ -1,21 +1,14 @@
 package fr.iut.montreuil.lpcsid.web.dto;
 
-import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
-import fr.iut.montreuil.lpcsid.entity.TransactionEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by youniik-nana on 10/03/15.
  */
 
 public class AccountDto implements Serializable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountDto.class);
+
     private Long id;
     private String libelle;
     private double balance = 0;
@@ -23,26 +16,8 @@ public class AccountDto implements Serializable {
     private String type;
     private Date dateCreated;
     private double taxation;
-    private List<TransactionEntity> operations = new ArrayList<TransactionEntity>();
-    private CustomerEntity customer;
-
     /* Pour le dozer */
     public AccountDto() {
-    }
-
-    public static AccountDto newAccountDto() {
-        return newAccountDto();
-    }
-
-
-    public AccountDto(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation, CustomerEntity customer) {
-        this.libelle = libelle;
-        this.balance = balance;
-        this.MAX_BALANCE = MAX_BALANCE;
-        this.type = type;
-        this.dateCreated = dateCreated;
-        this.taxation = taxation;
-        this.customer = customer;
     }
 
     public Long getId() {
@@ -101,101 +76,4 @@ public class AccountDto implements Serializable {
         this.dateCreated = date;
     }
 
-    public List<TransactionEntity> getOperations() {
-        return operations;
-    }
-
-    public void setOperations(List<TransactionEntity> operations) {
-        this.operations = operations;
-    }
-
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
-
-
-    /* Deposit */
-    // Opération Crédit(ajout)
-    public void deposit(final int amount) {
-        if (amount >= 0 && amount + balance <= MAX_BALANCE) {
-            balance = balance + amount;
-        }
-    }
-
-    /* Withdraw */
-    // Opération Débit(retrait)
-    public void withDraw(int amount) {
-        if (amount > 0 && balance - amount >= 0) {
-            balance = balance - amount;
-        }
-    }
-
-    /* Transfert */
-    /*
-    * Si les comptes sont des comptes courant, le montant du transfert est <0 et après le transfert le solde du compte débité est <0 alors tranfert
-    * Attention : Le transfert sera possible vers un compte même si après transfert le solde dépasse 25000 euros, sinon il faut rajouter une vérification
-    */
-   /* @Transactional
-    public int transfert(AccountDto from, AccountDto to, int amount) {
-        if (from.getType().equals("CURRENT") && to.getType().equals("CURRENT") && amount > 0 && from.getBalance() - amount >= 0 && to.getBalance() + amount < 25000){
-            double balanceFrom = from.getBalance() - amount;
-            double balanceTo = to.getBalance() + amount;
-            from.setBalance(balanceFrom);
-            LOGGER.info("Le compte a bien été débité : ", from.getBalance());
-            LOGGER.info("Nouveau solde du débiteur : ", to.getBalance());
-            to.setBalance(balanceTo);
-            LOGGER.info("Le compte a bien été crédité : ", to.getId());
-            LOGGER.info("Nouveau solde du créditeur : ", from.getId());
-            return amount;
-        }
-        else
-        {
-            LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
-            return 0;
-        }
-    }*/
-
-    public boolean transfert(AccountDto from, AccountDto to, int amount) {
-        String current = "CURRENT";
-        Boolean currentIsTrue = current.equals(from.getType()) && current.equals(to.getType());
-        Boolean amountIsTrue = amount > 0;
-        Boolean soldePositive = from.getBalance() - amount >= 0;
-        Boolean maxBalanceAtteign = to.getBalance() + amount < 25000;
-
-        if (!currentIsTrue.equals(true)) {
-            LOGGER.info(" LOG: L'un des compte à créditer n'est pas un compte courant, type du compte débité:  {}, type du compte crédité {}", from.getType(), to.getType());
-            return false;
-        }
-        if (!amountIsTrue.equals(true)) {
-            LOGGER.info(" LOG: le montant est inférieur à 0 ", amountIsTrue);
-            return false;
-        }
-        if (!soldePositive.equals(true)) {
-            LOGGER.info(" LOG: le solde du compte à débiter n'est pas suffisant");
-            return false;
-        }
-        if (!maxBalanceAtteign.equals(true)) {
-            LOGGER.info(" LOG: Le compte à créditer attein le montant maximum autorié", to.getMAX_BALANCE());
-            return false;
-        }
-
-        if (amountIsTrue.equals(true) & currentIsTrue.equals(true) & soldePositive.equals(true) && maxBalanceAtteign.equals(true)) {
-            double balanceFrom = from.getBalance() - amount;
-            double balanceTo = to.getBalance() + amount;
-            from.setBalance(balanceFrom);
-            LOGGER.info("Le compte a bien été débité : ", from.getBalance());
-            LOGGER.info("Nouveau solde du débiteur : ", to.getBalance());
-            to.setBalance(balanceTo);
-            LOGGER.info("Le compte a bien été crédité : ", to.getId());
-            LOGGER.info("Nouveau solde du créditeur : ", from.getId());
-            return true;
-        } else {
-            LOGGER.info(" Le traitement à échouer");
-        }
-        return false;
-    }
 }
