@@ -9,12 +9,15 @@ angular.module("bankingApp.controllers", ['ngCookies'])
         };
 
         $scope.getOperations = function (id) {
-            operationService.asyncGetAccountOperation(id).then(function (response) {
-                $scope.operations = response.data;
-            })
+            var operations = $scope.operations;
+            if (typeof operations == 'undefined') {
+                operationService.asyncGetAccountOperation(id).then(function (response) {
+                    $scope.operations = response.data;
+
+                })
+            }
         }
     }
-
 )
 
     // Transfer
@@ -23,11 +26,11 @@ angular.module("bankingApp.controllers", ['ngCookies'])
         //var vm = this;
         userService.query(function (response) {
             $scope.user = response || [];
-           // Ajout de données fictives $scope.user.accounts.unshift({id:2, libelle:"test"});
+            // Ajout de données fictives $scope.user.accounts.unshift({id:2, libelle:"test"});
             /* $scope.from=$scope.user.accounts[0];
-            $scope.toTest=$scope.user.accounts[0];
-            $scope.accountCredited=$scope.user.accounts[0];
-            $scope.accountDebited=$scope.user.accounts[0];*/
+             $scope.toTest=$scope.user.accounts[0];
+             $scope.accountCredited=$scope.user.accounts[0];
+             $scope.accountDebited=$scope.user.accounts[0];*/
 
         });
 
@@ -36,7 +39,7 @@ angular.module("bankingApp.controllers", ['ngCookies'])
             });
         }
         $scope.deposit = function () {
-          transferService.deposit($scope.amount, $scope.accountCredited, function (response) {
+            transferService.deposit($scope.amount, $scope.accountCredited, function (response) {
             });
         }
         $scope.withdraw = function () {
@@ -58,7 +61,6 @@ angular.module("bankingApp.controllers", ['ngCookies'])
             });
         }
         $scope.logOut = function () {
-            alert("test");
             loginService.logOut();
         }
 

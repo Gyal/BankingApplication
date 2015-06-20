@@ -1,88 +1,65 @@
-<left>
+<script src="js/jquery-2.1.4.js"></script>
+<script src="js/jquery-ui.js"></script>
+<div ng-controller="UserCtrl">
+    <!-- Cette div s'affiche si il n'y a aucun compte-->
 
+    <div ng-if='user.accounts.length <=0' class="alert alert-info" role="alert">
+        Il n'y a aucun compte à afficher
+    </div>
 
-    <div ng-controller="UserCtrl">
-        <!-- Cette div s'affiche si il n'y a aucun compte-->
+    <!--------------------------------------------------->
 
-        <div ng-if='user.accounts.length <=0' class="alert alert-info" role="alert">
-            Il n'y a aucun compte à afficher
+    <!-- Cette div s'affiche si il y a plus d'un compte-->
+
+    <div ng-if='user.accounts.length >0' class=" row well col-xs-5 form-horizontal" aria-selected="false">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-left">
+                    <h3> Synthèse des comptes </h3>
+                </div>
+            </div>
+        </nav>
+
+        <h4><b> Mes comptes Information au 25/04/2015 </b></h4>
+
+        <div ng-controller="AccountCtrl">
+            <div class="accordion" ng-repeat="account in user.accounts " ng-click="getOperations(1)">
+                <h3>
+                    <p>Compte <b>{{account.libelle}}</b> no : <b>{{account.id}}</b></p>
+                    <p>Solde : <b>{{account.balance}} €</b></p>
+                </h3>
+                <div>
+                    <label><u>Liste des opérations :</u></label>
+                    <p ng-repeat="operation in operations" ng-if="account.id  ==  operation.account.id">
+                        {{operation.transactionDate | date}} | {{operation.idTransaction}} | {{operation.transactionType}}
+                    </p>
+                    <p ng-if="operations.length <=0"> Aucune operation</p>
+                    </br>
+                    </br>
+                </div>
+                </br>
+                </br>
+
+            </div>
         </div>
 
-        <!--------------------------------------------------->
 
-        <!-- Cette div s'affiche si il y a plus d'un compte-->
-
-        <div ng-if='user.accounts.length >0' class=" row well col-xs-5 form-horizontal">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-left">
-                        <h3> Synthèse des comptes </h3>
-                    </div>
-                    <div class="navbar-right">
-                        <button class="btn btn-primary" type="button">
-                            RIB
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
-            <h4><b> Mes comptes Information au 25/04/2015 </b></h4>
-
-            <div ng-repeat="account in user.accounts ">
-
-                <a href="http://localhost:8080/api/account/{{account.id}}">Compte {{account.libelle}}
-                    n°{{account.id}}</a>
-
-                <p>Solde : {{account.balance}} €</p>
-            </div>
-
-</div>
-
-<div ng-repeat="account in user.accounts ">
-    <h3>Section 1</h3>
-
-    <div>
-        <p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi
-            metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros.
-            Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque
-            vulputate.</p>
     </div>
-</div>
 
 </div>
 
 <!-------------------------------------------------->
 </div>
 
-</left>
-<title>jQuery UI Accordion - Collapse content</title>
-<script src="js/jquery-2.1.4.js"></script>
-<script src="js/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
-<-- <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
-<script>
-    $(function() {
-        $( "#accordion" ).accordion({
-            collapsible: true
-        });
-    });
-</script>
-</head>
-<body>
-
-<div id="accordion">
-    <h3>Section 1</h3>
-    <div>
-        <p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>
-    </div>
-
-</div>
 
 <script>
+    // Doc accordion :http://www.tutorialspoint.com/jqueryui/jqueryui_accordion.htm
     $(function () {
-        $("#accordion").accordion({
-            collapsible: true
+        $(".accordion").accordion({
+            collapsible: true,
+            active: false
         });
     });
+
+
 </script>

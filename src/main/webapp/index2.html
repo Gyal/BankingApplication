@@ -5,7 +5,9 @@
             <b>Bonjour, {{user.civilities}} {{user.lastname}} {{user.firstName}}</br> Votre id utilisateur est le
                 :{{user.idCustomer}}</b>
         </div>
-        <div class="col-lg-2 col-centered  well block indexBoxSize">
+
+        <!-- Etat du compte courant -->
+        <div class="col-lg-3 col-centered  well block indexBoxSize">
             <b>
                 <ins><p class="text-left">Etat du Compte Courant</p></ins>
             </b>
@@ -19,12 +21,17 @@
                 <p ng-if="test.balance >0">
 
                 <h3 class="text-success glyphicon glyphicon-plus"> {{ test.balance}}euros</h3></p>
+
                 </br>
 
             </div>
         </div>
 
-        <div class="col-lg-2 col-centered  well block indexBoxSize ">
+        <!---------------------->
+
+        <!-- Etat du compte PEL -->
+
+        <div class="col-lg-3 col-centered  well block indexBoxSize ">
 
             <b>
                 <ins><p class="text-left">Etat du Compte PEL</p></ins>
@@ -44,6 +51,7 @@
             </div>
         </div>
 
+        <!------------------------------------->
 
         <div class="col-lg-5 col-centered well block indexBoxSize ">
             <ul class="nav">
@@ -72,36 +80,65 @@
         </div>
 
 
-        <div class="col-xs-2 col-centered well block indexBoxSize"  ng-repeat="HistoCurrent in operations"><b>
-            <ins><p class="text-left">Histo Courant</p></ins>
-            {{operations.length}}
-        </b></div>
-        <div class="col-xs-2 col-centered well block indexBoxSize"><b>
-            <ins><p class="text-left">Histo PEL</p></ins>
-        </b></div>
-
+        <!-- Bloc Historique opération Compte courant -->
 
         <div ng-controller="AccountCtrl">
-            <a id="test" class="list-group-item" ng-click="getOperations(1)"> Visualiser mes comptes</a>
-            {{operations.length}}
-            </br>
+            <button ng-click="getOperations(1)">
+                tesss
+            </button>
+            <div>
 
+                <div class="col-xs-3 col-centered well block indexBoxSize">
+                    <b>
+                        <ins><p class="text-left">Histo Courant</p></ins>
+                    </b>
 
+                    <p ng-repeat="operation in operations  | filter:operation.account.type.active ='CURRENT'">
+                        {{operation.idTransaction}}|
+                        {{operation.transactionType}}|
+                        {{operation.amount}} euros|
+                        {{operation.transactionDate | date}}
+                        ----------------------------------
+                    </p>
+                </div>
+
+                </hr>
+
+            </div>
 
         </div>
-        <div class="text-left" ng-repeat="HistoCurrent in operations">
-            ng-if="HistoCurrent.length <1 "
-            test operation CURRENT
+
+        <!--------------------------------------------------->
+
+        <!-- Bloc Historique opération Compte epargne-->
+
+        <div ng-controller="AccountCtrl">
+            <button ng-click="getOperations(1)">
+                tesss
+            </button>
+            <div>
+
+                <div class="col-xs-3 col-centered well block indexBoxSize">
+                    <b>
+                        <ins><p class="text-left">Histo PEL</p></ins>
+                    </b>
+
+                    <p ng-repeat="operation in operations | limitTo:4"
+                       ng-if="operation.account.type='SAVING'">
+                        {{operation.idTransaction}}|
+                        {{operation.transactionType}}|
+                        {{operation.amount}} euros|
+                        {{operation.transactionDate|date}}
+                        ----------------------------------
+
+                    </p>
+                </div>
+
+
+            </div>
 
         </div>
 
-        <div class="text-left col-xs-2" ng-repeat="HistoSaving in operations"><b>
-            <ins><p class="text-left">Histo PEL</p></ins>
-        </b>
-            test operation SavinGs  col-centered well block indexBoxSize
-        </div>
-
-
+        <!--------------------------------------------------->
     </div>
 </div>
-<hr class="soft"/>

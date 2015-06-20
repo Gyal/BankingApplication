@@ -1,26 +1,47 @@
 <center>
-    <div class="well" ng-controller="TransferCtrl">
-        <div class="control-group">
-            <label class="control-label">Montant Retiré</label>
+    <form>
 
-            <div class="controls">
-                <input id="amount" type="text" name="amount" placeholder="Montant Retiré" ng-model="amount"/>
+        <div class="well tab" ng-controller="TransferCtrl">
+            <h2> Réaliser un retrait </h2></br>
+
+            <div class="control-group">
+                <label class="control-label">Montant Retiré</label>
+
+                <div class="controls">
+                    <input id="amount" type="text" name="amount" placeholder="Montant Retiré" ng-model="amount"
+                           required/>
+                </div>
             </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">AcountDebited</label>
+            <div class="control-group">
+                <label class="control-label">AcountDebited</label>
 
-            <div class="controls">
-                    <select ng-options ='a.id as a.libelle for a in user.accounts' class="form-control" ng-model="accountDebited" style="width:160px" >
+                <div class="controls">
+                    <select ng-options="a.id as a.libelle for a in user.accounts | filter:a.type.active ='CURRENT'"
+                            class="form-control" ng-model="accountDebited" style="width:160px">
                     </select>
+                </div>
+            </div>
+            </br>
+
+
+            <!-- Information-->
+            <div class="alert alert-info fade in col-md-12" id="alertInfo">
+
+                <strong>Note!</strong> Le retrait d'argent n'est pas autorisé sur les comptes Epargne.
+
+            </div>
+            </br>
+            </br>
+
+
+            <!---------------->
+
+
+            <hr class="soft"/>
+            <div class="controls">
+                <button type="submit" class="btn btn-warning" ng-click="withdraw()">Enregistrer</button>
+                <button type="reset" class="btn btn-primary">Annuler</button>
             </div>
         </div>
-
-
-        <hr class="soft"/>
-        <div class="controls">
-            <button type="submit" class="btn btn-warning" ng-click="withdraw()">Enregistrer</button>
-            <button type="reset" class="btn btn-primary">Annuler</button>
-        </div>
-    </div>
+    </form>
 </center>

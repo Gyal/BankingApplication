@@ -1,19 +1,25 @@
 <center>
+    <form>
 
-    <div class="well" ng-controller="TransferCtrl">
+        <div class="well tab" ng-controller="TransferCtrl">
+
+
+            <h2> Réaliser un dépot </h2></br>
             <div class="control-group">
                 <label class="control-label">Montant Déposé</label>
 
                 <div class="controls">
-                    <input id="amount" type="text" name="amount" placeholder="Montant Déposé"  ng-model="amount"/>
+                    <input id="amount" type="text" name="amount" placeholder="Montant Déposé" ng-model="amount"
+                           required/>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">AccountCredited</label>
 
                 <div class="controls">
-                        <select ng-options ='a.id as a.libelle for a in user.accounts ' class="form-control" ng-model="accountCredited" style="width:160px" >
-                        </select>
+                    <select ng-options='a.id as a.libelle for a in user.accounts ' class="form-control"
+                            ng-model="accountCredited" style="width:160px" required>
+                    </select>
                 </div>
             </div>
 
@@ -24,6 +30,7 @@
                 <button type="reset" class="btn btn-primary">Annuler</button>
             </div>
         </div>
-
     </form>
+
+
 </center>

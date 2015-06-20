@@ -62,6 +62,9 @@ factory('transferService', function ($cookieStore, $http, $location) {
             $location.path('/account/' + idCustomerCookie);
 
         });
+        $http(reqDeposit).error(function () {
+            alert("Une erreur est survenu, le dépot n'a pas pu être éffectué");
+        });
     };
 
 
@@ -81,6 +84,9 @@ factory('transferService', function ($cookieStore, $http, $location) {
             // Transfert de l'id de l'utilisateur par cookie
             alert("Votre retrait sur le compte " + accountDebited + " d'un montant de " + amount + " euros a bien été effectué");
             $location.path('/account/' + idCustomerCookie);
+        });
+            $http(reqWithDraw).error(function () {
+                alert("Une erreur est survenu, le retrait n'a pas pu être éffectué");
 
         });
     };

@@ -1,3 +1,14 @@
+
+.transfer{
+    width: 14%;
+}
+.test{
+
+}
+
+.tab {
+    width: 550px;
+}
    body{
         padding-top:30px;
         padding-bottom : 40px;
@@ -11,10 +22,6 @@
         }
         .sidebar-nav {
         padding: 9px 0;
-        }
-        form{
-        width:20%;
-        padding: 20px;
         }
         #tab_account{
         width:50%;

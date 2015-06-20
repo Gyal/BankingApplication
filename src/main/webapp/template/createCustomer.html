@@ -22,14 +22,14 @@
                 <label class="control-label">Nom</label>
 
                 <div class="controls">
-                    <input id="customerLastName" type="text" name="customerLastName" placeholder="Nom"/>
+                    <input id="customerLastName" type="text" name="customerLastName" placeholder="Nom" required/>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Prénom</label>
 
                 <div class="controls">
-                    <input id="customerFirstName" type="text" name="customerFirstName" placeholder="Prénom"/>
+                    <input id="customerFirstName" type="text" name="customerFirstName" placeholder="Prénom" required/>
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                 <label class="control-label">Login</label>
 
                 <div class="controls">
-                    <input id="customerLogin" type="text" name="customerLogin" placeholder="Login"/>
+                    <input id="customerLogin" type="text" name="customerLogin" placeholder="Login" required/>
                 </div>
             </div>
 
@@ -45,63 +45,67 @@
                 <label class="control-label">Password</label>
 
                 <div class="controls">
-                    <input id="customerPassword" type="text" name="customerPassword" placeholder="Password"/>
+                    <input id="customerPassword" type="text" name="customerPassword" placeholder="Password" required/>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Date de naissance</label>
 
                 <div class="controls">
-                    <input id="datepicker" type="text" name="customerDateBirth" placeholder="Date de naissance"/>
+                    <input id="datepicker" type="text" name="customerDateBirth" placeholder="Date de naissance" required/>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Mail</label>
 
                 <div class="controls">
-                    <input id="customerMail" type="text" name="customerMail" placeholder="Mail"/>
+                    <input id="customerMail" type="email"overwrite-email name="customerMail" placeholder="Mail" required/>
+<span ng-show="form.customerMail.$error.email">
+This email format is invalid </span>
+                    </br>
+                    </br>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Numéro de telephone</label>
+                <label class="control-label" >Numéro de telephone</label>
 
                 <div class="controls">
-                    <input id="customerPhone" type="text" name="customerPhone" placeholder="Numéro de telephone"/>
+                    <input id="customerPhone" type="text" name="customerPhone" placeholder="Numéro de telephone" required pattern="[A-Za-z]{10}" />
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Adresse</label>
 
                 <div class="controls">
-                    <input id="customerAdresse" type="text" name="customerAdresse" placeholder="Adresse"/>
+                    <input id="customerAdresse" type="text" name="customerAdresse" placeholder="Adresse" required/>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Ville</label>
 
                 <div class="controls">
-                    <input id="customerVille" type="text" name="customerVille" placeholder="Ville"/>
+                    <input id="customerVille" type="text" name="customerVille" placeholder="Ville" required/>
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Code postale</label>
+                <label class="control-label">Code postal</label>
 
                 <div class="controls">
-                    <input id="customerCP" type="text" name="customerCP" placeholder="Code postale"/>
+                    <input id="customerCP" type="text" name="customerCP" placeholder="Code postal" required/>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Pays</label>
 
                 <div class="controls">
-                    <input id="customerPays" type="text" name="customerPays" placeholder="Pays"/>
+                    <input id="customerPays" type="text" name="customerPays" placeholder="Pays" required />
                 </div>
             </div>
 
             <hr class="soft"/>
             <div class="controls">
-                <button type="submit" class="btn btn-warning">Enregistrer</button>
+                <button type="submit" class="btn btn-warning" ng-disabled="form.$invalid">Enregistrer</button>
                 <button type="reset" class="btn btn-primary">Annuler</button>
             </div>
         </div>

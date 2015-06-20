@@ -1,21 +1,18 @@
 <center>
-
-    <div class="row" ng-controller="TransferCtrl" >
-        <ng-form>
-       <!-- <input id="user" type="text" class="form-control hidden" name="user" placeholder="Identifiant" ng-model="user">-->
-
-        <div class="col-xs-3">
+    <form>
+    <div class=" transfer col-xs-3" ng-controller="TransferCtrl">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4>From:</h4><!-- liste déroulante Type de compte -->
                     <div class="form-group">
                         <div class="row">
-                            <select ng-options='a.id as a.libelle for a in user.accounts ' class="form-control"
-                                    ng-model="from">
+                            <select ng-model="from"
+                                    ng-options="a.id as a.libelle for a in user.accounts  | filter:a.type.active ='CURRENT'"
+                                    class="form-control"
+                                    >
                             </select>
                         </div>
                     </div>
-                    </a></h4>
                 </div>
                 <div class="panel-body">
                     <p>
@@ -31,21 +28,21 @@
             <img class="btn" src="../bootstrap/images/arrows-button-Right.png"/>
         </div>
 
-        <div class="row">
-            <div class="col-xs-3">
+        <div class="row"  ng-controller="AccountCtrl">
+            <div class="transfer col-xs-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4>To: </h4><!-- liste déroulante Type de compte -->
-                        <div class="form-group">
-                            <div class="row">
-                                <input class="form-control" id="toTest" type="text" name="amount"
-                                       placeholder="To" ng-model="toTest"/>
-                                    <!--<select ng-options='a.id as a.libelle for a in user.accounts' class="form-control" ng-model="toTest">
-                                    </select>-->
-                            </div>
+                    <h4>From:</h4><!-- liste déroulante Type de compte -->
+                    <div class="form-group">
+                        <div class="row">
+                            <select ng-model="toTest"
+                                    ng-options="a.id as a.libelle for a in accounts  | filter:a.type.active ='CURRENT'"
+                                    class="form-control"
+                                    >
+                            </select>
                         </div>
-                        </a></h4>
                     </div>
+                </div>
                     <div class="panel-body">
                         <p>
                             Address <br>
@@ -58,8 +55,10 @@
             </div>
 
         </div>
+
+
         <!-- / end client details section -->
-        <div class=" row well col-xs-8 form-horizontal" style=" margin-left: 13px;">
+        <div class=" row well col-xs-5 form-horizontal" style=" margin-left: 13px;">
 
             <div class="form-group">
                 <label class="control-label col-sm-3" for="amount">Montant</label>
@@ -70,12 +69,26 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-3" for="date">Date</label>
+                <label class="control-label col-sm-3">Date</label>
 
                 <div class="col-sm-9">
-                    <input class="form-control" id="date" type="text" name="date" placeholder="Date"/>
+                    <input class="form-control" id="datepicker" type="text" name="date" placeholder="Date"/>
                 </div>
             </div>
+
+            </br>
+
+            <!-- Information-->
+            <div class="alert alert-info fade in col-md-12" id="alertInfo">
+
+                <strong>Note!</strong> Le retrait d'argent n'est autorisé qu'entre comptes COURANT
+
+            </div>
+            </br>
+            </br>
+
+
+            <!---------------->
             <hr class="soft"/>
             <div class="controls">
                 <button type="submit" class="btn btn-warning" ng-click="transfer()">Enregistrer</button>
@@ -83,6 +96,10 @@
             </div>
         </div>
     </div>
-    </ng-form>
-
+    </form>
 </center>
+<script>
+    $(function () {
+        $("#datepicker").datepicker();
+    });
+</script>
