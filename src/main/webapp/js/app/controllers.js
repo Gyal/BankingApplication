@@ -22,7 +22,8 @@ angular.module("bankingApp.controllers", ['ngCookies'])
 
     // Transfer
 
-    .controller("TransferCtrl", function ($scope, transferService, userService) {
+    .controller("TransferCtrl", function ($scope, transferService, userService, accountService) {
+
         //var vm = this;
         userService.query(function (response) {
             $scope.user = response || [];
@@ -32,6 +33,9 @@ angular.module("bankingApp.controllers", ['ngCookies'])
              $scope.accountCredited=$scope.user.accounts[0];
              $scope.accountDebited=$scope.user.accounts[0];*/
 
+        });
+        accountService.query(function (response) {
+            $scope.accounts = response || [];
         });
 
         $scope.transfer = function () {
