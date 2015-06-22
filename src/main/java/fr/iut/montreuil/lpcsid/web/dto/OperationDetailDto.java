@@ -11,7 +11,6 @@ public class OperationDetailDto implements Serializable {
     private Long id;
     private Long debitedAccount;
     private Long creditedAccount;
-
     private Long idTransaction;
 
     /* Pour le dozer */
@@ -33,10 +32,10 @@ public class OperationDetailDto implements Serializable {
     public static OperationDetailDto newOperationDetail() {
         return newOperationDetail();
     }
+
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -44,14 +43,21 @@ public class OperationDetailDto implements Serializable {
     public Long getDebitedAccount() {
         return debitedAccount;
     }
-
     public void setDebitedAccount(Long debitedAccount) {
         this.debitedAccount = debitedAccount;
     }
+
+    public Long getCreditedAccount() {
+        return creditedAccount;
+    }
+
+    public void setCreditedAccount(Long creditedAccount) {
+        this.creditedAccount = creditedAccount;
+    }
+
     public Long getIdTransaction() {
         return idTransaction;
     }
-
     public void setIdTransaction(Long idTransaction) {
         this.idTransaction = idTransaction;
     }

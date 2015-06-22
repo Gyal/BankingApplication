@@ -28,8 +28,8 @@ import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
  * Created by Mélina on 07/03/2015.
  */
 
-@Component
-public class AccountService {
+    @Component
+    public class AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
     //Utilisation des services au lieu des repository
@@ -59,11 +59,10 @@ public class AccountService {
      * *************************************************************************************************************
      */
 
-
-    //Prélévement de l'impot une fois par ans ( 31557600000 milliseconde) pour le compte SAVINGS pour faire le test : mettre 60000 qui correspond à une minute
-    //@Scheduled(fixedRateString = "60000")
-    /*String day=;
-    String month =;
+    //  Prélévement de l'impot une fois par ans ( 31557600000 milliseconde) pour le compte SAVINGS pour faire le test : mettre 60000 qui correspond à une minute
+    //  @Scheduled(fixedRateString = "60000")
+    /*  String day=;
+        String month =;
     */
     @Scheduled(cron = " 0 0 1 1 1 *")
     public void RecurringTaxSAVINGS() {
@@ -85,18 +84,16 @@ public class AccountService {
 
                 // ici il faudra utiliser la méthode withdraw pour plus de simplicité
             }
-
         }
     }
 
-
     /**
      * ***********************************************************************************************************
-     * <p/>
-     * Method: {account-id}/{customer-id}
-     * Type : GET
-     * Donne les infos du compte client checks droits" et détail true donne les opérations éffectuées sur le compte
-     * <p/>
+     *  <p/>
+     *  Method: {account-id}/{customer-id}
+     *  Type : GET
+     *  Donne les infos du compte client checks droits" et détail true donne les opérations éffectuées sur le compte
+     *  <p/>
      * *************************************************************************************************************
      */
 

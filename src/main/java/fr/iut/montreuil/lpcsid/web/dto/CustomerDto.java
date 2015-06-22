@@ -61,7 +61,18 @@ public class CustomerDto implements Serializable {
 
 
     public CustomerDto(String civilities, String lastname, String firstName, String dateOfBirth, String street, String city, String country, String zipCode, String mail, String phoneNumber, String connexionLogin, String password) {
-
+        this.civilities = civilities;
+        this.lastname = lastname;
+        this.firstName = firstName;
+        this.dateOfBirth = dateOfBirth;
+        this.street = street;
+        this.city = city;
+        this.country = country;
+        this.zipCode = zipCode;
+        this.mail = mail;
+        this.phoneNumber = phoneNumber;
+        this.connexionLogin = connexionLogin;
+        this.password = password;
     }
 
     //getter & setters
@@ -71,6 +82,7 @@ public class CustomerDto implements Serializable {
     public void setIdCustomer(Long id) {
         this.idCustomer = id;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -154,6 +166,7 @@ public class CustomerDto implements Serializable {
     public void setAccounts(List<AccountDto> accounts) {
         this.accounts = accounts;
     }
+
     public String getConnexionLogin() {
         return connexionLogin;
     }

@@ -102,6 +102,7 @@ public class CustomerEntity{
     public void setIdCustomer(Long id) {
         this.idCustomer = id;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -174,6 +175,7 @@ public class CustomerEntity{
     public void setCountry(String country) {
         this.country = country;
     }
+    
     public List<AccountEntity> getAccounts() {
         return accounts;
     }

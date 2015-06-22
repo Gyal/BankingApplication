@@ -1,5 +1,7 @@
 package fr.iut.montreuil.lpcsid.web.dto;
 
+import fr.iut.montreuil.lpcsid.entity.CustomerEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,8 +18,28 @@ public class AccountDto implements Serializable {
     private String type;
     private Date dateCreated;
     private double taxation;
+
     /* Pour le dozer */
     public AccountDto() {
+    }
+
+    public AccountDto(Long id, String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation) {
+        this.id = id;
+        this.libelle = libelle;
+        this.balance = balance;
+        this.MAX_BALANCE = MAX_BALANCE;
+        this.type = type;
+        this.dateCreated = dateCreated;
+        this.taxation = taxation;
+    }
+
+    public AccountDto(String libelle, double balance, double MAX_BALANCE, String type, Date dateCreated, double taxation) {
+        this.libelle = libelle;
+        this.balance = balance;
+        this.MAX_BALANCE = MAX_BALANCE;
+        this.type = type;
+        this.dateCreated = dateCreated;
+        this.taxation = taxation;
     }
 
     public Long getId() {
