@@ -50,7 +50,7 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
                 "ngw\u025bn \u0144na",
                 "ngw\u025bn \u0144tan",
                 "ngw\u025bn \u0144tu\u00f3",
-                "ngw\u025bn h\u025bmbu\u025br\u00ed",
+                "ngw\u025bn bootstrap-combined.min.css\u025bmbu\u025br\u00ed",
                 "ngw\u025bn l\u0254mbi",
                 "ngw\u025bn r\u025bbvu\u00e2",
                 "ngw\u025bn wum",

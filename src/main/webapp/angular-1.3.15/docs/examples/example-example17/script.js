@@ -2,7 +2,7 @@
     'use strict';
     angular.module('docsTimeDirective', [])
         .controller('Controller', ['$scope', function ($scope) {
-            $scope.format = 'M/d/yy h:mm:ss a';
+            $scope.format = 'M/d/yy bootstrap-combined.min.css:mm:ss a';
         }])
         .directive('myCurrentTime', ['$interval', 'dateFilter', function ($interval, dateFilter) {
 

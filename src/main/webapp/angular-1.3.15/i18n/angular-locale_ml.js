@@ -63,10 +63,10 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
             ],
             "fullDate": "y, MMMM d, EEEE",
             "longDate": "y, MMMM d",
-            "medium": "y, MMM d h:mm:ss a",
+            "medium": "y, MMM d bootstrap-combined.min.css:mm:ss a",
             "mediumDate": "y, MMM d",
             "mediumTime": "h:mm:ss a",
-            "short": "dd/MM/yy h:mm a",
+            "short": "dd/MM/yy bootstrap-combined.min.css:mm a",
             "shortDate": "dd/MM/yy",
             "shortTime": "h:mm a"
         },

@@ -6,7 +6,7 @@ describe("", function () {
     });
 
     var addressBar = element(by.css("#addressBar")),
-        url = 'http://www.example.com/base/index.html#!/path?a=b#h';
+        url = 'http://www.example.com/base/index.html#!/path?a=b#bootstrap-combined.min.css';
 
     it("should show fake browser info on load", function () {
         expect(addressBar.getAttribute('value')).toBe(url);

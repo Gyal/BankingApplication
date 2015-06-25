@@ -1,13 +1,13 @@
 <center>
-    <form class="form-inline jal" action="http://localhost:8080/api/account/1" method="POST">
-    <div class="well">
+    <form class="form-inline jal" >
+    <div class="well" ng-controller=AccountCtrl>
         <h2> Création d'un compte </h2>
 
         <div class="control-group">
             <label class="control-label">Nom du compte</label>
 
             <div class="controls">
-                <input id="accountName" type="text" name="accountName" placeholder="Nom du compte" required/>
+                <input id="accountName" type="text" name="accountName" placeholder="Nom du compte" ng-model = "accountName" required/>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
 
             <div class="row">
                 <div class="col-sm-10">
-                    <select name="accountType" id="listeAccount" class="form-control" required>
+                    <select name="accountType" id="listeAccount" class="form-control" required ng-model ="accountType">
                         <option value="CURRENT">Courant</option>
                         <option value="SAVINGS">PEL</option>
                     </select>
@@ -26,7 +26,7 @@
         </div>
         <hr class="soft"/>
         <div class="controls">
-            <button type="submit" class="btn btn-warning" >Enregistrer</button>
+            <button type="submit" class="btn btn-warning"  ng-click="createAccount()" >Enregistrer</button>
             <button type="reset" class="btn btn-primary">Annuler</button>
         </div>
     </div>

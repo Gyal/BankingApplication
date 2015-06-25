@@ -1,10 +1,40 @@
 angular.module('bankingApp.services', ['ngCookies'])
 
 //*************Controleur permettant l'affichage de la liste de compte ******************************************************/
-    .factory('accountService', function ($resource) {
-        return $resource('/api/account/list');
+    .factory('accountService', function ($cookieStore, $http, $resource) {
+        var idCustomerCookie = $cookieStore.get('JSESSIONID');
+
+        var createAccount = function (accountName,accountType ) {
+            $http({
+
+                url: '/api/account/'+idCustomerCookie,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'charset=UTF-8'
+                },
+                params: {
+                    "accountName": accountName,
+                    "accountType": accountType
+                }
+
+            })
+                .then(function(){
+                    alert("L'opération est un succès."); //Success
+                },
+            function(){
+                alert("Une erreur s'est produite."); //Failed
+            });
+        };
+        return {
+            // si pas return de login : la requete ne se sera exécuté en GET
+            createAccount: createAccount
+        },
+            $resource('/api/account/list');
+
     })
 
+
+//*************Controleur gestion des operation sur les comptes ******************************************************/
     .factory('operationService', function ($http) {
         var asyncGetAccountOperation = function (idAccount) {
             return $http.get('/api/account/transaction/' + idAccount);
@@ -13,104 +43,105 @@ angular.module('bankingApp.services', ['ngCookies'])
             // si pas return de login : la requete ne se sera exécuté en GET
             asyncGetAccountOperation: asyncGetAccountOperation
         };
-        })
+    })
+//*************Controleur gestion transaction : deposit, withDraw, transfer ******************************************************/
 
-/****************************************************************************************************************************/
-.
-factory('transferService', function ($cookieStore, $http, $location) {
-    var idCustomerCookie = $cookieStore.get('JSESSIONID');
+    .factory('transferService', function ($cookieStore, $http, $location) {
+        var idCustomerCookie = $cookieStore.get('JSESSIONID');
 
-    var transfer = function (amount, from, to) {
-        var req = {
-            method: 'PUT',
-            url: '/api/account/balance/' + idCustomerCookie + '/transfer',
-            headers: {
-                'Content-Type': 'charset=UTF-8'
-            },
-            params: {
-                "amount": amount,
-                "from": from,
-                "toTest": to
-            }
+        var transfer = function (amount, from, to) {
+            $http({
+
+                method: 'PUT',
+                url: '/api/account/balance/' + idCustomerCookie + '/transfer',
+                headers: {
+                    'Content-Type': 'charset=UTF-8'
+                },
+                params: {
+                    "amount": amount,
+                    "from": from,
+                    "toTest": to
+                }
+
+            })
+                .then(function(){
+                    //Success
+                    // Transfert de l'id de l'utilisateur par cookie
+                    alert("Votre transfert d'un montant de " + amount + " euros , a bien été réalisé du compte " + from + " au compte " + to);
+                    $location.path('/account/' + idCustomerCookie);
+                },
+                function(){
+                    alert("Une erreur s'est produite lors de la transaction."); //Failed
+                });
         };
-        $http(req).success(function () {
-            // Transfert de l'id de l'utilisateur par cookie
-            alert("Votre transfert d'un montant de " + amount + " euros , a bien été réalisé du compte " + from + " au compte " + to);
-            $location.path('/account/' + idCustomerCookie);
 
-        });
-    };
+        var deposit = function (amount, accountCredited) {
+            $http({
 
-    var deposit = function (amount, accountCredited) {
+                method: 'PUT',
+                url: '/api/account/balance/' + idCustomerCookie + '/deposit',
+                headers: {
+                    'Content-Type': 'charset=UTF-8'
+                },
+                params: {
+                    "amount": amount,
+                    "accountCredited": accountCredited
+                }
 
+            })
+                .then(function(){
+                    //Success
+                    // Transfert de l'id de l'utilisateur par cookie
+                    alert("Votre dépot sur le compte " + accountCredited + " d'un montant de " + amount + " euros a bien été effectué");
+                    $location.path('/account/' + idCustomerCookie);
+                },
+                function(){
+                    alert("Une erreur s'est produite lors de la transaction."); //Failed
+                });
 
-        var reqDeposit = {
-            method: 'PUT',
-            url: '/api/account/balance/' + idCustomerCookie + '/deposit',
-            headers: {
-                'Content-Type': 'charset=UTF-8'
-            },
-            params: {
-                "amount": amount,
-                "accountCredited": accountCredited
-            }
         };
-        $http(reqDeposit).success(function () {
-
-            // Transfert de l'id de l'utilisateur par cookie
-            alert("Votre dépot sur le compte " + accountCredited + " d'un montant de " + amount + " euros a bien été effectué");
-            $location.path('/account/' + idCustomerCookie);
-
-        });
-        $http(reqDeposit).error(function () {
-            alert("Une erreur est survenu, le dépot n'a pas pu être éffectué");
-        });
-    };
 
 
-    var withdraw = function (amount, accountDebited) {
-        var reqWithDraw = {
-            method: 'PUT',
-            url: '/api/account/balance/' + idCustomerCookie + '/withdraw',
-            headers: {
-                'Content-Type': 'charset=UTF-8'
-            },
-            params: {
-                "amount": amount,
-                "accountDebited": accountDebited
-            }
+        var withdraw = function (amount, accountDebited) {
+
+            $http({
+
+                method: 'PUT',
+                url: '/api/account/balance/' + idCustomerCookie + '/withdraw',
+                headers: {
+                    'Content-Type': 'charset=UTF-8'
+                },
+                params: {
+                    "amount": amount,
+                    "accountDebited": accountDebited
+                }
+
+            })
+                .then(function(){
+                    //Success
+                    // Transfert de l'id de l'utilisateur par cookie
+                    alert("Votre retrait sur le compte " + accountDebited + " d'un montant de " + amount + " euros a bien été effectué");
+                    $location.path('/account/' + idCustomerCookie);
+                },
+                function(){
+                    alert("Une erreur s'est produite lors de la transaction."); //Failed
+                });
+
         };
-        $http(reqWithDraw).success(function () {
-            // Transfert de l'id de l'utilisateur par cookie
-            alert("Votre retrait sur le compte " + accountDebited + " d'un montant de " + amount + " euros a bien été effectué");
-            $location.path('/account/' + idCustomerCookie);
-        });
-            $http(reqWithDraw).error(function () {
-                alert("Une erreur est survenu, le retrait n'a pas pu être éffectué");
-
-        });
-    };
-    return {
-        // si pas return de login : la requete ne se sera exécuté en GET
-        transfer: transfer,
-        deposit: deposit,
-        withdraw: withdraw
-    };
-})
+        return {
+            // si pas return de login : la requete ne se sera exécuté en GET
+            transfer: transfer,
+            deposit: deposit,
+            withdraw: withdraw
+        };
+    })
 
 
 //*************Controleur permettant l'affichage de la page index: avec l'id l'utilisateur récupéré du coookie **************/
     .factory('userService', function ($resource, $cookieStore) {
         var idCustomerCookie = $cookieStore.get('JSESSIONID');
-        // alert(idCustomerCookie);
-        var SeeUserAccount = function ($location) {
-            $location.path("/api/account/:id");
-        }
-
-        var See
 
         return {
-            SeeUserAccount: SeeUserAccount
         },
             $resource('/api/account/:id',
                 {id: "@id"},

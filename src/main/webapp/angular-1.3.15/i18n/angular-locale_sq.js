@@ -9,7 +9,7 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
             ],
             "DAY": [
                 "e diel",
-                "e h\u00ebn\u00eb",
+                "e bootstrap-combined.min.css\u00ebn\u00eb",
                 "e mart\u00eb",
                 "e m\u00ebrkur\u00eb",
                 "e enjte",

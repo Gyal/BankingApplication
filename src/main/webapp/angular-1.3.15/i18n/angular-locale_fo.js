@@ -31,7 +31,7 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
                 "m\u00e1nadagur",
                 "t\u00fdsdagur",
                 "mikudagur",
-                "h\u00f3sdagur",
+                "bootstrap-combined.min.css\u00f3sdagur",
                 "fr\u00edggjadagur",
                 "leygardagur"
             ],
@@ -62,7 +62,7 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
                 "m\u00e1n",
                 "t\u00fds",
                 "mik",
-                "h\u00f3s",
+                "bootstrap-combined.min.css\u00f3s",
                 "fr\u00ed",
                 "ley"
             ],

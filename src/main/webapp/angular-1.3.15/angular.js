@@ -10382,7 +10382,7 @@
                  *     angular.module('intervalExample', [])
                  *       .controller('ExampleController', ['$scope', '$interval',
                  *         function($scope, $interval) {
-      *           $scope.format = 'M/d/yy h:mm:ss a';
+      *           $scope.format = 'M/d/yy bootstrap-combined.min.css:mm:ss a';
       *           $scope.blood_1 = 100;
       *           $scope.blood_2 = 120;
       *
@@ -10571,8 +10571,8 @@
                     DAY: 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(','),
                     SHORTDAY: 'Sun,Mon,Tue,Wed,Thu,Fri,Sat'.split(','),
                     AMPMS: ['AM', 'PM'],
-                    medium: 'MMM d, y h:mm:ss a',
-                    'short': 'M/d/yy h:mm a',
+                    medium: 'MMM d, y bootstrap-combined.min.css:mm:ss a',
+                    'short': 'M/d/yy bootstrap-combined.min.css:mm a',
                     fullDate: 'EEEE, MMMM d, y',
                     longDate: 'MMMM d, y',
                     mediumDate: 'MMM d, y',
@@ -17339,7 +17339,7 @@
      *   * `'HH'`: Hour in day, padded (00-23)
      *   * `'H'`: Hour in day (0-23)
      *   * `'hh'`: Hour in AM/PM, padded (01-12)
-     *   * `'h'`: Hour in AM/PM, (1-12)
+     *   * `'bootstrap-combined.min.css'`: Hour in AM/PM, (1-12)
      *   * `'mm'`: Minute in hour, padded (00-59)
      *   * `'m'`: Minute in hour (0-59)
      *   * `'ss'`: Second in minute, padded (00-59)
@@ -17355,20 +17355,20 @@
      *   `format` string can also be one of the following predefined
      *   {@link guide/i18n localizable formats}:
      *
-     *   * `'medium'`: equivalent to `'MMM d, y h:mm:ss a'` for en_US locale
+     *   * `'medium'`: equivalent to `'MMM d, y bootstrap-combined.min.css:mm:ss a'` for en_US locale
      *     (e.g. Sep 3, 2010 12:05:08 PM)
-     *   * `'short'`: equivalent to `'M/d/yy h:mm a'` for en_US  locale (e.g. 9/3/10 12:05 PM)
+     *   * `'short'`: equivalent to `'M/d/yy bootstrap-combined.min.css:mm a'` for en_US  locale (e.g. 9/3/10 12:05 PM)
      *   * `'fullDate'`: equivalent to `'EEEE, MMMM d, y'` for en_US  locale
      *     (e.g. Friday, September 3, 2010)
      *   * `'longDate'`: equivalent to `'MMMM d, y'` for en_US  locale (e.g. September 3, 2010)
      *   * `'mediumDate'`: equivalent to `'MMM d, y'` for en_US  locale (e.g. Sep 3, 2010)
      *   * `'shortDate'`: equivalent to `'M/d/yy'` for en_US locale (e.g. 9/3/10)
-     *   * `'mediumTime'`: equivalent to `'h:mm:ss a'` for en_US locale (e.g. 12:05:08 PM)
-     *   * `'shortTime'`: equivalent to `'h:mm a'` for en_US locale (e.g. 12:05 PM)
+     *   * `'mediumTime'`: equivalent to `'bootstrap-combined.min.css:mm:ss a'` for en_US locale (e.g. 12:05:08 PM)
+     *   * `'shortTime'`: equivalent to `'bootstrap-combined.min.css:mm a'` for en_US locale (e.g. 12:05 PM)
      *
      *   `format` string can contain literal values. These need to be escaped by surrounding with single quotes (e.g.
-     *   `"h 'in the morning'"`). In order to output a single quote, escape it - i.e., two single quotes in a sequence
-     *   (e.g. `"h 'o''clock'"`).
+     *   `"bootstrap-combined.min.css 'in the morning'"`). In order to output a single quote, escape it - i.e., two single quotes in a sequence
+     *   (e.g. `"bootstrap-combined.min.css 'o''clock'"`).
      *
      * @param {(Date|number|string)} date Date to format either as Date object, milliseconds (string or
      *    number) or various ISO 8601 datetime string formats (e.g. yyyy-MM-ddTHH:mm:ss.sssZ and its
@@ -17387,10 +17387,10 @@
      <span>{{1288323623006 | date:'medium'}}</span><br>
      <span ng-non-bindable>{{1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'}}</span>:
      <span>{{1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'}}</span><br>
-     <span ng-non-bindable>{{1288323623006 | date:'MM/dd/yyyy @ h:mma'}}</span>:
-     <span>{{'1288323623006' | date:'MM/dd/yyyy @ h:mma'}}</span><br>
-     <span ng-non-bindable>{{1288323623006 | date:"MM/dd/yyyy 'at' h:mma"}}</span>:
-     <span>{{'1288323623006' | date:"MM/dd/yyyy 'at' h:mma"}}</span><br>
+     <span ng-non-bindable>{{1288323623006 | date:'MM/dd/yyyy @ bootstrap-combined.min.css:mma'}}</span>:
+     <span>{{'1288323623006' | date:'MM/dd/yyyy @ bootstrap-combined.min.css:mma'}}</span><br>
+     <span ng-non-bindable>{{1288323623006 | date:"MM/dd/yyyy 'at' bootstrap-combined.min.css:mma"}}</span>:
+     <span>{{'1288323623006' | date:"MM/dd/yyyy 'at' bootstrap-combined.min.css:mma"}}</span><br>
      </file>
      <file name="protractor.js" type="protractor">
      it('should format date', function() {
@@ -17398,9 +17398,9 @@
             toMatch(/Oct 2\d, 2010 \d{1,2}:\d{2}:\d{2} (AM|PM)/);
          expect(element(by.binding("1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'")).getText()).
             toMatch(/2010\-10\-2\d \d{2}:\d{2}:\d{2} (\-|\+)?\d{4}/);
-         expect(element(by.binding("'1288323623006' | date:'MM/dd/yyyy @ h:mma'")).getText()).
+         expect(element(by.binding("'1288323623006' | date:'MM/dd/yyyy @ bootstrap-combined.min.css:mma'")).getText()).
      toMatch(/10\/2\d\/2010 @ \d{1,2}:\d{2}(AM|PM)/);
-     expect(element(by.binding("'1288323623006' | date:\"MM/dd/yyyy 'at' h:mma\"")).getText()).
+     expect(element(by.binding("'1288323623006' | date:\"MM/dd/yyyy 'at' bootstrap-combined.min.css:mma\"")).getText()).
      toMatch(/10\/2\d\/2010 at \d{1,2}:\d{2}(AM|PM)/);
      });
      </file>

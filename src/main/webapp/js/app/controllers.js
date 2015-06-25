@@ -1,15 +1,25 @@
 angular.module("bankingApp.controllers", ['ngCookies'])
 
-    .controller("AccountCtrl", function ($scope, accountService, operationService) {
+    .controller("AccountCtrl", function ($scope, transferService, accountService, operationService, userService, $location) {
+        $scope.createAccount = function () {
+            accountService.createAccount($scope.accountName, $scope.accountType, function (response) {
+            });
+        }
+
+        userService.query(function (response) {
+            $scope.user = response || [];
+        });
+
         accountService.query(function (response) {
             $scope.accounts = response || [];
         });
-        $scope.melina = function () {
-            alert("Hello");
-        };
+
+        $scope.getAccountByCustomer = function (id) {
+            $location.path("/account/list/:" + id);
+        }
 
         $scope.getOperations = function (id) {
-            var operations = $scope.operations;
+
             if (typeof operations == 'undefined') {
                 operationService.asyncGetAccountOperation(id).then(function (response) {
                     $scope.operations = response.data;
@@ -23,29 +33,23 @@ angular.module("bankingApp.controllers", ['ngCookies'])
     // Transfer
 
     .controller("TransferCtrl", function ($scope, transferService, userService, accountService) {
-
-        //var vm = this;
-        userService.query(function (response) {
-            $scope.user = response || [];
-            // Ajout de données fictives $scope.user.accounts.unshift({id:2, libelle:"test"});
-            /* $scope.from=$scope.user.accounts[0];
-             $scope.toTest=$scope.user.accounts[0];
-             $scope.accountCredited=$scope.user.accounts[0];
-             $scope.accountDebited=$scope.user.accounts[0];*/
-
-        });
         accountService.query(function (response) {
             $scope.accounts = response || [];
         });
+
+        userService.query(function (response) {
+            $scope.user = response || [];
+        });
+        $scope.deposit = function () {
+            transferService.deposit($scope.amount, $scope.accountCredited, function (response) {
+            });
+        }
 
         $scope.transfer = function () {
             transferService.transfer($scope.amount, $scope.from, $scope.toTest, function (response) {
             });
         }
-        $scope.deposit = function () {
-            transferService.deposit($scope.amount, $scope.accountCredited, function (response) {
-            });
-        }
+
         $scope.withdraw = function () {
             transferService.withdraw($scope.amount, $scope.accountDebited, function (response) {
             });
@@ -70,14 +74,7 @@ angular.module("bankingApp.controllers", ['ngCookies'])
 
     })
 
-    .controller('UserCtrl', function ($scope, userService, $location) {
-        $scope.SeeUserAccount = function (id) {
-            $location.path("/account/list/:" + id);
-        }
+    .controller('UserCtrl', function ($scope, userService) {
 
-        userService.query(function (response) {
-            $scope.user = response || [];
-
-
-        });
     })
+

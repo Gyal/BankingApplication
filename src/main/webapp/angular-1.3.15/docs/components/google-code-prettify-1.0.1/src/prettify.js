@@ -848,7 +848,7 @@ var prettyPrint;
                         [PR_COMMENT, /^#(?:(?:define|e(?:l|nd)if|else|error|ifn?def|include|line|pragma|undef|warning)\b|[^\r\n]*)/,
                             null, '#']);
                 }
-                // #include <stdio.h>
+                // #include <stdio.bootstrap-combined.min.css>
                 fallthroughStylePatterns.push(
                     [PR_STRING,
                         /^<(?:(?:(?:\.\.\/)*|\/?)(?:[\w-]+(?:\/[\w-]+)+)?[\w-]+\.h(?:h|pp|\+\+)?|[a-z]\w*)>/,

@@ -1,97 +1,78 @@
 <center>
     <form>
-    <div class="" ng-controller="TransferCtrl">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>From:</h4><!-- liste déroulante Type de compte -->
+        <div ng-controller="TransferCtrl">
+
+            <div class="well col-xs-3 panel panel-default">
+                <div class="panel-default">
+                    <h4>From :</h4>
                     <div class="form-group">
                         <div class="row">
                             <select ng-model="from"
                                     ng-options="a.id as a.libelle for a in user.accounts  | filter:a.type.active ='CURRENT'"
-                                    class="form-control"
-                                    >
+                                    class="form-control">
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="col-xs-2">
+                <img src="../bootstrap/images/arrows-button-Right.png"/>
+            </div>
+            <br>
 
-        <div class="col-xs-2">
-            <img class="btn" src="../bootstrap/images/arrows-button-Right.png"/>
-        </div>
-
-        <div class="row" >
-            <div class="transfer col-xs-3" >
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                    <h4>From:</h4><!-- liste déroulante Type de compte -->
+            <div class="well col-xs-3 panel panel-default" style="margin-top:-19px">
+                <div class="panel-default">
+                    <h4>To :</h4>
                     <div class="form-group">
                         <div class="row">
                             <select ng-model="toTest"
                                     ng-options="a.id as a.libelle for a in accounts  | filter:a.type.active ='CURRENT'"
-                                    class="form-control"
-                                    >
+                                    class="form-control">
                             </select>
                         </div>
                     </div>
                 </div>
-                    <div class="panel-body">
-                        <p>
-                            Address <br>
-                            details <br>
-                            more <br>
-                        </p>
+            </div>
+
+            <div class=" row well col-xs-8 form-horizontal" style="margin-left:0px; margin-top:25px;">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="amount">Montant</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" id="amount" type="text" name="amount"
+                               placeholder="Montant transféré" ng-model="amount"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Date</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" id="datepicker" type="text" name="date" placeholder="Date"/>
                     </div>
                 </div>
 
-            </div>
+                </br>
 
-        </div>
-
-
-        <!-- / end client details section -->
-        <div class=" row well col-xs-5 form-horizontal" style=" margin-left: 13px;">
-
-            <div class="form-group">
-                <label class="control-label col-sm-3" for="amount">Montant</label>
-
-                <div class="col-sm-9">
-                    <input class="form-control" id="amount" type="text" name="amount"
-                           placeholder="Montant transféré" ng-model="amount"/>
+                <div class="alert alert-info fade in col-md-12" id="alertInfo">
+                    <strong>Note!</strong> Le retrait d'argent n'est autorisé qu'entre comptes COURANT
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">Date</label>
 
-                <div class="col-sm-9">
-                    <input class="form-control" id="datepicker" type="text" name="date" placeholder="Date"/>
+                </br>
+                </br>
+
+                <hr class="soft"/>
+                <div class="controls">
+                    <button type="submit" class="btn btn-warning" ng-click="transfer()">Enregistrer</button>
+                    <button type="reset" class="btn btn-primary">Annuler</button>
                 </div>
             </div>
 
-            </br>
-
-            <!-- Information-->
-            <div class="alert alert-info fade in col-md-12" id="alertInfo">
-
-                <strong>Note!</strong> Le retrait d'argent n'est autorisé qu'entre comptes COURANT
-
-            </div>
-            </br>
-            </br>
-
-
-            <!---------------->
-            <hr class="soft"/>
-            <div class="controls">
-                <button type="submit" class="btn btn-warning" ng-click="transfer()">Enregistrer</button>
-                <button type="reset" class="btn btn-primary">Annuler</button>
-            </div>
         </div>
-        </div>
-    </div>
     </form>
 </center>
+
 <script>
     $(function () {
         $("#datepicker").datepicker();

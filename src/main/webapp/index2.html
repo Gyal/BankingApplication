@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="UserCtrl">
+<div class="container-fluid" ng-controller="AccountCtrl">
     <div class="row row-centered">
 
         <div class="col-lg-5 col-centered well block indexBoxSize">
@@ -63,7 +63,8 @@
                     </p>
 
                     <div class="list-group">
-                        <a id="seeAccounts" class="list-group-item" ng-click="SeeUserAccount(2)">Visualiser mes
+                        <a id="seeAccounts" class="list-group-item" ng-click="getAccountByCustomer(user.idCustomer)">Visualiser
+                            mes
                             comptes</a>
                         <a href="/#/account/transfer" id="transfer" class="list-group-item" onclick="" value="transfer"
                            ng-click="transfer()">Réaliser un
@@ -81,11 +82,7 @@
 
 
         <!-- Bloc Historique opération Compte courant -->
-
-        <div ng-controller="AccountCtrl">
-            <button ng-click="getOperations(1)">
-                tesss
-            </button>
+        <div>
             <div>
 
                 <div class="col-xs-3 col-centered well block indexBoxSize">
@@ -112,10 +109,7 @@
 
         <!-- Bloc Historique opération Compte epargne-->
 
-        <div ng-controller="AccountCtrl">
-            <button ng-click="getOperations(1)">
-                tesss
-            </button>
+        <div>
             <div>
 
                 <div class="col-xs-3 col-centered well block indexBoxSize">
