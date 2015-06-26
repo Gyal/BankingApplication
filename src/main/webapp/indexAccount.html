@@ -1,6 +1,6 @@
 <script src="js/jquery-2.1.4.js"></script>
 <script src="js/jquery-ui.js"></script>
-<div ng-controller="UserCtrl">
+<div ng-controller="AccountCtrl">
     <!-- Cette div s'affiche si il n'y a aucun compte-->
 
     <div ng-if='user.accounts.length <=0' class="alert alert-info" role="alert">
@@ -22,15 +22,14 @@
 
         <h4><b> Mes comptes Information au 25/04/2015 </b></h4>
 
-        <div ng-controller="AccountCtrl">
-            <div class="accordion" ng-repeat="account in user.accounts " ng-click="getOperations(1)">
+            <div class="accordion" ng-repeat="account in user.accounts "  ng-click="getOperations(account.id)" id= "div{{account.id}}" >
                 <h3>
                     <p>Compte <b>{{account.libelle}}</b> no : <b>{{account.id}}</b></p>
                     <p>Solde : <b>{{account.balance}} €</b></p>
                 </h3>
                 <div>
                     <label><u>Liste des opérations :</u></label>
-                    <p ng-repeat="operation in operations" ng-if="account.id  ==  operation.account.id">
+                    <p ng-repeat="operation in operations">
                         {{operation.transactionDate | date}} | {{operation.idTransaction}} | {{operation.transactionType}}
                     </p>
                     <p ng-if="operations.length <=0"> Aucune operation</p>
@@ -41,7 +40,6 @@
                 </br>
 
             </div>
-        </div>
 
 
     </div>
@@ -53,13 +51,9 @@
 
 
 <script>
-    // Doc accordion :http://www.tutorialspoint.com/jqueryui/jqueryui_accordion.htm
-    $(function () {
-        $(".accordion").accordion({
-            collapsible: true,
-            active: false
+    $(function() {
+        $( ".accordion" ).accordion({
+            collapsible: true
         });
     });
-
-
 </script>

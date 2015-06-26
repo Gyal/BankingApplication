@@ -85,9 +85,9 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
             "medium": "\u0f66\u0fa4\u0fb1\u0f72\u0f0b\u0f63\u0f7c\u0f0by \u0f5f\u0fb3\u0f0bMMM \u0f5a\u0f7a\u0f66\u0f0bdd \u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0bh:mm:ss a",
             "mediumDate": "\u0f66\u0fa4\u0fb1\u0f72\u0f0b\u0f63\u0f7c\u0f0by \u0f5f\u0fb3\u0f0bMMM \u0f5a\u0f7a\u0f66\u0f0bdd",
             "mediumTime": "\u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0bh:mm:ss a",
-            "short": "y-MM-dd \u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0b h \u0f66\u0f90\u0f62\u0f0b\u0f58\u0f0b mm a",
+            "short": "y-MM-dd \u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0b bootstrap-combined.min.css \u0f66\u0f90\u0f62\u0f0b\u0f58\u0f0b mm a",
             "shortDate": "y-MM-dd",
-            "shortTime": "\u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0b h \u0f66\u0f90\u0f62\u0f0b\u0f58\u0f0b mm a"
+            "shortTime": "\u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0b bootstrap-combined.min.css \u0f66\u0f90\u0f62\u0f0b\u0f58\u0f0b mm a"
         },
         "NUMBER_FORMATS": {
             "CURRENCY_SYM": "Nu.",

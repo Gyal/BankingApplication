@@ -84,7 +84,7 @@ public class AccountController {
      * *************************************************************************************************************************
      */
 
-    @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.PUT)
+    @RequestMapping(value = "/balance/{customer-id}/deposit", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     public void deposit(@PathVariable(value = "customer-id") Long customerId,
                         @RequestParam(value = "amount", required = true) final int amountDeposit,
@@ -129,7 +129,6 @@ public class AccountController {
     @RequestMapping(value = "/transaction/{id-account}", method = RequestMethod.GET, produces = "application/json")
     public List<TransactionEntity> getAccountTransaction(@PathVariable(value = "id-account") Long accountId) {
         AccountEntity account = accountRepository.findOne(accountId);
-
         return transactionRepository.findAllByAccount(account);
 
     }

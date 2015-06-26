@@ -214,59 +214,58 @@ import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
      */
 
     public void deposit(Long customerId, final int amountDeposit, Long idAccount) {
-        CustomerEntity customer = customerRepository.findOne(customerId);
+
         AccountEntity accountCredited = accountRepository.getOne(idAccount);
 
+        CustomerEntity customer = customerRepository.findOne(customerId);
         Boolean accountCustomer = customer.getIdCustomer().equals(accountCredited.getCustomer().getIdCustomer());
         if (accountCustomer.equals(true)) {
 
             int sommeOperationDeposit = 0;
-            List<TransactionEntity> operations = transactionRepository.findAllByAccount(accountCredited);
+            List<TransactionEntity> currentOperations = transactionRepository.findAllByAccountAndTransactionType(accountCredited, "DEPOSIT");
             LOGGER.info("For account {}", accountCredited.getId());
-            LOGGER.info("Operations is:{}", operations);
+            LOGGER.info("Operations is:{}", currentOperations);
             Date today = new Date();
 
-            for (TransactionEntity operation : operations) {
-                if (operation.getTransactionType() == "DEPOSIT" && operation.getTransactionDate().getMonth() == today.getMonth()) {
+            for (TransactionEntity operation : currentOperations) {
+                if (operation.getTransactionDate().getMonth() == today.getMonth()) {
                     sommeOperationDeposit += operation.getAmount();
                 }
             }
-        /* Informations logger */
+            LOGGER.info("operation {}", sommeOperationDeposit);
+
             if (amountDeposit + sommeOperationDeposit < 3000) {
                 LOGGER.info("Le montant maximum de dépot n'est pas encore atteint {}", amountDeposit + sommeOperationDeposit);
             } else {
-                LOGGER.info("Le montant maximum de dépot est atteint {}", amountDeposit + sommeOperationDeposit);
+                LOGGER.error("Le montant maximum de dépot est atteint {}", amountDeposit + sommeOperationDeposit);
             }
             if (amountDeposit > 0) {
                 LOGGER.info("Le montant déposé est supérieur à 0 :{}", amountDeposit);
             } else {
-                LOGGER.info("Le montant déposé n'être pas supérieur à 0 :{}", amountDeposit);
+                LOGGER.error("Le montant déposé n'être pas supérieur à 0 :{}", amountDeposit);
             }
             if (amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE()) {
                 LOGGER.info("Le plafond n'est pas encore atteint :{}", amountDeposit + accountCredited.getBalance());
             } else {
-                LOGGER.info("Le plafond est atteint :{}", amountDeposit + accountCredited.getBalance());
+                LOGGER.error("Le plafond est atteint :{}", amountDeposit + accountCredited.getBalance());
             }
 
-        /* Action si tout ce passe bien */
-            try {
-                if (amountDeposit + sommeOperationDeposit < 3000 && amountDeposit > 0 && amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE()) {
-                    LOGGER.info("Verification {} {} {}", amountDeposit + sommeOperationDeposit < 3000, amountDeposit > 0, amountDeposit + accountCredited.getBalance() < accountCredited.getMAX_BALANCE());
+                if (amountDeposit + sommeOperationDeposit <= 3000 && amountDeposit > 0 && amountDeposit+ amountDeposit + accountCredited.getBalance() <= accountCredited.getMAX_BALANCE()) {
 
-                    accountCredited.deposit(amountDeposit);
+                    LOGGER.info("Verification {} {} {}", amountDeposit + sommeOperationDeposit < 3000, amountDeposit > 0, amountDeposit + accountCredited.getBalance() <= accountCredited.getMAX_BALANCE());
+
+                   accountCredited.deposit(amountDeposit);
                     accountRepository.save(accountCredited);
 
 
                     TransactionEntity operation = new TransactionEntity("DEPOSIT", amountDeposit, today, accountCredited);
                     transactionRepository.save(operation);
                     accountRepository.save(accountCredited);
-                }
-            } catch (DataIntegrityException e) {
-                throw new DataIntegrityException(BAD_REQUEST);
-            }
+                }else{  throw new DataIntegrityException(BAD_REQUEST);}
+
 
         } else {
-            LOGGER.info("pas de concordance{}", accountCustomer);
+            LOGGER.error("pas de concordance{}", accountCustomer);
             throw new DataIntegrityException(UNAUTHORIZED);
 
         }

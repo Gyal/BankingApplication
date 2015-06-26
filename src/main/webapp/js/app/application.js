@@ -10,8 +10,7 @@
 // Déclaration de l'application
 
 (function () {
-    var app = angular.module('bankingApp', ["ngResource", "bankingApp.controllers", "bankingApp.services", "ngRoute"]);
-
+    var app = angular.module('bankingApp',["ngResource", "bankingApp.controllers", "bankingApp.services", "ngRoute"]);
     app.config(function ($routeProvider) {
         $routeProvider
             .when('/list', {templateUrl: '/template/listAccount.html'})

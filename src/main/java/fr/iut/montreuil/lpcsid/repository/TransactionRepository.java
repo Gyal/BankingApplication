@@ -16,5 +16,6 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 
     public List<TransactionEntity> findAllByAccountAndTransactionDateGreaterThan(AccountEntity account, Date date);
     public List<TransactionEntity> findAllByAccount(AccountEntity account);
+    public List<TransactionEntity> findAllByAccountAndTransactionType(AccountEntity account, String type);
 
 }

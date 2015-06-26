@@ -63,12 +63,12 @@ angular.module("ngLocale", [], ["$provide", function ($provide) {
             ],
             "fullDate": "y\ub144 M\uc6d4 d\uc77c EEEE",
             "longDate": "y\ub144 M\uc6d4 d\uc77c",
-            "medium": "y. M. d. a h:mm:ss",
+            "medium": "y. M. d. a bootstrap-combined.min.css:mm:ss",
             "mediumDate": "y. M. d.",
-            "mediumTime": "a h:mm:ss",
-            "short": "yy. M. d. a h:mm",
+            "mediumTime": "a bootstrap-combined.min.css:mm:ss",
+            "short": "yy. M. d. a bootstrap-combined.min.css:mm",
             "shortDate": "yy. M. d.",
-            "shortTime": "a h:mm"
+            "shortTime": "a bootstrap-combined.min.css:mm"
         },
         "NUMBER_FORMATS": {
             "CURRENCY_SYM": "\u20a9KP",
