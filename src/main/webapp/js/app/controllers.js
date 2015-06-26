@@ -1,18 +1,14 @@
 angular.module("bankingApp.controllers", ['ngCookies'])
 
-    .controller("AccountCtrl", function ($scope, transferService, accountService, operationService, userService, $location) {
+    .controller("AccountCtrl", function ($resource, $scope, transferService, accountService, operationService, userService, $location) {
         $scope.createAccount = function () {
             accountService.createAccount($scope.accountName, $scope.accountType, function (response) {
             });
         }
-
         userService.query(function (response) {
             $scope.user = response || [];
-        });
+        })
 
-        accountService.query(function (response) {
-            $scope.accounts = response || [];
-        });
 
         $scope.getAccountByCustomer = function (id) {
             $location.path("/account/list/:" + id);
@@ -27,13 +23,20 @@ angular.module("bankingApp.controllers", ['ngCookies'])
                 })
             }
         }
+    })
+
+
+    .controller("accountList", function ($resource, accountList, $scope) {
+        accountList.query(function (response) {
+            $scope.accounts = response || [];
+        });
     }
 )
 
     // Transfer
 
-    .controller("TransferCtrl", function ($scope, transferService, userService, accountService) {
-        accountService.query(function (response) {
+    .controller("TransferCtrl", function ($scope, transferService, userService, accountList) {
+        accountList.query(function (response) {
             $scope.accounts = response || [];
         });
 

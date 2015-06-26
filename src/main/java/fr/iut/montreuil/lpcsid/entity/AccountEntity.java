@@ -182,15 +182,15 @@ public class AccountEntity{
             return false;
         }
         if (!amountIsTrue.equals(true)) {
-            LOGGER.info(" LOG: le montant est inférieur à 0 {} ", amountIsTrue);
+            LOGGER.error(" LOG: le montant est inférieur à 0 {} ", amountIsTrue);
             return false;
         }
         if (!soldePositive.equals(true)) {
-            LOGGER.info(" LOG: le solde du compte à débiter n'est pas suffisant");
+            LOGGER.error(" LOG: le solde du compte à débiter n'est pas suffisant");
             return false;
         }
         if (!maxBalanceAtteign.equals(true)) {
-            LOGGER.info(" LOG: Le compte à créditer atteint le montant maximum autorié", to.getMAX_BALANCE());
+            LOGGER.error(" LOG: Le compte à créditer atteint le montant maximum autorié", to.getMAX_BALANCE());
             return false;
         }
 

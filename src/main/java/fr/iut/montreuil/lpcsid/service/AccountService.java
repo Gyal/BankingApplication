@@ -274,26 +274,27 @@ import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
 
     public void withdraw(Long customerId, final int amountWithDraw, Long idAccount) {
         AccountEntity accountDebited = accountRepository.getOne(idAccount);
-
         CustomerEntity customer = customerRepository.findOne(customerId);
-        LOGGER.info("type{}", accountDebited.getType());
-
+        List<TransactionEntity> withdrawOperations = transactionRepository.findAllByAccountAndTransactionType(accountDebited, "WITHDRAW");
+        LOGGER.info("WithDrawOperations is:{}", withdrawOperations.size());
         Boolean accountCustomer = customer.getIdCustomer().equals(accountDebited.getCustomer().getIdCustomer());
         if (accountCustomer.equals(true) && ("CURRENT").equals(accountDebited.getType())) {
 
             int sommeOperationDebit = 0;
-            List<TransactionEntity> operations = transactionRepository.findAllByAccount(accountDebited);
             LOGGER.info("For account {}", accountDebited.getId());
-            LOGGER.info("Operations is:{}", operations);
             Date today = new Date();
 
-            for (TransactionEntity operation : operations) {
-                if (("WITHDRAW").equals(operation.getTransactionType())) {
-                    sommeOperationDebit = sommeOperationDebit + operation.getAmount();
+            for (TransactionEntity operation : withdrawOperations) {
+                if (operation.getTransactionDate().getMonth() == today.getMonth()) {
+                    sommeOperationDebit += operation.getAmount();
                 }
-                if (sommeOperationDebit + amountWithDraw > 2500) {
-                    LOGGER.info("Le montant maximum de retrait est atteind {}", sommeOperationDebit);
-                }
+            }
+            LOGGER.info("operation {}", sommeOperationDebit);
+
+            if (amountWithDraw + sommeOperationDebit <=2500) {
+                LOGGER.info("Le montant maximum de retrait n'est pas encore atteint {}", amountWithDraw + sommeOperationDebit);
+            } else {
+                LOGGER.error("Le montant maximum de retrait est atteint {} pour le mois en cours {}", amountWithDraw + sommeOperationDebit,today.getMonth());
             }
         /* Informations logger */
             if (amountWithDraw > 0) {
@@ -308,13 +309,14 @@ import static fr.iut.montreuil.lpcsid.web.exception.ErrorCode.*;
                 LOGGER.info("Le solde ne dépasse pas encore le plafond {}", amountWithDraw + accountDebited.getBalance());
             }
         /* Action */
-            if (accountDebited.getBalance() - amountWithDraw >= 0 && amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() <= accountDebited.getMAX_BALANCE()) {
+            if (amountWithDraw + sommeOperationDebit <=2500 && amountWithDraw > 0 && accountDebited.getBalance() - amountWithDraw >= 0 && amountWithDraw > 0 && amountWithDraw + accountDebited.getBalance() <= accountDebited.getMAX_BALANCE()) {
                 accountDebited.withDraw(amountWithDraw);
                 accountRepository.save(accountDebited);
 
                 TransactionEntity operation = new TransactionEntity("WITHDRAW", amountWithDraw, today, accountDebited);
                 transactionRepository.save(operation);
-            }
+
+            } else{  throw new DataIntegrityException(BAD_REQUEST);}
         } else {
             LOGGER.info("pas de concordance{}", accountCustomer);
             throw new DataIntegrityException(UNAUTHORIZED);
