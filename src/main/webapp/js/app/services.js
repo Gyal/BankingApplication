@@ -1,13 +1,18 @@
 angular.module('bankingApp.services', ['ngCookies'])
 
 //*************Controleur permettant l'affichage de la liste de compte ******************************************************/
-    .factory('accountService', function ($cookieStore, $http, $resource) {
+  // Séparation de accountList et de accountService car impossible de retourner ne fonction + une ressource
+    .factory('accountList', function ($resource) {
+        return $resource('/api/account/list');
+    })
+    //
+    .factory('accountService', function ($cookieStore, $http ) {
         var idCustomerCookie = $cookieStore.get('JSESSIONID');
 
-        var createAccount = function (accountName,accountType ) {
+        var createAccount = function (accountName, accountType) {
             $http({
 
-                url: '/api/account/'+idCustomerCookie,
+                url: '/api/account/' + idCustomerCookie,
                 method: 'POST',
                 headers: {
                     'Content-Type': 'charset=UTF-8'
@@ -18,18 +23,21 @@ angular.module('bankingApp.services', ['ngCookies'])
                 }
 
             })
-                .then(function(){
+                .then(function () {
                     alert("L'opération est un succès."); //Success
                 },
-            function(){
-                alert("Une erreur s'est produite."); //Failed
-            });
-        };
+                function () {
+                    alert("Une erreur s'est produite."); //Failed
+                });
+          }
+
         return {
-            // si pas return de login : la requete ne se sera exécuté en GET
+
             createAccount: createAccount
-        },
-            $resource('/api/account/list');
+        };
+
+
+
 
     })
 

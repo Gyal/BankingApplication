@@ -55,7 +55,6 @@ public class LoginService {
             LOGGER.info("aucun user avec ce login {}", login);
         }
 
-
             return userConnexion.getIdCustomer();
     }
 
